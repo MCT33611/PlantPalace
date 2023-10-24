@@ -1,0 +1,56 @@
+﻿@model List<Product>
+@{
+}
+
+<partial name="_Notification" />
+
+<div class="mb-5">
+    <div class="row pt-4 pb-3">
+        <div class="col-6 ">
+            <h2 class="text-primary">
+                Category List
+            </h2>
+        </div>
+        <div class="col-6 text-end">
+            <h2 class="text-primary">
+                <a asp-controller="Product" asp-action="Upsert" class="btn btn-primary custum-controll-w">
+                    <i class="bi bi-plus-circle-fill"></i>
+                    <span class="text-nowrap ">Add New Product</span>
+                </a>
+
+            </h2>
+        </div>
+    </div>
+    <table id="tblData" class="table table-bordered table-striped w-100">
+        <thead>
+            <tr>
+                <th>
+                    Product Name
+                </th>
+                <th>
+                    Category
+                </th>
+                <th>
+                    List Price
+                </th>
+                <th>
+                    Price for 1 - 50
+                </th>
+                <th>
+                    Price for 50 +
+                </th>
+                <th>
+                    Price for 100 +
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+    </table>
+
+</div>
+
+@section Scripts{
+    <script src="~/js/product.js"></script>
+}

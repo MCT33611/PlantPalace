@@ -1,0 +1,15 @@
+﻿@model int
+
+<div class="container row pt-4 ">
+    <div class="col-12 text-center">
+        <h1 class="text-primary text-center">Payment Successfully!</h1>
+        Your Order Id is :#@Model <br /><br />
+        <img src="~/images/5b7237fe7bbfa31531d6e765576f1bc4.jpg" width="50%" />
+    </div>
+    <div class="col-12 text-center" style="color:maroon">
+        <br />
+        Payment has been applied successfully! <br />
+    </div>
+    <a asp-action="Details" asp-controller="Order" asp-area="Admin"  class="btn btn-primary">Back To List</a>
+
+</div> 
