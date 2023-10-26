@@ -74,4 +74,8 @@
     <ProjectReference Include="..\PlantPalace.Utility\PlantPalace.Utility.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\profiles\" />
+  </ItemGroup>
+
 </Project>

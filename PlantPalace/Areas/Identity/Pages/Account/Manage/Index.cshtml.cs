@@ -4,12 +4,15 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Org.BouncyCastle.Pqc.Crypto.Picnic;
+using PlantPalace.DataAccess.Repository.IRepository;
+using PlantPalace.Models.ViewModels;
 
 namespace PlantPalace.Areas.Identity.Pages.Account.Manage
 {
@@ -18,12 +21,17 @@ namespace PlantPalace.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
 
+        private readonly IUnitOfWork _unitOfWork;
+
         public IndexModel(
             UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            IUnitOfWork unitOfWork
+            )
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _unitOfWork = unitOfWork;
         }
 
         /// <summary>
@@ -38,6 +46,11 @@ namespace PlantPalace.Areas.Identity.Pages.Account.Manage
         /// </summary>
         [TempData]
         public string StatusMessage { get; set; }
+
+
+
+        public string ProfilePhoto { get; set; }
+
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -60,20 +73,29 @@ namespace PlantPalace.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
 
-            public string ProfilePhoto { get; set; }
-
+           
         }
 
         private async Task LoadAsync(IdentityUser user)
         {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            var ProifilPicUser = _unitOfWork.ApplicationUser.Get(u => u.Id == claim.Value);
+
+
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
             Username = userName;
 
+            ProfilePhoto = ProifilPicUser.Pic;
+
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+
+                
             };
         }
 
@@ -113,10 +135,88 @@ namespace PlantPalace.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+            
+
+
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();
         }
+
+
+
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> OnPostPicUploadAsync(IFormFile photo)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            var user =  _unitOfWork.ApplicationUser.Get(u => u.Id == claim.Value);
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                await LoadAsync(user);
+                return Page();
+            }
+
+            if (photo != null && photo.Length > 0)
+            {
+                // Define a folder path to save user photos
+                var uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Images/profiles");
+
+                // Ensure the folder exists
+                Directory.CreateDirectory(uploadFolder);
+
+                // Generate a unique file name for the photo
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(photo.FileName);
+
+                // Combine the folder path and file name
+                var filePath = Path.Combine(uploadFolder, fileName);
+
+
+                // if user profile alldriady exist it delete
+
+
+                if (!string.IsNullOrEmpty(user.Pic))
+                {
+                    var oldImagePath = Directory.GetCurrentDirectory()+ "\\wwwroot\\"+user.Pic.TrimStart('\\');
+
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
+                // Save the photo to the server
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await photo.CopyToAsync(stream);
+                }
+
+                // Store the file path in the database (update your database model accordingly)
+                user.Pic = "/Images/profiles\\" + fileName; // Update the user's profile photo property in the database
+
+                // Update the user in the database
+                var updateResult = await _userManager.UpdateAsync(user);
+
+                if (updateResult.Succeeded)
+                {
+                    StatusMessage = "Your profile has been updated";
+                }
+                else
+                {
+                    StatusMessage = "Error updating the profile photo.";
+                }
+            }
+
+            _unitOfWork.ApplicationUser.Update(user);
+            _unitOfWork.Save();
+            return RedirectToPage();
+        }
+
     }
 }

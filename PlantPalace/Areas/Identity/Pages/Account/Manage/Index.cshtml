@@ -4,7 +4,56 @@
     ViewData["Title"] = "Profile";
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
-<link href="~/css/profile.css" rel="stylesheet" />
+<style>
+    .profile-pic {
+        color: transparent;
+        transition: all .3s ease;
+        position: relative;
+        transition: all .3s ease;
+        input
+
+    {
+        display: none;
+    }
+
+    img {
+        position: absolute;
+        object-fit: cover;
+        width: $circleSize;
+        height: $circleSize;
+        box-shadow: $shadow;
+        border-radius: $radius;
+        z-index: 0;
+    }
+
+    .-label {
+        cursor: pointer;
+        height: $circleSize;
+        width: $circleSize;
+    }
+
+    &:hover {
+        .-label
+
+    {
+        background-color: rgba(0,0,0,.8);
+        z-index: 10000;
+        color: $fontColor;
+        transition: background-color .2s ease-in-out;
+        border-radius: $radius;
+        margin-bottom: 0;
+    }
+
+    }
+
+    span {
+        display: inline-flex;
+        padding: .2em;
+        height: 2em;
+    }
+
+    }
+</style>
 <h3>@ViewData["Title"]</h3>
 <partial name="_StatusMessage" for="StatusMessage" />
 <div class="row">
@@ -25,23 +74,28 @@
     </div>
     <div class="col-md-6">
         <div class="card mb-4">
-            <div class="card-body text-center">
-                <div class="profile-pic">
-                    <label class="-label" for="file">
-                        <span class="glyphicon glyphicon-camera"></span>
-                        <span>Change Image</span>
-                    </label>
-                    <input id="file" type="file" onchange="loadFile(event)" />
-                    <img src="https://cdn.pixabay.com/photo/2017/08/06/21/01/louvre-2596278_960_720.jpg" id="output" width="200" />
+            <form asp-page-handler="PicUpload" enctype="multipart/form-data">
+                <div class="card-body text-center">
+                    <div class="profile-pic">
+                        <label class="-label" for="file">
+                            <span class="glyphicon glyphicon-camera"></span>
+                            <span>Change Image</span>
+                        </label>
+                        <input id="file" type="file" name="photo" onchange="loadFile(event)" />
+                        <img src="@Model.ProfilePhoto" id="output" width="200" />
+                    </div>
+                    <div class="d-flex justify-content-center mb-2">
+                        <button type="submit" class="btn btn-primary">Upload New Image</button>
+                    </div>
                 </div>
-                <div class="d-flex justify-content-center mb-2">
-                    <button type="button" class="btn btn-primary">Follow</button>
-                    <button type="button" class="btn btn-outline-primary ms-1">Message</button>
-                </div>
-            </div>
+            </form>
+            
         </div>
     </div>
 </div>
+
+
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
