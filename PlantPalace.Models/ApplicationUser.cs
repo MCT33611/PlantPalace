@@ -20,5 +20,8 @@ namespace PlantPalace.Models
         public string? State { get; set; }
         public string? PostalCode { get; set; }
 
+        [NotMapped]
+        public string Role { get; set; }
+
     }
 }

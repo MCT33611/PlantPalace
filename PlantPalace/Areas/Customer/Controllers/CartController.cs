@@ -90,7 +90,8 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 
 				ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
 				ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusPending;
-				ShoppingCartVM.OrderHeader.OrderDate = System.DateTime.Now;
+                ShoppingCartVM.OrderHeader.PaymentMethod = SD.PaymentMethodOnline;
+                ShoppingCartVM.OrderHeader.OrderDate = System.DateTime.Now;
 				ShoppingCartVM.OrderHeader.ApplicationUserId = claim.Value;
 
 				foreach (var cart in ShoppingCartVM.ListCart)
@@ -167,6 +168,7 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 
 				ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
 				ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusPending;
+                ShoppingCartVM.OrderHeader.PaymentMethod = SD.PaymentMethodCOD;
 				ShoppingCartVM.OrderHeader.OrderDate = System.DateTime.Now;
 				ShoppingCartVM.OrderHeader.ApplicationUserId = claim.Value;
 
@@ -206,15 +208,14 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 
         public IActionResult OrderConfirmation(int id)
         {
-            return View(id);
-        }
+            OrderHeader orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == id, incluedProperties: "ApplicationUser");
 
-		public IActionResult OrderConfirmationOffline(int id)
-		{
-			OrderHeader orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == id,incluedProperties: "ApplicationUser");
-            _unitOfWork.OrderHeader.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusPending);
-		    _unitOfWork.Save();
-            string mailBody = $@"<body>
+            string mailBody = $@"
+
+
+                                  <link rel=""stylesheet"" href=""~/lib/bootstrap/dist/css/bootstrap.css"" />
+
+                                  <body>
                                     <div class=""container"">
                                         <div class=""row"">
                                             <div class=""col-md-6 mx-auto"">
@@ -223,8 +224,10 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
                                                         <h1 class=""card-title"">Order Confirmation</h1>
                                                         <p>Thank you for your order with PlantPalace!</p>
                                                         <p>Your order #{orderHeader.Id} has been confirmed.</p>
-                                                        <p>Order Date: {orderHeader.OrderDate.ToShortDateString()}</p>
-                                                        <p>Shipping Address:{orderHeader.StreetAddress}</p>
+                                                        <p>Order Date: {orderHeader.OrderDate.ToShortDateString()}</p>                                                        <p>Order Date: {orderHeader.OrderDate.ToShortDateString()}</p>                                                        <p>Order Date: {orderHeader.OrderDate.ToShortDateString()}</p>
+                                                        <p>Payment Method: {orderHeader.PaymentMethod}</p>
+
+                                                        <p>Shipping Address:{orderHeader.State},{orderHeader.City},{orderHeader.StreetAddress}<BR/>PINCODE:{orderHeader.PostalCode}</p>
                                                         <p>Total Amount: {orderHeader.OrderTotal}</p>
                                                         
                 
@@ -239,14 +242,20 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
                                     </div>
                                 </body>";
 
-
-
-
             _emailSender.SendEmailAsync(orderHeader.ApplicationUser.Email, "Order Place from PlantPalace", mailBody);
 
             List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart.GetALL(u => u.userId == orderHeader.ApplicationUserId).ToList();
-			_unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
-			_unitOfWork.Save();
+            _unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
+            _unitOfWork.Save();
+            return View(id);
+        }
+
+		public IActionResult OrderConfirmationOffline(int id)
+		{
+			OrderHeader orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == id,incluedProperties: "ApplicationUser");
+            _unitOfWork.OrderHeader.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusPending);
+		    _unitOfWork.Save();
+            
 
 			return RedirectToAction("OrderConfirmation", "Cart", new {id = id });
 
@@ -264,9 +273,9 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
                 _unitOfWork.OrderHeader.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusDelayedPayment);
                 _unitOfWork.Save();
             }
-            List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart.GetALL(u => u.userId == orderHeader.ApplicationUserId).ToList();
+/*            List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart.GetALL(u => u.userId == orderHeader.ApplicationUserId).ToList();
             _unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
-            _unitOfWork.Save();
+            _unitOfWork.Save();*/
 
 			return RedirectToAction("OrderConfirmation", "Cart", new {id = id});
 

@@ -21,6 +21,8 @@ namespace PlantPalace.Models
         public DateTime ShippingDate { get; set; }
         public double OrderTotal { get; set; }
 
+        public string? PaymentMethod { get; set; }
+
         public string? OrderStatus { get; set; }
         public string? PaymentStatus { get; set; }
         public string? TrackingNumber { get; set; }

@@ -242,7 +242,10 @@
                             @if (Model.OrderHeader.PaymentStatus == SD.PaymentStatusDelayedPayment &&
                             Model.OrderHeader.OrderStatus == SD.StatusShipped)
                             {
-                                <button type="submit" class="btn btn-success form-control my-1">Pay Now</button>
+                                <button type="submit" asp-action="SetASPaid"
+                                        class="btn btn-success form-control my-1">
+                                    Set As Paid
+                                </button>
                             }
                             @if (User.IsInRole(SD.Role_Admin))
                             {
@@ -260,9 +263,9 @@
                                         Ship Order
                                     </button>
                                 }
-                                @if (Model.OrderHeader.OrderStatus == SD.StatusPending)
+                                @if (Model.OrderHeader.PaymentStatus == SD.PaymentStatusPending && Model.OrderHeader.OrderStatus == SD.StatusShipped)
                                 {
-                                    <button type="submit" asp-action="SetASPaid" 
+                                    <button type="submit" asp-action="SetASPaid"
                                             class="btn btn-success form-control my-1">
                                         Set As Paid
                                     </button>

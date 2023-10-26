@@ -13,6 +13,10 @@ namespace PlantPalace.Utility
         public const string Role_Admin = "Admin";
         public const string Role_Employee = "Employee";
 
+        public const string PaymentMethodOnline = "Online";
+        public const string PaymentMethodCOD = "Offline";
+
+
 
         public const string StatusPending = "Pending";
         public const string StatusApproved = "Approved";

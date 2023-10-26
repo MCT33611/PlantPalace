@@ -114,9 +114,6 @@ namespace PlantPalace.Areas.Identity.Pages.Account
             public string? State { get; set; }
             public string? PostalCode { get; set; }
             public string? PhoneNumber { get; set; }
-            public int? CompanyId { get; set; }
-            [ValidateNever]
-            public IEnumerable<SelectListItem> CompanyList { get; set; }
 
         }
 
@@ -170,9 +167,8 @@ namespace PlantPalace.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _userManager.AddToRoleAsync(user, SD.Role_Admin);
+                        await _userManager.AddToRoleAsync(user, SD.Role_Customer);
                     }
-                    await _userManager.AddToRoleAsync(user, SD.Role_Customer);
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

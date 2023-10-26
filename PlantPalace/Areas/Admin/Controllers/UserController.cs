@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using PlantPalace.DataAccess.Repository.IRepository;
 using PlantPalace.Models;
 using PlantPalace.Utility;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using System.Data;
 
-namespace PlantPalaceWeb.Areas.Admin.Controllers
+namespace BulkyBookWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = SD.Role_Admin)]
@@ -16,23 +16,16 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IUnitOfWork _unitOfWork;
-        public UserController(UserManager<IdentityUser> userManager, IUnitOfWork unitOfWork, RoleManager<IdentityRole> roleManager)
-        {
+        public UserController(UserManager<IdentityUser> userManager, IUnitOfWork unitOfWork, RoleManager<IdentityRole> roleManager) {
             _unitOfWork = unitOfWork;
             _roleManager = roleManager;
             _userManager = userManager;
         }
-        public IActionResult Index()
+        public IActionResult Index() 
         {
             return View();
         }
 
-
-
-        public IActionResult Details()
-        {
-            return View();
-        }
 
 
 
@@ -44,26 +37,31 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
         {
             List<ApplicationUser> objUserList = _unitOfWork.ApplicationUser.GetALL().ToList();
 
+            foreach(var user in objUserList) {
+
+                user.Role=  _userManager.GetRolesAsync(user).GetAwaiter().GetResult().FirstOrDefault();
+            }
+
             return Json(new { data = objUserList });
         }
 
 
         [HttpPost]
-        public IActionResult Block_UnBlock([FromBody] string id)
+        public IActionResult LockUnlock([FromBody]string id)
         {
 
             var objFromDb = _unitOfWork.ApplicationUser.Get(u => u.Id == id);
-            if (objFromDb == null)
+            if (objFromDb == null) 
             {
                 return Json(new { success = false, message = "Error while Locking/Unlocking" });
             }
-            if (objFromDb.LockoutEnd != null && objFromDb.LockoutEnd > DateTime.Now)
-            {
+
+            if(objFromDb.LockoutEnd!=null && objFromDb.LockoutEnd > DateTime.Now) {
                 //user is currently locked and we need to unlock them
                 objFromDb.LockoutEnd = DateTime.Now;
+                objFromDb.LockoutEnabled = !objFromDb.LockoutEnabled;
             }
-            else
-            {
+            else {
                 objFromDb.LockoutEnd = DateTime.Now.AddYears(1000);
             }
             _unitOfWork.ApplicationUser.Update(objFromDb);

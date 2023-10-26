@@ -88,14 +88,17 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
                 if(productVM.Product.Id == 0)
                 {
                     _unitOfWork.Product.Add(productVM.Product);
+                    TempData["success"] = "Product " + productVM.Product.Name + " Created Successfully";
+
 
                 }
                 else
                 {
                     _unitOfWork.Product.Update(productVM.Product);
+                    TempData["success"] = "Product " + productVM.Product.Name + " Updated Successfully";
+
                 }
                 _unitOfWork.Save();
-                TempData["success"] = "Product " + productVM.Product.Name + " Created Successfully";
                 return RedirectToAction("Index");
             }
             else

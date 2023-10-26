@@ -58,25 +58,24 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
         public IActionResult SetASPaid()
         {
             var orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == OrderVM.OrderHeader.Id);
-            orderHeader.OrderStatus = SD.StatusShipped;
             orderHeader.PaymentStatus = SD.PaymentStatusApproved;
 
             _unitOfWork.OrderHeader.Update(orderHeader);
             _unitOfWork.Save();
-            TempData["Success"] = "Order Shipped Successfully.";
-            return RedirectToAction(nameof(COD_PaymentConfirmation), new { id = OrderVM.OrderHeader.Id });
+            TempData["Success"] = "Payment completed Successfully.";
+            return RedirectToAction(nameof(Details), new { orderId = OrderVM.OrderHeader.Id });
         }
 
         public IActionResult COD_PaymentConfirmation(int id)
         {
             OrderHeader orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == id);
-            _unitOfWork.OrderHeader.UpdateStatus(id, SD.StatusShipped, SD.PaymentStatusApproved);
+            _unitOfWork.OrderHeader.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusPending);
             _unitOfWork.Save();
 
             return View(id);
         }
 
-
+        
         [HttpPost]
         [Authorize(Roles ="Admin")]
         [AutoValidateAntiforgeryToken]
