@@ -156,6 +156,7 @@ namespace PlantPalace.Areas.Identity.Pages.Account
                 user.State = Input.State;
                 user.PostalCode = Input.PostalCode;
                 user.PhoneNumber = Input.PhoneNumber;
+                user.Pic = "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?size=626&ext=jpg";
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded) {
@@ -178,9 +179,10 @@ namespace PlantPalace.Areas.Identity.Pages.Account
                         pageHandler: null,
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
-
+                    OTPM.GenerateOTP();
+                    OTPM.Email = Input.Email;
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                        $"Your Otp is <a>{OTPM.OTP}</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
@@ -193,6 +195,8 @@ namespace PlantPalace.Areas.Identity.Pages.Account
                         }
                         else {
                             await _signInManager.SignInAsync(user, isPersistent: false);
+                            return RedirectToAction("OTP", "Home", new { area = "Customer" });
+
                         }
                         return LocalRedirect(returnUrl);
                     }

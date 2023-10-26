@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Org.BouncyCastle.Pqc.Crypto.Picnic;
 
 namespace PlantPalace.Areas.Identity.Pages.Account.Manage
 {
@@ -58,6 +59,9 @@ namespace PlantPalace.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            public string ProfilePhoto { get; set; }
+
         }
 
         private async Task LoadAsync(IdentityUser user)

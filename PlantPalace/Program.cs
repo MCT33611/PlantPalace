@@ -6,6 +6,7 @@ using PlantPalace.DataAccess.Repository;
 using PlantPalace.Utility;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Stripe;
+using PlantPalace.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

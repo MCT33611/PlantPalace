@@ -1,0 +1,78 @@
+﻿<link href="~/css/otp.css" rel="stylesheet" />
+
+<div class="container height-100 d-flex justify-content-center align-items-center">
+    <div class="position-relative">
+        <div class="card p-2 text-center">
+            <h6>Please enter the one-time password <br> to verify your account</h6>
+            <div> <span>A code has been sent to your email</span></div>
+
+            @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.ErrorMessage
+                </div>
+            }
+
+            <form asp-action="OTP" asp-controller="Home" asp-area="Customer" method="post">
+                <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
+                    <input class="m-2 text-center form-control rounded" type="text" id="first" name="first" maxlength="1" />
+                    <input class="m-2 text-center form-control rounded" type="text" id="second" name="second" maxlength="1" />
+                    <input class="m-2 text-center form-control rounded" type="text" id="third" name="third" maxlength="1" />
+                    <input class="m-2 text-center form-control rounded" type="text" id="fourth" name="fourth" maxlength="1" />
+                    <input class="m-2 text-center form-control rounded" type="text" id="fifth" name="fifth" maxlength="1" />
+                    <input class="m-2 text-center form-control rounded" type="text" id="sixth" name="sixth" maxlength="1" />
+                </div>
+                <div class="w-100  text-center d-flex justify-content-center">
+                </div>
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary px-4 validate">Validate</button>
+                </div>
+            </form>
+            @* <a asp-action="ResentOtpAsync" id="resend" class="px-4" hidden>Resend</a><span id="countdown" class="text-secondary"></span> *@
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/otp.js"></script>
+
+    <script>
+        const resendButton = document.getElementById('resend');
+        const countdownDisplay = document.getElementById('countdown');
+        let countdown = 30;
+        let countdownInterval;
+
+        function enableResendButton() {
+            resendButton.removeAttribute('hidden');
+            resendButton.textContent = 'Resend';
+            countdownDisplay.style.display = 'none'; // Hide the countdown when the button is enabled
+        }
+
+        function disableResendButton() {
+            resendButton.setAttribute('hidden', true);
+            countdownDisplay.style.display = 'block'; // Show the countdown
+        }
+
+        function updateCountdown() {
+            countdownDisplay.textContent = `${countdown} seconds`;
+        }
+
+        resendButton.addEventListener('click', () => {
+            disableResendButton();
+            updateCountdown();
+            clearInterval(countdownInterval);
+            countdownInterval = setInterval(() => {
+                countdown--;
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    enableResendButton();
+                } else {
+                    updateCountdown();
+                }
+            }, 1000);
+        });
+
+        // Initially, enable the Resend button
+        enableResendButton();
+    </script>
+}

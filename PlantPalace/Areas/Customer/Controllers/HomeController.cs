@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using PlantPalace.DataAccess.Repository.IRepository;
 using PlantPalace.Models;
@@ -13,12 +14,61 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IEmailSender _emailSender;
 
-        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
+
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork, IEmailSender emailSender)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
+            _emailSender = emailSender;
+
         }
+
+        [HttpGet]
+        public IActionResult OTP()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResentOtpAsync()
+        {
+            if(OTPM.Email != null)
+            {
+                await _emailSender.SendEmailAsync(OTPM.Email, "Confirm your email",
+                        $"Your Otp is <a>{OTPM.OTP}</a>.");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Sumting went worong ! Please refresh");
+            }
+
+            return RedirectToAction("OTP");
+        }
+
+        [HttpPost]
+        public IActionResult OTP(string first, string second, string third, string fourth, string fifth, string sixth)
+        {
+            
+            string userEnteredOTP = $"{first}{second}{third}{fourth}{fifth}{sixth}";
+
+            
+            string correctOTP = OTPM.OTP.ToString();
+
+            if (userEnteredOTP == correctOTP)
+            {
+                
+                
+                return LocalRedirect("~/");
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "Incorrect OTP. Please try again.";
+                return View(); 
+            }
+        }
+
 
         public IActionResult Index()
         {
