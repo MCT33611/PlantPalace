@@ -11,7 +11,7 @@
                 <div class="product_image">
                     <a href="#"><img src="@product.ImageUrl" alt=""></a>
                     <div class="product_buttons">
-                        <button class="product_heart"><i class="fa fa-heart"></i></button>
+                            <button onclick="AddORremove(@product.Id)" class="product_heart"><i class="fa fa-heart"></i></button>
                         <button onclick="AddToCart(@product.Id)" class="add_to_cart"><i class="fa fa-shopping-cart"></i></button>
                         <div class="quick_view">
                             <a href="#"><h6>Quick View</h6></a>
@@ -36,7 +36,7 @@
                             </div>
                     </div>
                     <div class="product_buttons">
-                        <button class="product_heart"><i class="fa fa-heart"></i></button>
+                            <button onclick="AddORremove(@product.Id)" class="product_heart"><i class="fa fa-heart"></i></button>
                             <button onclick="AddToCart(@product.Id)" class="add_to_cart"><i class="fa fa-shopping-cart"></i></button>
                     </div>
                 </div>
@@ -56,6 +56,18 @@
                 type: 'GET',
                 success: function (data) {
                     
+                    toastr.success(data.message);
+                }
+            });
+        }
+
+        function AddORremove(productId) {
+            var url = "Customer/WishList/AddORremove?ProductId=" + productId;
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (data) {
+
                     toastr.success(data.message);
                 }
             });

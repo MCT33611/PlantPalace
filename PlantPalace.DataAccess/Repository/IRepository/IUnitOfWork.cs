@@ -14,6 +14,7 @@ namespace PlantPalace.DataAccess.Repository.IRepository
         IApplicationUserRepository ApplicationUser { get; }
 
         IShoppingCartRepository ShoppingCart { get; }
+        IWishListRepository WishList { get; }
 
         IOrderDetailRepository OrderDetail { get; }
 

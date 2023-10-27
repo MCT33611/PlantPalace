@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace PlantPalace.Models.ViewModels
 {
-    public class ShoppingCartVM
+
+    public class WishListVM
     {
-        public OrderHeader OrderHeader { get; set; }
-
-        public IEnumerable<ShoppingCart> ListCart { get; set; }
-
-
-
+        public IEnumerable<WishList> WishLists { get; set; }
     }
 }

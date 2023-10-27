@@ -14,11 +14,14 @@ namespace PlantPalace.DataAccess.Repository
         public ICategoryRepository Category { get; private set; }
         public IProductRepository Product { get; private set; }
         public IShoppingCartRepository ShoppingCart { get; set; }
+        public IWishListRepository WishList { get; set; }
         public IApplicationUserRepository ApplicationUser { get; set; }
 
 		public IOrderDetailRepository OrderDetail { get; set; }
 
 		public IOrderHeaderRepository OrderHeader { get; set; }
+
+
 
 		public UnitOfWork(ApplicationDbContext db)
         {
@@ -26,6 +29,7 @@ namespace PlantPalace.DataAccess.Repository
             Product = new ProductRepository(_db);
             Category = new CategoryRepository(_db);
             ShoppingCart = new ShoppingCartRepository(_db);
+            WishList = new WishListRepository(_db);
             ApplicationUser = new ApplicationUserRepository(_db);
             OrderDetail = new OrderDetailRepository(_db);
             OrderHeader = new OrderHeaderRepository(_db);

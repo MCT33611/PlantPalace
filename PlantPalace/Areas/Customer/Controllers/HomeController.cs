@@ -134,7 +134,7 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
         #region API CALLS
         [HttpGet]
         [Authorize]
-        public void AddTOcart(int ProductId)
+        public IActionResult AddTOcart(int ProductId)
         {
             ShoppingCart cart = new ShoppingCart()
             {
@@ -163,10 +163,12 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
             }
 
             _unitOfWork.Save();
+			return RedirectToAction(nameof(Index));
 
-        }
 
-        #endregion
-    }
+		}
+
+		#endregion
+	}
 
 }
