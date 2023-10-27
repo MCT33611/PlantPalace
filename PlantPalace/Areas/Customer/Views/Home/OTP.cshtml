@@ -28,7 +28,7 @@
                     <button type="submit" class="btn btn-primary px-4 validate">Validate</button>
                 </div>
             </form>
-            @* <a asp-action="ResentOtpAsync" id="resend" class="px-4" hidden>Resend</a><span id="countdown" class="text-secondary"></span> *@
+            <a asp-action="ResentOtp" id="resend" class="px-4">Resend</a>
         </div>
     </div>
 </div>
@@ -36,43 +36,5 @@
 @section Scripts{
     <script src="~/js/otp.js"></script>
 
-    <script>
-        const resendButton = document.getElementById('resend');
-        const countdownDisplay = document.getElementById('countdown');
-        let countdown = 30;
-        let countdownInterval;
-
-        function enableResendButton() {
-            resendButton.removeAttribute('hidden');
-            resendButton.textContent = 'Resend';
-            countdownDisplay.style.display = 'none'; // Hide the countdown when the button is enabled
-        }
-
-        function disableResendButton() {
-            resendButton.setAttribute('hidden', true);
-            countdownDisplay.style.display = 'block'; // Show the countdown
-        }
-
-        function updateCountdown() {
-            countdownDisplay.textContent = `${countdown} seconds`;
-        }
-
-        resendButton.addEventListener('click', () => {
-            disableResendButton();
-            updateCountdown();
-            clearInterval(countdownInterval);
-            countdownInterval = setInterval(() => {
-                countdown--;
-                if (countdown <= 0) {
-                    clearInterval(countdownInterval);
-                    enableResendButton();
-                } else {
-                    updateCountdown();
-                }
-            }, 1000);
-        });
-
-        // Initially, enable the Resend button
-        enableResendButton();
-    </script>
+    
 }

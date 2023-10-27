@@ -51,6 +51,7 @@
         position: absolute;
         top: 0;
         left: 0;
+        margin-left: -68px;
     }
 
         #slider-wrap ul#slider li {
@@ -198,14 +199,14 @@ h2 {
 
 
 
-/*ANIMATION*/
-/*#slider-wrap ul, #pagination-wrap ul li {
+ANIMATION
+#slider-wrap ul, #pagination-wrap ul li {
     -webkit-transition: all 0.3s cubic-bezier(1,.01,.32,1);
     -moz-transition: all 0.3s cubic-bezier(1,.01,.32,1);
     -o-transition: all 0.3s cubic-bezier(1,.01,.32,1);
     -ms-transition: all 0.3s cubic-bezier(1,.01,.32,1);
     transition: all 0.3s cubic-bezier(1,.01,.32,1);
-}*/
+}
 
 
 

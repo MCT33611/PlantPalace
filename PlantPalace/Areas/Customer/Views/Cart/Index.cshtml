@@ -1,5 +1,5 @@
 ﻿@model ShoppingCartVM
-
+<link href="~/css/cartstyleemt.css" rel="stylesheet" />
 <form method="post">
     <br />
     <div class="card shadow border-0 mb-5 card-home-c">
@@ -11,6 +11,11 @@
                     </h5>
                 </div>
 
+                <div class="col-6">
+                    <h5 class="pt-2 text-white text-end">
+                        Items :@Model.ListCart.Count()
+                    </h5>
+                </div>
             </div>
         </div>
         <div class="card-body my-4">
@@ -21,7 +26,36 @@
                     <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-outline-primary text-uppercase mb-5 btn-sm"><small>Continue Shopping</small></a>
                 </div>
                 <div class="col-md-10 offset-md-1">
+                    @if(Model.ListCart.Count() <= 0)
+                    {
+                        <div class="container-fluid  mt-100">
+                            <div class="row">
 
+                                <div class="col-md-12">
+
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Cart</h5>
+                                        </div>
+                                        <div class="card-body cart">
+                                            <div class="col-sm-12 empty-cart-cls text-center">
+                                                <img src="https://i.imgur.com/dCdflKN.png" width="130" height="130" class="img-fluid mb-4 mr-3">
+                                                <h3><strong>Your Cart is Empty</strong></h3>
+                                                <h4>Add something to make me happy :)</h4>
+                                                <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-primary cart-btn-transform m-3" data-abc="true">continue shopping</a>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
                     @foreach (var item in Model.ListCart)
                     {
                         <div class="row border-bottom pb-3">
@@ -86,11 +120,14 @@
                         </ul>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-2 offset-md-5">
-                        <a asp-action="Summary" class="btn btn-primary border-0 bg-gradient w-100 py-2">Summary</a>
+                @if(Model.ListCart.Count() >= 1)
+                {
+                    <div class="row">
+                        <div class="col-md-2 offset-md-5">
+                            <a asp-action="Summary" class="btn btn-primary border-0 bg-gradient w-100 py-2">Summary</a>
+                        </div>
                     </div>
-                </div>
+                }
             </div>
         </div>
     </div>

@@ -3,67 +3,102 @@
 @model WishListVM
 
 <div class="cart-wrap">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="main-heading mb-10">My wishlist</div>
-				<div class="table-wishlist">
-					<table cellpadding="0" cellspacing="0" border="0" width="100%">
-						<thead>
-							<tr>
-								<th width="45%">Product Name</th>
-								<th width="15%">Unit Price</th>
-								<th width="15%">Stock Status</th>
-								<th width="15%"></th>
-								<th width="10%"></th>
-							</tr>
-						</thead>
-						<tbody>
-							@foreach(var item in Model.WishLists)
-							{
-								
-								<tr>
-									<a asp-action="Details" asp-controller="Home" asp-area="Customer" asp-route-productId="@item.Product.Id">
-										<td width="45%">
-											<div class="display-flex align-center">
-												<div class="img-product">
-													<img src="@item.Product.ImageUrl" alt="" class="mCS_img_loaded">
-												</div>
-												<div class="name-product">
-														@item.Product.Name
-												</div>
-											</div>
-										</td>
-									</a>
-									
-									<td width="15%" class="price">@item.Product.Price</td>
-									<td width="15%">
-										@if (item.Product.Stock > 0)
-										{
-											<span class="in-stock-box">In Stock</span>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="main-heading mb-10">My wishlist</div>
+                <div class="table-wishlist">
+                    @if(Model.WishLists.Count() >= 1)
+                    {
+                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th width="45%">Product Name</th>
+                                    <th width="15%">Unit Price</th>
+                                    <th width="15%">Stock Status</th>
+                                    <th width="15%"></th>
+                                    <th width="10%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.WishLists)
+                                {
 
-										}
-										else
-										{
-											<span class="in-stock-box">Out Of Stock</span>
-										}
-									</td>
-									<td width="15%"><a href="/Customer/Home/AddTOcart?ProductId=@item.Product.Id" class="round-black-btn small-btn">Add to Cart</a></td>
-									<td width="10%" class="text-center">
-										<div class="col-3 col-sm-4 col-lg-2 offset-lg-1 text-right pt-2">
-											<a asp-action="AddORremove" asp-area="Customer" asp-controller="WishList" asp-route-ProductId="@item.Product.Id" class="btn btn-danger bg-gradient py-2 ">
-												<i class="bi bi-trash-fill"></i>
-											</a>
-										</div>
-									</td>
-								</tr>
-							}
-							
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
+                                    <tr>
+                                        <a asp-action="Details" asp-controller="Home" asp-area="Customer" asp-route-productId="@item.Product.Id">
+                                        <td width="45%">
+                                            <div class="display-flex align-center">
+                                                <div class="img-product">
+                                                    <img src="@item.Product.ImageUrl" alt="" class="mCS_img_loaded">
+                                                </div>
+                                                <div class="name-product">
+                                                        @item.Product.Name
+                                                </div>
+                                            </div>
+                                        </td>
+                                        </a>
+
+                                        <td width="15%" class="price">@item.Product.Price</td>
+                                        <td width="15%">
+                                            @if (item.Product.Stock > 0)
+                                            {
+                                                <span class="in-stock-box">In Stock</span>
+
+                                            }
+                                            else
+                                            {
+                                                <span class="in-stock-box">Out Of Stock</span>
+                                            }
+                                        </td>
+                                        <td width="15%"><a href="/Customer/Home/AddTOcart?ProductId=@item.Product.Id" class="round-black-btn small-btn">Add to Cart</a></td>
+                                        <td width="10%" class="text-center">
+                                            <div class="col-3 col-sm-4 col-lg-2 offset-lg-1 text-right pt-2">
+                                                <a asp-action="AddORremove" asp-area="Customer" asp-controller="WishList" asp-route-ProductId="@item.Product.Id" class="btn btn-danger bg-gradient py-2 ">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+
+                    }
+                    else
+                    {
+                        <div class="container-fluid  mt-100">
+                            <div class="row">
+
+                                <div class="col-md-12">
+
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Cart</h5>
+                                        </div>
+                                        <div class="card-body cart">
+                                            <div class="col-sm-12 empty-cart-cls text-center">
+                                                <img src="https://cdn-icons-png.flaticon.com/512/4689/4689880.png" width="130" height="130" class="img-fluid mb-4 mr-3">
+                                                <h3><strong>Your Wish List is Empty</strong></h3>
+                                                <h4>Add something to make me happy :)</h4>
+                                                <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-primary cart-btn-transform m-3" data-abc="true">Go To Home</a>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 

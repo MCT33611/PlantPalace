@@ -32,11 +32,12 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ResentOtpAsync()
+        [HttpGet]
+        public async Task<IActionResult> ResentOtp()
         {
             if(OTPM.Email != null)
             {
+                OTPM.GenerateOTP();
                 await _emailSender.SendEmailAsync(OTPM.Email, "Confirm your email",
                         $"Your Otp is <a>{OTPM.OTP}</a>.");
             }
@@ -45,7 +46,8 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
                 ModelState.AddModelError("", "Sumting went worong ! Please refresh");
             }
 
-            return RedirectToAction("OTP");
+            return RedirectToAction(nameof(OTP));
+            
         }
 
         [HttpPost]
@@ -163,12 +165,13 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
             }
 
             _unitOfWork.Save();
-			return RedirectToAction(nameof(Index));
+            return Json(new { success = true, message = "Product Added to Cart" });
 
 
-		}
 
-		#endregion
-	}
+        }
+
+        #endregion
+    }
 
 }
