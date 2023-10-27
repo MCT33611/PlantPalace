@@ -4,29 +4,29 @@
 <link href="~/css/homelist.css" rel="stylesheet" />
 <div class="row pb-3 card-home-c">
     <div class="product_grid">
-    <ul class="product_list list">
-    @foreach (var product in Model)
-        {
-            <li class="col-12 p-1 product_item m-3 rounded">
-                <div class="product_image">
-                    <a href="#"><img src="@product.ImageUrl" alt=""></a>
-                    <div class="product_buttons">
+        <ul class="product_list list">
+            @foreach (var product in Model)
+            {
+                <li class="col-12 p-1 product_item m-3 mx-4 rounded">
+                    <div class="product_image d-flex justify-content-center align-items-center">
+                        <a href="#"><img id="img" src="@product.ImageUrl" alt=""></a>
+                        <div class="product_buttons">
                             <button onclick="AddORremove(@product.Id)" class="product_heart"><i class="fa fa-heart"></i></button>
-                        <button onclick="AddToCart(@product.Id)" class="add_to_cart"><i class="fa fa-shopping-cart"></i></button>
-                        <div class="quick_view">
-                            <a href="#"><h6>Quick View</h6></a>
+                            <button onclick="AddToCart(@product.Id)" class="add_to_cart"><i class="fa fa-shopping-cart"></i></button>
+@*                             <div class="quick_view">
+                                <a onclick="openQuickViewPopup('@product.ImageUrl')"><h6>Quick View</h6></a>
+                            </div>
+ *@
                         </div>
                     </div>
-                </div>
-                <div class="product_values">
-                    <div class="product_title">
-                        <h5>@product.Name</h5>
-                    </div>
-                    <div class="product_price">
-                        <a href="#"><span class="price_old">@product.ListPrice.ToString("c")</span> <span class="price_new">@product.Price100.ToString("c")</span></a>
-                        <span class="product_rating"></span>
-                    </div>
-                    <div class="col-12">
+                    <div class="product_values">
+                        <div class="product_title">
+                            <h5>@product.Name</h5>
+                        </div>
+                        <div class="product_price">
+                            <a href="#"><span class="price_old">@product.ListPrice.ToString("c")</span> <span class="price_new">@product.Price100.ToString("c")</span></a>
+                        </div>
+                        <div class="col-12">
                             <div>
                                 <a asp-action="Details"
                                    asp-route-productId="@product.Id"
@@ -34,15 +34,21 @@
                                     Details
                                 </a>
                             </div>
-                    </div>
-                    <div class="product_buttons">
+                        </div>
+                        <div class="product_buttons">
                             <button onclick="AddORremove(@product.Id)" class="product_heart"><i class="fa fa-heart"></i></button>
                             <button onclick="AddToCart(@product.Id)" class="add_to_cart"><i class="fa fa-shopping-cart"></i></button>
+                        </div>
                     </div>
-                </div>
-            </li>
-        }
-    </ul>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+<div id="quickViewPopup" class="popup">
+    <div class="popup-content">
+        <span class="close" onclick="closeQuickViewPopup()">&times;</span>
+        <img id="quickViewImage" src="" alt="">
     </div>
 </div>
 
@@ -55,7 +61,7 @@
                 url: url,
                 type: 'GET',
                 success: function (data) {
-                    
+
                     toastr.success(data.message);
                 }
             });
@@ -73,5 +79,7 @@
             });
         }
 
+
+        
     </script>
 }

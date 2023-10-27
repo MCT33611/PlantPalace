@@ -1,7 +1,12 @@
 ﻿@model ShoppingCart
 
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+<link href='https://fonts.googleapis.com/css?family=Anton' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Neucha' rel='stylesheet' type='text/css'>
+
 <form method="post" class="mb-5">
     <input hidden asp-for="Id" />
+    <link href="~/css/imagezoom.css" rel="stylesheet" />
     <div class="card shadow border-0 mt-4 mb-5">
         <div class="card-header bg-secondary bg-gradient text-light py-4">
             <div class="row">
@@ -23,7 +28,56 @@
                 <div class="row">
                     <div class="col-12 col-lg-3 offset-lg-1 text-center mb-3">
 
-                        <img src="@Model.Product.ImageUrl" width="100" class="rounded w-75" />
+
+                        <div id="wrapper">
+
+                            <div id="slider-wrap">
+                                <ul id="slider">
+                                   
+                                    <li data-color="#1abc9c">
+                                        <div class="wrap" style="width:300px ; margin:0">
+                                            <div class="div col-10" id="imgMain" data-image="@Model.Product.ImageUrl" data-image-zoom="@Model.Product.ImageUrl" data-size="100"></div>
+                                        </div>
+                                    </li>
+
+                                    <li data-color="#1abc9c">
+                                        <div class="wrap" style="width:300px; margin:0">
+                                            <div class="div col-10" id="imgMain" data-image="@Model.Product.ImageOne" data-image-zoom="@Model.Product.ImageOne" data-size="100"></div>
+                                        </div>
+                                    </li>
+
+                                    <li data-color="#1abc9c">
+                                        <div class="wrap" style="width:300px; margin:0">
+                                            <div class="div col-10" id="imgMain" data-image="@Model.Product.ImageTwo" data-image-zoom="@Model.Product.ImageTwo" data-size="100"></div>
+                                        </div>
+                                    </li>
+
+                                    <li data-color="#1abc9c">
+                                        <div class="wrap" style="width:300px; margin:0">
+                                            <div class="div col-10" id="imgMain" data-image="@Model.Product.ImageThree" data-image-zoom="@Model.Product.ImageThree" data-size="100"></div>
+                                        </div>
+                                    </li>
+
+
+                                </ul>
+
+                                <!--controls-->
+                                <div class="btns" id="next"><i class="fa fa-arrow-right"></i></div>
+                                <div class="btns" id="previous"><i class="fa fa-arrow-left"></i></div>
+                                <div id="counter"></div>
+
+                                <div id="pagination-wrap">
+                                    <ul>
+                                    </ul>
+                                </div>
+                                <!--controls-->
+
+                            </div>
+
+                        </div>
+
+
+                        @* <img src="@Model.Product.ImageUrl" width="100" class="rounded w-75" /> *@
 
 
                     </div>
@@ -99,3 +153,74 @@
         </div>
     </div>
 </form>
+@section Scripts{
+    <script src="~/js/detailsimg.js"></script>
+    <script>
+        $.fn.magnifierRentgen = function () {
+
+            return this.each(function () {
+
+                var th = $(this),
+                    dataImage = th.data("image"),
+                    dataImageZoom = th.data("image-zoom"),
+                    dataSize = th.data("size");
+
+                th
+                    .addClass("magnifierRentgen")
+                    .resize(function () {
+                        th.find(".data-image, .magnifier-loupe img").css({
+                            "width": th.width()
+                        })
+                    })
+                    .append("<img class='data-image' src='" + dataImage + "'><div class='magnifier-loupe'><img src='" + dataImageZoom + "'>")
+                    .hover(function () {
+                        th.find(".magnifier-loupe").stop().fadeIn()
+                    }, function () {
+                        th.find(".magnifier-loupe").stop().fadeOut()
+                    })
+                    .find(".data-image").css({
+                        "width": th.width()
+                    }).parent().find(".magnifier-loupe").css({
+                        "width": dataSize,
+                        "height": dataSize
+                    })
+                    .find("img").css({
+                        "position": "absolute",
+                        "width": th.width()
+                    });
+
+                th.mousemove(function (e) {
+
+                    var elemPos = {},
+                        offset = th.offset();
+
+                    elemPos = {
+                        left: e.pageX - offset.left - dataSize / 2,
+                        top: e.pageY - offset.top - dataSize / 2
+                    }
+
+                    th
+                        .find(".magnifier-loupe").css({
+                            "top": elemPos["top"],
+                            "left": elemPos["left"]
+                        })
+                        .find("img").css({
+                            "top": -elemPos["top"],
+                            "left": -elemPos["left"],
+                            "width": th.width()
+                        })
+
+                });
+
+                $(window).resize(function () {
+                    $(".magnifierRentgen").resize();
+                });
+
+            });
+
+        };
+
+        $(".div").magnifierRentgen();
+    </script>
+
+}

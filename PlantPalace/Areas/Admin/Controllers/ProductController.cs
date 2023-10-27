@@ -279,6 +279,33 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
                     System.IO.File.Delete(oldImagePath);
                 }
             }
+            if (!string.IsNullOrEmpty(productToBeDeleted.ImageOne))
+            {
+                var oldImagePath = Path.Combine(wwwRootPath, productToBeDeleted.ImageOne.TrimStart('\\'));
+
+                if (System.IO.File.Exists(oldImagePath))
+                {
+                    System.IO.File.Delete(oldImagePath);
+                }
+            }
+            if (!string.IsNullOrEmpty(productToBeDeleted.ImageTwo))
+            {
+                var oldImagePath = Path.Combine(wwwRootPath, productToBeDeleted.ImageTwo.TrimStart('\\'));
+
+                if (System.IO.File.Exists(oldImagePath))
+                {
+                    System.IO.File.Delete(oldImagePath);
+                }
+            }
+            if (!string.IsNullOrEmpty(productToBeDeleted.ImageThree))
+            {
+                var oldImagePath = Path.Combine(wwwRootPath, productToBeDeleted.ImageThree.TrimStart('\\'));
+
+                if (System.IO.File.Exists(oldImagePath))
+                {
+                    System.IO.File.Delete(oldImagePath);
+                }
+            }
 
             _unitOfWork.Product.Remove(productToBeDeleted);
             _unitOfWork.Save();
