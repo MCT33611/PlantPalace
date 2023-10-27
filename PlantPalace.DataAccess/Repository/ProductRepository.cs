@@ -31,9 +31,26 @@ namespace PlantPalace.DataAccess.Repository
                 objFormDb.Price50 = obj.Price50;
                 objFormDb.Price100 = obj.Price100;
                 objFormDb.categoryId = obj.categoryId;
-                if(objFormDb.ImageUrl != null)
+                objFormDb.Stock = obj.Stock;
+
+                if (objFormDb.ImageUrl != null)
                 {
                     objFormDb.ImageUrl = obj.ImageUrl;
+                }
+
+                if (objFormDb.ImageOne != null)
+                {
+                    objFormDb.ImageOne = obj.ImageOne;
+                }
+
+                if (objFormDb.ImageTwo != null)
+                {
+                    objFormDb.ImageTwo = obj.ImageTwo;
+                }
+
+                if (objFormDb.ImageThree != null)
+                {
+                    objFormDb.ImageThree = obj.ImageThree;
                 }
             }
         }
