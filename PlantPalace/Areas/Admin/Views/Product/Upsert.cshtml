@@ -25,6 +25,11 @@
             <span asp-validation-for="Product.Name" class="text-danger"></span>
         </div>
         <div class="row p-1 mb-3">
+            <label asp-for="Product.Stock" class="p-0"></label>
+            <input asp-for="Product.Stock" class="form-control" />
+            <span asp-validation-for="Product.Stock" class="text-danger"></span>
+        </div>
+        <div class="row p-1 mb-3">
         <select asp-for="Product.categoryId" class="p-0 form-select" asp-items="@Model.CategoryList">
             <option disabled selected >--Select Category--</option>
         </select>

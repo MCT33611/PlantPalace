@@ -40,9 +40,10 @@ button.accept-policy {
 }
 
 .footer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
+  margin-top:10rem;
   white-space: nowrap;
   line-height: 60px;
 }

@@ -21,45 +21,50 @@
             </h2>
         </div>
     </div>
-    <table class="table table-bordered table-striped ">
-        <thead>
-            <tr>
-                <th>
-                    Category Name
-                </th>
-                <th>
-                    Display Orders
-                </th>
-                <th>
 
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var category in Model)
-            {
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped  table-sm">
+            <thead>
                 <tr>
-                    <td>
-                        @category.Name
-                    </td>
+                    <th>
+                        Category Name
+                    </th>
+                    <th>
+                        Display Orders
+                    </th>
+                    <th>
 
-                    <td>
-                        @category.DisplayOrder
-                    </td>
-
-                    <td>
-                        <div class=" d-flex justify-content-center flex-column flex-lg-row align-item-center" role="group">
-                            <a asp-action="Edit" asp-controller="Category" asp-route-id="@category.Id" class="btn btn-primary rounded me-1 text-nowrap">
-                                <i class="bi bi-pencil-square"></i> Edit
-                            </a>
-                            <a asp-action="Delete" asp-controller="Category" asp-route-id="@category.Id" class="btn btn-danger rounded ms-1 text-nowrap">
-                                <i class="bi bi-trash3-fill"></i> Delete
-                            </a>
-                        </div>
-                    </td>
+                    </th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var category in Model)
+                {
+                    <tr>
+                        <td>
+                            @category.Name
+                        </td>
+
+                        <td>
+                            @category.DisplayOrder
+                        </td>
+
+                        <td>
+                            <div class=" d-flex justify-content-center flex-column flex-lg-row align-item-center" role="group">
+                                <a asp-action="Edit" asp-controller="Category" asp-route-id="@category.Id" class="btn btn-primary rounded me-1 text-nowrap">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+                                <a asp-action="Delete" asp-controller="Category" asp-route-id="@category.Id" class="btn btn-danger rounded ms-1 text-nowrap">
+                                    <i class="bi bi-trash3-fill"></i> Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    
 
 </div>

@@ -4,57 +4,7 @@
     ViewData["Title"] = "Profile";
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
-<style>
-    .profile-pic {
-        color: transparent;
-        transition: all .3s ease;
-        position: relative;
-        transition: all .3s ease;
-        input
 
-    {
-        display: none;
-    }
-
-    img {
-        position: absolute;
-        object-fit: cover;
-        width: $circleSize;
-        height: $circleSize;
-        box-shadow: $shadow;
-        border-radius: $radius;
-        z-index: 0;
-    }
-
-    .-label {
-        cursor: pointer;
-        height: $circleSize;
-        width: $circleSize;
-    }
-
-    &:hover {
-        .-label
-
-    {
-        background-color: rgba(0,0,0,.8);
-        z-index: 10000;
-        color: $fontColor;
-        transition: background-color .2s ease-in-out;
-        border-radius: $radius;
-        margin-bottom: 0;
-    }
-
-    }
-
-    span {
-        display: inline-flex;
-        padding: .2em;
-        height: 2em;
-    }
-
-    }
-</style>
-<h3>@ViewData["Title"]</h3>
 <partial name="_StatusMessage" for="StatusMessage" />
 <div class="row">
     <div class="col-md-6">
@@ -69,6 +19,11 @@
                 <label asp-for="Input.PhoneNumber" class="form-label"></label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.UserName" class="form-control" placeholder="Please enter your phone number." />
+                <label asp-for="Input.UserName" class="form-label"></label>
+                <span asp-validation-for="Input.UserName" class="text-danger"></span>
+            </div>
             <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
         </form>
     </div>
@@ -79,13 +34,12 @@
                     <div class="profile-pic">
                         <label class="-label" for="file">
                             <span class="glyphicon glyphicon-camera"></span>
-                            <span>Change Image</span>
+                            <img id="output" src="@Model.ProfilePhoto" class="rounded-circle position-relative" style="background-size:cover;width:10rem;height:10rem">
                         </label>
-                        <input id="file" type="file" name="photo" onchange="loadFile(event)" />
-                        <img src="@Model.ProfilePhoto" id="output" width="200" />
+                        <input id="file" type="file" name="photo" onchange="loadFile(event)" hidden />
                     </div>
                     <div class="d-flex justify-content-center mb-2">
-                        <button type="submit" class="btn btn-primary">Upload New Image</button>
+                        <button type="submit" id="btnSubmit" class="btn btn-primary my-2" hidden>Upload New Image</button>
                     </div>
                 </div>
             </form>
@@ -102,7 +56,8 @@
     <script>
         var loadFile = function (event) {
             var image = document.getElementById("output");
-            image.src = URL.createObjectURL(event.target.files[0]);
+            image.src= URL.createObjectURL(event.target.files[0]);
+            document.getElementById("btnSubmit").removeAttribute("hidden")
         };
 
     </script>

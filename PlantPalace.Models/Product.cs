@@ -58,8 +58,10 @@ namespace PlantPalace.Models
         [ValidateNever]
 
         public string ImageUrl { get; set; }
-        /*        [Display(Name = "Is Listed")]
-                public bool IsListed { get; set; }*/
+
+        [Range(1, double.MaxValue, ErrorMessage = "Quantity must be a positive number")]
+        [Required]
+        public int Stock { get;set; }
     }
 
 }

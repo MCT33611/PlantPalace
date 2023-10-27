@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using PlantPalace.DataAccess.Repository;
 using PlantPalace.DataAccess.Repository.IRepository;
 using PlantPalace.Models;
 using PlantPalace.Utility;
@@ -126,5 +127,46 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
+
+
+        #region API CALLS
+        [HttpGet]
+        [Authorize]
+        public void AddTOcart(int ProductId)
+        {
+            ShoppingCart cart = new ShoppingCart()
+            {
+                Quantity = 1,
+                ProductId = ProductId
+            };
+
+
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            cart.userId = claim.Value;
+
+            
+
+            ShoppingCart cartDb =
+                _unitOfWork.ShoppingCart.Get(u => u.userId == claim.Value && u.ProductId == cart.ProductId);
+
+            if (cartDb == null)
+            {
+                _unitOfWork.ShoppingCart.Add(cart);
+            }
+            else
+            {
+                _unitOfWork.ShoppingCart.QuantityIncrement(cartDb, 1);
+
+            }
+
+            _unitOfWork.Save();
+
+        }
+
+        #endregion
     }
+
 }

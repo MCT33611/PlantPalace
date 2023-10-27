@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlantPalace.DataAccess.Data;
 
 #nullable disable
 
-namespace PlantPalace.DataAccess.Data
+namespace PlantPalace.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231027004924_addStocktoproducts")]
+    partial class addStocktoproducts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -440,7 +443,7 @@ namespace PlantPalace.DataAccess.Data
                             Price = 95.0,
                             Price100 = 85.0,
                             Price50 = 90.75,
-                            Stock = 10,
+                            Stock = 0,
                             categoryId = 1
                         },
                         new
@@ -453,7 +456,7 @@ namespace PlantPalace.DataAccess.Data
                             Price = 95.0,
                             Price100 = 85.0,
                             Price50 = 90.75,
-                            Stock = 10,
+                            Stock = 0,
                             categoryId = 4
                         },
                         new
@@ -466,7 +469,7 @@ namespace PlantPalace.DataAccess.Data
                             Price = 95.0,
                             Price100 = 85.0,
                             Price50 = 90.75,
-                            Stock = 10,
+                            Stock = 0,
                             categoryId = 2
                         },
                         new
@@ -479,7 +482,7 @@ namespace PlantPalace.DataAccess.Data
                             Price = 95.0,
                             Price100 = 85.0,
                             Price50 = 90.75,
-                            Stock = 10,
+                            Stock = 0,
                             categoryId = 3
                         },
                         new
@@ -492,7 +495,7 @@ namespace PlantPalace.DataAccess.Data
                             Price = 95.0,
                             Price100 = 85.0,
                             Price50 = 90.75,
-                            Stock = 10,
+                            Stock = 0,
                             categoryId = 1
                         },
                         new
@@ -505,7 +508,7 @@ namespace PlantPalace.DataAccess.Data
                             Price = 95.0,
                             Price100 = 85.0,
                             Price50 = 90.75,
-                            Stock = 10,
+                            Stock = 0,
                             categoryId = 1
                         },
                         new
@@ -518,7 +521,7 @@ namespace PlantPalace.DataAccess.Data
                             Price = 95.0,
                             Price100 = 85.0,
                             Price50 = 90.75,
-                            Stock = 10,
+                            Stock = 0,
                             categoryId = 3
                         },
                         new
@@ -531,7 +534,7 @@ namespace PlantPalace.DataAccess.Data
                             Price = 95.0,
                             Price100 = 85.0,
                             Price50 = 90.75,
-                            Stock = 10,
+                            Stock = 0,
                             categoryId = 2
                         },
                         new
@@ -544,7 +547,7 @@ namespace PlantPalace.DataAccess.Data
                             Price = 95.0,
                             Price100 = 85.0,
                             Price50 = 90.75,
-                            Stock = 10,
+                            Stock = 0,
                             categoryId = 4
                         },
                         new
@@ -557,7 +560,7 @@ namespace PlantPalace.DataAccess.Data
                             Price = 95.0,
                             Price100 = 85.0,
                             Price50 = 90.75,
-                            Stock = 10,
+                            Stock = 0,
                             categoryId = 3
                         });
                 });

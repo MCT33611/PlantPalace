@@ -47,7 +47,8 @@ namespace PlantPalace.DataAccess.Data
                     Price100 = 85.00,
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                     categoryId = 1,
-                    ImageUrl = ""
+                    ImageUrl = "",
+                    Stock = 10
                 },
                 new Product { Id = 2,
                     Name = "Product 2",
@@ -57,7 +58,8 @@ namespace PlantPalace.DataAccess.Data
                     Price100 = 85.00,
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                     categoryId = 4,
-                    ImageUrl = ""
+                    ImageUrl = "",
+                    Stock = 10
 
                 },
                 new Product { Id = 3,
@@ -68,7 +70,8 @@ namespace PlantPalace.DataAccess.Data
                     Price100 = 85.00,
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                     categoryId = 2,
-                    ImageUrl = ""
+                    ImageUrl = "",
+                    Stock = 10
 
                 },
                 new Product { Id = 4,
@@ -80,7 +83,8 @@ namespace PlantPalace.DataAccess.Data
                     Price100 = 85.00,
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                     categoryId = 3,
-                    ImageUrl = ""
+                    ImageUrl = "",
+                    Stock = 10
 
                 },
                 new Product { Id = 5,
@@ -91,7 +95,8 @@ namespace PlantPalace.DataAccess.Data
                     Price100 = 85.00,
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                     categoryId = 1,
-                    ImageUrl = ""
+                    ImageUrl = "",
+                    Stock = 10
 
                 },
                 new Product { Id = 6,
@@ -102,7 +107,8 @@ namespace PlantPalace.DataAccess.Data
                     Price100 = 85.00,
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                     categoryId = 1,
-                    ImageUrl = ""
+                    ImageUrl = "",
+                    Stock = 10
                 },
                 new Product { Id = 7,
                     Name = "Product 7",
@@ -112,7 +118,8 @@ namespace PlantPalace.DataAccess.Data
                     Price100 = 85.00,
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                     categoryId = 3,
-                    ImageUrl = ""
+                    ImageUrl = "",
+                    Stock = 10
 
                 },
                 new Product { Id = 8,
@@ -124,7 +131,8 @@ namespace PlantPalace.DataAccess.Data
                     Price100 = 85.00,
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                     categoryId = 2,
-                    ImageUrl = ""
+                    ImageUrl = "",
+                    Stock = 10
 
                 },
                 new Product { Id = 9,
@@ -135,7 +143,8 @@ namespace PlantPalace.DataAccess.Data
                     Price100 = 85.00,
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                     categoryId = 4,
-                    ImageUrl = ""
+                    ImageUrl = "",
+                    Stock = 10
 
                 },
                 new Product { Id = 10,
@@ -146,7 +155,8 @@ namespace PlantPalace.DataAccess.Data
                     Price100 = 85.00,
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                     categoryId = 3,
-                    ImageUrl = ""
+                    ImageUrl = "",
+                    Stock = 10
 
                 }
                 );

@@ -244,7 +244,50 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 
             _emailSender.SendEmailAsync(orderHeader.ApplicationUser.Email, "Order Place from PlantPalace", mailBody);
 
-            List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart.GetALL(u => u.userId == orderHeader.ApplicationUserId).ToList();
+            List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart.GetALL(u => u.userId == orderHeader.ApplicationUserId,incluedProperties : "Product").ToList();
+            // Create a dictionary to store the product ID and its quantity in the shopping carts
+            Dictionary<int, int> productQuantities = new Dictionary<int, int>();
+
+            foreach (var cart in shoppingCarts)
+            {
+                // Assuming that the ShoppingCart model has a ProductId and Quantity property
+                int productId = cart.ProductId;
+                int quantity = cart.Quantity;
+
+                // Update the productQuantities dictionary
+                if (productQuantities.ContainsKey(productId))
+                {
+                    productQuantities[productId] += quantity;
+                }
+                else
+                {
+                    productQuantities[productId] = quantity;
+                }
+            }
+
+            // Update product stock based on the quantities in the shopping carts
+            foreach (var productId in productQuantities.Keys)
+            {
+                var product = _unitOfWork.Product.Get(u => u.Id == productId);
+
+                if (product != null)
+                {
+                    int quantityInCart = productQuantities[productId];
+
+                    // Check if the product stock is sufficient
+                    if (product.Stock >= quantityInCart)
+                    {
+                        // Update the product stock
+                        product.Stock -= quantityInCart;
+                        _unitOfWork.Product.Update(product);
+                    }
+                    else
+                    {
+                        // Handle insufficient stock (e.g., display an error message or take appropriate action)
+                        // You can return an error message or throw an exception here
+                    }
+                }
+            }
             _unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
             _unitOfWork.Save();
             return View(id);

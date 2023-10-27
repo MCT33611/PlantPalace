@@ -73,7 +73,10 @@ namespace PlantPalace.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
 
-           
+            
+            [Display(Name = "User Name")]
+            public string UserName { get; set; }
+
         }
 
         private async Task LoadAsync(IdentityUser user)
@@ -94,8 +97,7 @@ namespace PlantPalace.Areas.Identity.Pages.Account.Manage
             Input = new InputModel
             {
                 PhoneNumber = phoneNumber,
-
-                
+                UserName = ProifilPicUser.UserName,
             };
         }
 
@@ -131,7 +133,14 @@ namespace PlantPalace.Areas.Identity.Pages.Account.Manage
                 var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
+                    StatusMessage = "Unexpected error when trying to reset phone number.";
+                    return RedirectToPage();
+                }
+
+                var setUsernameResult = await _userManager.SetUserNameAsync(user, Input.UserName);
+                if (!setUsernameResult.Succeeded)
+                {
+                    StatusMessage = "Unexpected error when trying to reset user name.";
                     return RedirectToPage();
                 }
             }
