@@ -59,7 +59,7 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
             
         }
         [HttpPost]
-        public IActionResult Upsert(ProductVM productVM, IFormFile? file)
+        public IActionResult Upsert(ProductVM productVM, IFormFile? file, IFormFile? file1, IFormFile? file2, IFormFile? file3)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +85,71 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
                     }
                     productVM.Product.ImageUrl = @"\Images\product\" + filename;
                 }
-                if(productVM.Product.Id == 0)
+                if (file1 != null)
+                {
+                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(file1.FileName);
+                    string productPath = wwwRootPath + @"\Images\product\";
+
+                    if (!string.IsNullOrEmpty(productVM.Product.ImageOne))
+                    {
+                        var oldImagePath = Path.Combine(wwwRootPath, productVM.Product.ImageOne.TrimStart('\\'));
+
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+
+                    using (var fileStream = new FileStream(Path.Combine(productPath, filename), FileMode.Create))
+                    {
+                        file1.CopyTo(fileStream);
+                    }
+                    productVM.Product.ImageOne = @"\Images\product\" + filename;
+                }
+                if (file2 != null)
+                {
+                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(file2.FileName);
+                    string productPath = wwwRootPath + @"\Images\product\";
+
+                    if (!string.IsNullOrEmpty(productVM.Product.ImageTwo))
+                    {
+                        var oldImagePath = Path.Combine(wwwRootPath, productVM.Product.ImageTwo.TrimStart('\\'));
+
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+
+                    using (var fileStream = new FileStream(Path.Combine(productPath, filename), FileMode.Create))
+                    {
+                        file2.CopyTo(fileStream);
+                    }
+                    productVM.Product.ImageTwo = @"\Images\product\" + filename;
+                }
+                if (file3 != null)
+                {
+                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(file3.FileName);
+                    string productPath = wwwRootPath + @"\Images\product\";
+
+                    if (!string.IsNullOrEmpty(productVM.Product.ImageThree))
+                    {
+                        var oldImagePath = Path.Combine(wwwRootPath, productVM.Product.ImageThree.TrimStart('\\'));
+
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+
+                    using (var fileStream = new FileStream(Path.Combine(productPath, filename), FileMode.Create))
+                    {
+                        file3.CopyTo(fileStream);
+                    }
+                    productVM.Product.ImageThree = @"\Images\product\" + filename;
+                }
+
+                if (productVM.Product.Id == 0)
                 {
                     _unitOfWork.Product.Add(productVM.Product);
                     TempData["success"] = "Product " + productVM.Product.Name + " Created Successfully";

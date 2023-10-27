@@ -48,7 +48,10 @@ namespace PlantPalace.DataAccess.Data
                     Price100 = 85.00,
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                     categoryId = 1,
-                    ImageUrl = "",
+                    ImageUrl = "https://www.plantsguru.com/image/cache/pg-flowering-plants-175x175.jpg",
+                    ImageOne = "https://www.plantsguru.com/image/cache/Aquatic/plantsguru-adenium-light-of-sun-and-moon-400x400.jpg",
+                    ImageTwo = "https://www.plantsguru.com/image/cache/catalog/Desertrose/pg-adenium-phet-mong-kon-400x400.jpg",
+                    ImageThree = "https://www.plantsguru.com/image/cache/catalog/Desertrose/pg-adenium-phet-mong-kon-400x400.jpg",
                     Stock = 10
                 },
                 new Product { Id = 2,
@@ -59,7 +62,10 @@ namespace PlantPalace.DataAccess.Data
                     Price100 = 85.00,
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                     categoryId = 4,
-                    ImageUrl = "",
+                    ImageUrl = "https://www.plantsguru.com/image/cache/pg-flowering-plants-175x175.jpg",
+                    ImageOne = "https://www.plantsguru.com/image/cache/Aquatic/plantsguru-adenium-light-of-sun-and-moon-400x400.jpg",
+                    ImageTwo = "https://www.plantsguru.com/image/cache/catalog/Desertrose/pg-adenium-phet-mong-kon-400x400.jpg",
+                    ImageThree = "https://www.plantsguru.com/image/cache/catalog/Desertrose/pg-adenium-phet-mong-kon-400x400.jpg",
                     Stock = 10
 
                 },
@@ -71,7 +77,10 @@ namespace PlantPalace.DataAccess.Data
                     Price100 = 85.00,
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                     categoryId = 2,
-                    ImageUrl = "",
+                    ImageUrl = "https://www.plantsguru.com/image/cache/pg-flowering-plants-175x175.jpg",
+                    ImageOne = "https://www.plantsguru.com/image/cache/Aquatic/plantsguru-adenium-light-of-sun-and-moon-400x400.jpg",
+                    ImageTwo = "https://www.plantsguru.com/image/cache/catalog/Desertrose/pg-adenium-phet-mong-kon-400x400.jpg",
+                    ImageThree = "https://www.plantsguru.com/image/cache/catalog/Desertrose/pg-adenium-phet-mong-kon-400x400.jpg",
                     Stock = 10
 
                 },
@@ -84,7 +93,10 @@ namespace PlantPalace.DataAccess.Data
                     Price100 = 85.00,
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                     categoryId = 3,
-                    ImageUrl = "",
+                    ImageUrl = "https://www.plantsguru.com/image/cache/pg-flowering-plants-175x175.jpg",
+                    ImageOne = "https://www.plantsguru.com/image/cache/Aquatic/plantsguru-adenium-light-of-sun-and-moon-400x400.jpg",
+                    ImageTwo = "https://www.plantsguru.com/image/cache/catalog/Desertrose/pg-adenium-phet-mong-kon-400x400.jpg",
+                    ImageThree = "https://www.plantsguru.com/image/cache/catalog/Desertrose/pg-adenium-phet-mong-kon-400x400.jpg",
                     Stock = 10
 
                 },
@@ -96,7 +108,10 @@ namespace PlantPalace.DataAccess.Data
                     Price100 = 85.00,
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                     categoryId = 1,
-                    ImageUrl = "",
+                    ImageUrl = "https://www.plantsguru.com/image/cache/pg-flowering-plants-175x175.jpg",
+                    ImageOne = "https://www.plantsguru.com/image/cache/Aquatic/plantsguru-adenium-light-of-sun-and-moon-400x400.jpg",
+                    ImageTwo = "https://www.plantsguru.com/image/cache/catalog/Desertrose/pg-adenium-phet-mong-kon-400x400.jpg",
+                    ImageThree = "https://www.plantsguru.com/image/cache/catalog/Desertrose/pg-adenium-phet-mong-kon-400x400.jpg",
                     Stock = 10
 
                 },
@@ -119,7 +134,10 @@ namespace PlantPalace.DataAccess.Data
                     Price100 = 85.00,
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                     categoryId = 3,
-                    ImageUrl = "",
+                    ImageUrl = "https://www.plantsguru.com/image/cache/pg-flowering-plants-175x175.jpg",
+                    ImageOne = "https://www.plantsguru.com/image/cache/Aquatic/plantsguru-adenium-light-of-sun-and-moon-400x400.jpg",
+                    ImageTwo = "https://www.plantsguru.com/image/cache/catalog/Desertrose/pg-adenium-phet-mong-kon-400x400.jpg",
+                    ImageThree = "https://www.plantsguru.com/image/cache/catalog/Desertrose/pg-adenium-phet-mong-kon-400x400.jpg",
                     Stock = 10
 
                 },
@@ -132,7 +150,10 @@ namespace PlantPalace.DataAccess.Data
                     Price100 = 85.00,
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                     categoryId = 2,
-                    ImageUrl = "",
+                    ImageUrl = "https://www.plantsguru.com/image/cache/pg-flowering-plants-175x175.jpg",
+                    ImageOne = "https://www.plantsguru.com/image/cache/Aquatic/plantsguru-adenium-light-of-sun-and-moon-400x400.jpg",
+                    ImageTwo = "https://www.plantsguru.com/image/cache/catalog/Desertrose/pg-adenium-phet-mong-kon-400x400.jpg",
+                    ImageThree = "https://www.plantsguru.com/image/cache/catalog/Desertrose/pg-adenium-phet-mong-kon-400x400.jpg",
                     Stock = 10
 
                 },
@@ -144,7 +165,10 @@ namespace PlantPalace.DataAccess.Data
                     Price100 = 85.00,
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                     categoryId = 4,
-                    ImageUrl = "",
+                    ImageUrl = "https://www.plantsguru.com/image/cache/pg-flowering-plants-175x175.jpg",
+                    ImageOne = "https://www.plantsguru.com/image/cache/Aquatic/plantsguru-adenium-light-of-sun-and-moon-400x400.jpg",
+                    ImageTwo = "https://www.plantsguru.com/image/cache/catalog/Desertrose/pg-adenium-phet-mong-kon-400x400.jpg",
+                    ImageThree = "https://www.plantsguru.com/image/cache/catalog/Desertrose/pg-adenium-phet-mong-kon-400x400.jpg",
                     Stock = 10
 
                 },
@@ -156,7 +180,10 @@ namespace PlantPalace.DataAccess.Data
                     Price100 = 85.00,
                     Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                     categoryId = 3,
-                    ImageUrl = "",
+                    ImageUrl = "https://www.plantsguru.com/image/cache/pg-flowering-plants-175x175.jpg",
+                    ImageOne = "https://www.plantsguru.com/image/cache/Aquatic/plantsguru-adenium-light-of-sun-and-moon-400x400.jpg",
+                    ImageTwo = "https://www.plantsguru.com/image/cache/catalog/Desertrose/pg-adenium-phet-mong-kon-400x400.jpg",
+                    ImageThree = "https://www.plantsguru.com/image/cache/catalog/Desertrose/pg-adenium-phet-mong-kon-400x400.jpg",
                     Stock = 10
 
                 }
