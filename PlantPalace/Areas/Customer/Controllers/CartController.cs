@@ -7,6 +7,7 @@ using PlantPalace.Models.ViewModels;
 using PlantPalace.Utility;
 using Stripe.Checkout;
 using System.Security.Claims;
+using PlantPalace.Utility;
 
 namespace PlantPalaceWeb.Areas.Customer.Controllers
 {
@@ -17,12 +18,19 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
         private readonly IUnitOfWork _unitOfWork;
         [BindProperty]
         public ShoppingCartVM ShoppingCartVM { get; set; }
-        private readonly IEmailSender _emailSender;
+
+		[BindProperty]
+		public Summary SummaryVM { get; set; }
+
+		private readonly IEmailSender _emailSender;
         public CartController(IUnitOfWork unitOfWork,IEmailSender emailSender)
         {
             _unitOfWork = unitOfWork;
             _emailSender = emailSender;
         }
+
+
+
         public IActionResult Index()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -57,6 +65,12 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
                 OrderHeader = new()
 
             };
+
+            
+            if(ShoppingCartVM.ListCart.Count() <= 0)
+            {
+                return RedirectToAction(nameof(Index));
+            }
             ShoppingCartVM.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUser.Get(u => u.Id == claim.Value);
 
             ShoppingCartVM.OrderHeader.Name = ShoppingCartVM.OrderHeader.ApplicationUser.Name;
@@ -71,7 +85,10 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
                 cart.Price = GetPriceBasedOnQuantity(cart.Quantity, cart.Product.Price, cart.Product.Price50, cart.Product.Price100);
                 ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Quantity);
             }
-            return View(ShoppingCartVM);
+
+            HttpContext.Session.SetObject("ShoppingCartVMproducts", ShoppingCartVM.ListCart);
+
+			return View(ShoppingCartVM);
         }
 
 
@@ -86,8 +103,9 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 				var claimsIdentity = (ClaimsIdentity)User.Identity;
 				var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-				ShoppingCartVM.ListCart = _unitOfWork.ShoppingCart.GetALL(u => u.userId == claim.Value, incluedProperties: "Product");
+				//ShoppingCartVM.ListCart = _unitOfWork.ShoppingCart.GetALL(u => u.userId == claim.Value, incluedProperties: "Product");
 
+                ShoppingCartVM.ListCart = HttpContext.Session.GetObject<IEnumerable<ShoppingCart>>("ShoppingCartVMproducts");
 				ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
 				ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusPending;
                 ShoppingCartVM.OrderHeader.PaymentMethod = SD.PaymentMethodOnline;
@@ -164,7 +182,8 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 				var claimsIdentity = (ClaimsIdentity)User.Identity;
 				var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-				ShoppingCartVM.ListCart = _unitOfWork.ShoppingCart.GetALL(u => u.userId == claim.Value, incluedProperties: "Product");
+				//ShoppingCartVM.ListCart = _unitOfWork.ShoppingCart.GetALL(u => u.userId == claim.Value, incluedProperties: "Product");
+				ShoppingCartVM.ListCart = HttpContext.Session.GetObject<IEnumerable<ShoppingCart>>("ShoppingCartVMproducts");
 
 				ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
 				ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusPending;

@@ -246,7 +246,7 @@ namespace PlantPalace.DataAccess.Data
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categorries");
+                    b.ToTable("Categorries", (string)null);
 
                     b.HasData(
                         new
@@ -301,7 +301,7 @@ namespace PlantPalace.DataAccess.Data
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderDetail");
+                    b.ToTable("OrderDetail", (string)null);
                 });
 
             modelBuilder.Entity("PlantPalace.Models.OrderHeader", b =>
@@ -380,7 +380,7 @@ namespace PlantPalace.DataAccess.Data
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("OrderHeader");
+                    b.ToTable("OrderHeader", (string)null);
                 });
 
             modelBuilder.Entity("PlantPalace.Models.Product", b =>
@@ -436,7 +436,7 @@ namespace PlantPalace.DataAccess.Data
 
                     b.HasIndex("categoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
 
                     b.HasData(
                         new
@@ -622,7 +622,7 @@ namespace PlantPalace.DataAccess.Data
 
                     b.HasIndex("userId");
 
-                    b.ToTable("ShoppingCarts");
+                    b.ToTable("ShoppingCarts", (string)null);
                 });
 
             modelBuilder.Entity("PlantPalace.Models.WishList", b =>
@@ -646,7 +646,7 @@ namespace PlantPalace.DataAccess.Data
 
                     b.HasIndex("userId");
 
-                    b.ToTable("WishList");
+                    b.ToTable("WishList", (string)null);
                 });
 
             modelBuilder.Entity("PlantPalace.Models.ApplicationUser", b =>

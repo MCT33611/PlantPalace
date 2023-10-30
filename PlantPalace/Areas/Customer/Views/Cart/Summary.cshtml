@@ -116,16 +116,31 @@
 							@DateTime.Now.AddDays(7).ToShortDateString() - @DateTime.Now.AddDays(14).ToShortDateString()
 						</p>
 					</div>
-					<div>
-						<input class="form-check-input" type="checkbox"  id="flexCheckChecked" name="IsChecked" checked>
-						<label class="form-check-label" for="flexCheckChecked">
-							Cash On Delivery
-						</label>
-					</div>
+					@if (@Model.OrderHeader.OrderTotal >= 1)
+					{
+						<div>
+							<input class="form-check-input" type="checkbox" id="flexCheckChecked" name="IsChecked" checked>
+							<label class="form-check-label" for="flexCheckChecked">
+								Cash On Delivery
+							</label>
+						</div>
+						<div class="col-12 col-md-4">
+							<button type="submit" value="Place Order" class="btn btn-primary form-control">Place Order</button>
+						</div>
+					}
+					else
+					{
+						<div>
+							<input class="form-check-input" type="checkbox" id="flexCheckChecked" name="IsChecked" disabled>
+							<label class="form-check-label" for="flexCheckChecked">
+								Cash On Delivery
+							</label>
+						</div>
+						<div class="col-12 col-md-4">
+							<button type="submit" value="Place Order" class="btn btn-primary form-control" disabled>Place Order</button>
+						</div>
+					}
 
-					<div class="col-12 col-md-4">
-						<button type="submit" value="Place Order" class="btn btn-primary form-control">Place Order</button>
-					</div>
 				</div>
 			</div>
 		</div>
