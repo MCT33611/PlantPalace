@@ -59,14 +59,25 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             if(objFromDb.LockoutEnd!=null && objFromDb.LockoutEnd > DateTime.Now) {
                 //user is currently locked and we need to unlock them
                 objFromDb.LockoutEnd = DateTime.Now;
-                objFromDb.LockoutEnabled = !objFromDb.LockoutEnabled;
             }
             else {
                 objFromDb.LockoutEnd = DateTime.Now.AddYears(1000);
             }
+            objFromDb.LockoutEnabled = !objFromDb.LockoutEnabled;
+
             _unitOfWork.ApplicationUser.Update(objFromDb);
             _unitOfWork.Save();
-            return Json(new { success = true, message = "Operation Successful" });
+            string MSG;
+            if (objFromDb.LockoutEnabled)
+            {
+                MSG = "Blocked Successful";
+            }
+            else
+            {
+                MSG = "unblocked Successful";
+
+            }
+            return Json(new { success = true, message = MSG });
         }
 
         #endregion
