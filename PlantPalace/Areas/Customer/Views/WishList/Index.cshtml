@@ -50,7 +50,7 @@
                                                 <span class="in-stock-box">Out Of Stock</span>
                                             }
                                         </td>
-                                        <td width="15%"><a href="/Customer/Home/AddTOcart?ProductId=@item.Product.Id" class="round-black-btn small-btn">Add to Cart</a></td>
+                                        <td width="15%"><a onclick="AddToCart(@item.Product.Id)" class="round-black-btn small-btn">Add to Cart</a></td>
                                         <td width="10%" class="text-center">
                                             <div class="col-3 col-sm-4 col-lg-2 offset-lg-1 text-right pt-2">
                                                 <a asp-action="AddORremove" asp-area="Customer" asp-controller="WishList" asp-route-ProductId="@item.Product.Id" class="btn btn-danger bg-gradient py-2 ">
@@ -101,4 +101,19 @@
         </div>
     </div>
 </div>
+<script>
+    function AddToCart(productId) {
+        console.log("yes")
+        var url = "/Customer/Home/AddTOcart?ProductId=" + productId;
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (data) {
+
+                toastr.success(data.message);
+            }
+        });
+    }
+</script>
+
 
