@@ -68,6 +68,7 @@ namespace PlantPalace.DataAccess.Repository
                     query = query.Include(incluedProp);
                 }
             }
+           
             return query.ToList();
         }
 

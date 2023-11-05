@@ -19,8 +19,6 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
         [BindProperty]
         public ShoppingCartVM ShoppingCartVM { get; set; }
 
-		[BindProperty]
-		public Summary SummaryVM { get; set; }
 
 		private readonly IEmailSender _emailSender;
         public CartController(IUnitOfWork unitOfWork,IEmailSender emailSender)

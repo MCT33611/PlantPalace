@@ -75,6 +75,10 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 
         public IActionResult Index()
         {
+            if (User.IsInRole(SD.Role_Admin))
+            {
+                return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
+            }
             IEnumerable<Product> products = _unitOfWork.Product.GetALL(incluedProperties: "Category");
             return View(products);
         }

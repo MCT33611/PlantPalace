@@ -15,7 +15,6 @@ namespace PlantPalace.DataAccess.Data
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
-        public DbSet<Summary> Summary { get; set; }
 		public DbSet<WishList> WishList { get; set; }
         public DbSet<OrderDetail> OrderDetail { get; set; }
         public DbSet<OrderHeader> OrderHeader { get; set; }

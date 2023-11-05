@@ -246,7 +246,7 @@ namespace PlantPalace.DataAccess.Data
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categorries", (string)null);
+                    b.ToTable("Categorries");
 
                     b.HasData(
                         new
@@ -301,7 +301,7 @@ namespace PlantPalace.DataAccess.Data
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderDetail", (string)null);
+                    b.ToTable("OrderDetail");
                 });
 
             modelBuilder.Entity("PlantPalace.Models.OrderHeader", b =>
@@ -380,7 +380,7 @@ namespace PlantPalace.DataAccess.Data
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("OrderHeader", (string)null);
+                    b.ToTable("OrderHeader");
                 });
 
             modelBuilder.Entity("PlantPalace.Models.Product", b =>
@@ -436,7 +436,7 @@ namespace PlantPalace.DataAccess.Data
 
                     b.HasIndex("categoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
 
                     b.HasData(
                         new
@@ -622,7 +622,7 @@ namespace PlantPalace.DataAccess.Data
 
                     b.HasIndex("userId");
 
-                    b.ToTable("ShoppingCarts", (string)null);
+                    b.ToTable("ShoppingCarts");
                 });
 
             modelBuilder.Entity("PlantPalace.Models.WishList", b =>
@@ -646,7 +646,7 @@ namespace PlantPalace.DataAccess.Data
 
                     b.HasIndex("userId");
 
-                    b.ToTable("WishList", (string)null);
+                    b.ToTable("WishList");
                 });
 
             modelBuilder.Entity("PlantPalace.Models.ApplicationUser", b =>
@@ -671,6 +671,9 @@ namespace PlantPalace.DataAccess.Data
 
                     b.Property<string>("StreetAdderss")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("joinDate")
+                        .HasColumnType("datetime2");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });

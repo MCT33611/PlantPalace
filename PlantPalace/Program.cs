@@ -6,10 +6,7 @@ using PlantPalace.DataAccess.Repository;
 using PlantPalace.Utility;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Stripe;
-using PlantPalace.Models;
-using Microsoft.AspNet.Identity;
-using PlantPalace.Utility;
-using System.Security.Policy;
+using IronPdf.Extensions.Mvc.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +34,9 @@ builder.Services.AddSession(options => {
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddTransient<IRazorViewRenderer, RazorViewRenderer>();
+
+builder.Services.AddHttpContextAccessor();
 
 //builder.Services.AddTransient<UserLockoutMiddleware>();
 var app = builder.Build();
@@ -80,7 +80,6 @@ app.Use(async (context, next) =>
 
 	await next();
 });
-
 app.UseSession();
 app.MapRazorPages();
 app.MapControllerRoute(

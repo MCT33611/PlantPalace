@@ -157,7 +157,7 @@ namespace PlantPalace.Areas.Identity.Pages.Account
                 user.PostalCode = Input.PostalCode;
                 user.PhoneNumber = Input.PhoneNumber;
                 user.Pic = "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?size=626&ext=jpg";
-
+                user.joinDate = DateTime.Now;
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded) {
                     _logger.LogInformation("User created a new account with password.");

@@ -22,6 +22,8 @@ namespace PlantPalace.Models
         public string? State { get; set; }
         public string? PostalCode { get; set; }
 
+        public DateTime joinDate { get; set; } = DateTime.Now;
+
         [NotMapped]
         public string Role { get; set; }
 

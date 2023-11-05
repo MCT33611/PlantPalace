@@ -53,6 +53,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="DinkToPdf" Version="1.0.8" />
+    <PackageReference Include="IronPdf" Version="2023.11.7" />
+    <PackageReference Include="IronPdf.Extensions.Mvc.Core" Version="2023.9.1" />
     <PackageReference Include="MailKit" Version="4.2.0" />
     <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.12" />
@@ -77,6 +80,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Images\profiles\" />
+    <Folder Include="wwwroot\Pdf\SalesReport\" />
   </ItemGroup>
 
 </Project>
