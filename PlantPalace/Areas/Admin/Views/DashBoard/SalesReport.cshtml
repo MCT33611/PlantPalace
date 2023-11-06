@@ -1,11 +1,11 @@
 ﻿@{
     Layout = null;
-    
+
 }
 
 @model IEnumerable<OrderHeader>
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,6 +18,7 @@
             width: 210mm;
             height: 297mm;
         }
+
         body,
         .intro {
             height: 100%;
@@ -28,7 +29,7 @@
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
-            font-size:small;
+            font-size: small;
         }
 
         thead th,
@@ -46,49 +47,61 @@
         }
     </style>
 </head>
-<body >
+<body>
     <section class="intro a4-size ">
-        <div class="bg-image h-100 a4-size" >
+        <div class="bg-image h-100 a4-size">
             <div class="mask d-flex align-items-center h-100">
                 <div class="">
+                    <div class="text-center mb-5">
+                        <h3>Sales Report</h3>
+                    </div>
                     <div class="row justify-content-start">
+                        @{
+                            var minOrderDate = Model.Min(o => o.OrderDate);
+                            var maxOrderDate = Model.Max(o => o.OrderDate);
+
+                            var orderedOrders = Model.OrderByDescending(o => o.OrderDate).ToList();
+                        }
+
+                        <div class="card-header-pills text-start text-small opacity-75 mb-2">
+                            <p>@minOrderDate.ToShortDateString() to @maxOrderDate.ToShortDateString() </p>
+                        </div>
                         <div class="col-12">
                             <div class="card bg-dark shadow-2-strong">
+                                
                                 <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-dark table-borderless mb-0">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">CUSTOMER</th>
-                                                    <th scope="col">CONTACT</th>
+                                    <table class="table table-dark table-borderless mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">CUSTOMER</th>
+                                                <th scope="col">CONTACT</th>
 
-                                                    <th scope="col">DATE</th>
-                                                    <th>Address</th>
-                                                    <th scope="col">TOTAL</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach(var order in Model)
-                                                {
-                                                    <tr>
-                                                        <th scope="row">@order.ApplicationUser.Name</th>
-                                                        <th >@order.ApplicationUser.Email</th>
-                                                        <td>@order.OrderDate</td>
-                                                        <td>@order.State<br>,@order.City<br>,@order.StreetAddress<br>,@order.PostalCode</td>
-                                                        <td>@order.OrderTotal</td>
-                                                    </tr>
-                                                }
-                                                
-                                                
-                                            </tbody>
-                                            <tfoot>
+                                                <th scope="col">DATE</th>
+                                                <th>Address</th>
+                                                <th scope="col">TOTAL</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var order in orderedOrders)
+                                            {
                                                 <tr>
-                                                    <th>Total:</th>
-                                                    <td>@Model.Sum(o => o.OrderTotal)</td>
+                                                    <th scope="row">@order.ApplicationUser.Name</th>
+                                                    <th>@order.ApplicationUser.Email</th>
+                                                    <td>@order.OrderDate</td>
+                                                    <td>@order.State<br>,@order.City<br>,@order.StreetAddress<br>,@order.PostalCode</td>
+                                                    <td>@order.OrderTotal</td>
                                                 </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
+                                            }
+
+
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Total:</th>
+                                                <td>@Model.Sum(o => o.OrderTotal)</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
                                 </div>
                             </div>
                         </div>

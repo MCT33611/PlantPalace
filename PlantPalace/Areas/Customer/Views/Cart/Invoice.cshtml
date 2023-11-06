@@ -1,0 +1,123 @@
+﻿@{
+    Layout = null;
+
+}
+
+@model OrderVM
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Order confirmation</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #e1e1e1;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <table>
+        <tr>
+            <td colspan="2"><h1>Order Confirmation</h1></td>
+        </tr>
+        <tr>
+            <td>Customer: @Model.OrderHeader.Name</td>
+            <td>Date: @Model.OrderHeader.OrderDate</td>
+        </tr>
+    </table>
+
+    <!-- Order Details -->
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Id</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+        </tr>
+        @foreach(var orderDetail in Model.OrderDetail)
+        {
+            <tr>
+                <td>@orderDetail.Product.Name</td>
+                <td>#@orderDetail.Id</td>
+                <td>@orderDetail.Count</td>
+                <td>₹@orderDetail.Price</td>
+            </tr>
+        }
+        
+        
+    </table>
+
+    <!-- Total -->
+    <table>
+        <tr>
+            <td align="right">Subtotal</td>
+            <td>₹@Model.OrderHeader.OrderTotal</td>
+        </tr>
+        @* <tr>
+            <td align="right">Shipping & Handling</td>
+            <td>$15.00</td>
+        </tr>
+        <tr>
+            <td align="right"><strong>Grand Total (Incl. Tax)</strong></td>
+            <td><strong>$344.90</strong></td>
+        </tr>
+        <tr>
+            <td align="right"><small>Tax</small></td>
+            <td><small>$72.40</small></td>
+        </tr> *@
+    </table>
+
+    <!-- Billing Information -->
+    <table>
+        <tr>
+            <td><h2>Billing Information</h2></td>
+        </tr>
+        <tr>
+            <td>@Model.OrderHeader.OrderDate</td>
+        </tr>
+        
+        <tr>
+            <td>@Model.OrderHeader.StreetAddress, @Model.OrderHeader.PostalCode, @Model.OrderHeader.State</td>
+        </tr>
+        <tr>
+            <td>P: @Model.OrderHeader.PhoneNumber</td>
+        </tr>
+        <tr>
+            @if(Model.OrderHeader.PaymentMethod == SD.PaymentMethodCOD)
+            {
+                <td>Cash on Delivery</td>
+
+            }
+            else
+            {
+                <td>Card</td>
+
+            }
+        </tr>
+    </table>
+
+    <p>Have a nice day.</p>
+</body>
+</html>
+
