@@ -1,25 +1,30 @@
 ﻿@model List<Product>
 
-
 <div class="mb-5">
     <div class="row pt-4 pb-3">
-        <div class="col-6 ">
-            <h2 class="text-primary">
-                Category List
-            </h2>
-        </div>
-        <div class="col-6 text-end">
-            <h2 class="text-primary">
-                <a asp-controller="Product" asp-action="Upsert" class="btn btn-primary custum-controll-w">
-                    <i class="bi bi-plus-circle-fill"></i>
-                    <span class="text-nowrap ">Add New Product</span>
-                </a>
 
-            </h2>
-        </div>
+        <div class="pagetitle col-12 ">
+            <h1>Products List</h1>
+
+            <div class="row d-flex">
+                <nav class="col-10">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/Admin/Dashboard/Index">Admin</a></li>
+                        <li class="breadcrumb-item active">Product</li>
+                    </ol>
+
+                </nav>
+                <div class="col-2">
+                    <a asp-controller="Product" asp-action="Upsert" class="btn btn-primary custum-controll-w">
+                        <i class="bi bi-plus-circle-fill"></i>
+                        <span class="text-nowrap ">Add New Product</span>
+                    </a>
+                </div>
+            </div>
+        </div><!-- End Page Title -->
     </div>
     <div class="table-responsive">
-        <table id="tblData" class="table table-bordered table-striped w-100 table-sm ">
+        <table id="tblData" class="table table-bordered table-striped w-100 table-sm border-top">
             <thead>
                 <tr>
                     <th>

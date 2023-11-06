@@ -25,13 +25,13 @@ namespace PlantPalace.DataAccess.Data
 
             modelBuilder.Entity<Category>().HasData(
 
-                new Category { Id = 1, Name = "Indoor", DisplayOrder = 1 },
+                new Category { Id = 1, Name = "Indoor", Tax = 18 },
 
-                new Category { Id = 2, Name = "Outdoor", DisplayOrder = 1 },
+                new Category { Id = 2, Name = "Outdoor", Tax = 18 },
 
-                new Category { Id = 3, Name = "Tree", DisplayOrder = 1 },
+                new Category { Id = 3, Name = "Tree", Tax = 18 },
 
-                new Category { Id = 4, Name = "Hanging", DisplayOrder = 1 }
+                new Category { Id = 4, Name = "Hanging", Tax = 18 }
 
 
 

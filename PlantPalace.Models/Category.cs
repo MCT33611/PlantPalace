@@ -11,8 +11,8 @@ namespace PlantPalace.Models
         [MaxLength(30,ErrorMessage ="Maximun charecters are 30")]
         [DisplayName("Category Name")]
         public string Name { get; set; }
-        [DisplayName("Display Order")]
-        [Range(1,1000, ErrorMessage = "Only allow 1 to 100")]
-        public int DisplayOrder { get; set; }
+        [DisplayName("Tax(GST)")]
+        [Range(1,100, ErrorMessage = "Only allow 1 to 100")]
+        public int Tax { get; set; }
     }
 }

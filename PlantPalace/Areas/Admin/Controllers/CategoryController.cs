@@ -33,7 +33,7 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Create(Category model)
         {
-            if (model.Name == model.DisplayOrder.ToString())
+            if (model.Name == model.Tax.ToString())
             {
                 ModelState.AddModelError("name", "The display order cannot exactly match the Name.");
             }

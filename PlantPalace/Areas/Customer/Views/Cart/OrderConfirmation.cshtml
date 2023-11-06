@@ -3,8 +3,10 @@
 <div class="container row pt-4 ">
     <div class="col-12 text-center">
         <h1 class="text-primary text-center">Order Placed Successfully!</h1>
-        Your Order Id is :#@Model | 
-        <a asp-action="Invoice" asp-controller="Cart" asp-area="Customer" asp-route-id="@Model">Download Invoice</a>
+        Your Order Id is :#@Model |
+        <a asp-action="Index" asp-controller="Home" asp-area="Customer" class="btn btn-primary">Back To List</a>
+
+        
         <br /><br />
         <img src="~/images/5b7237fe7bbfa31531d6e765576f1bc4.jpg" width="50%" />
     </div>
@@ -13,6 +15,5 @@
         Your order has been placed successfully! <br />
     </div>
     
-    <a asp-action="Index" asp-controller="Home" asp-area="Customer"  class="btn btn-primary">Back To List</a>
 
 </div> 

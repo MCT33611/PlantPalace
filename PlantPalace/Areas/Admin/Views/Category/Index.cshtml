@@ -6,20 +6,26 @@
 
 <div class="">
     <div class="row pt-4 pb-3">
-        <div class="col-6 ">
-            <h2 class="text-primary">
-                Category List
-            </h2>
-        </div>
-        <div class="col-6 text-end">
-            <h2 class="text-primary">
-                <a asp-controller="Category" asp-action="Create" class="btn btn-primary custum-controll-w">
-                    <i class="bi bi-plus-circle-fill"></i>
-                    <span class="text-nowrap ">Add New Category</span>
-                </a>
 
-            </h2>
-        </div>
+        <div class="pagetitle col-12 ">
+            <h1>Category List</h1>
+            
+            <div class="row d-flex">
+                <nav class="col-10">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/Admin/Dashboard/Index">Admin</a></li>
+                        <li class="breadcrumb-item active">Categories</li>
+                    </ol>
+
+                </nav>
+                <div class="col-2">
+                    <a asp-controller="Category" asp-action="Create" class="btn btn-primary custum-controll-w">
+                        <i class="bi bi-plus-circle-fill"></i>
+                        <span class="text-nowrap ">Add New Category</span>
+                    </a>
+                </div>
+            </div>
+        </div><!-- End Page Title -->
     </div>
 
     <div class="table-responsive">
@@ -30,7 +36,7 @@
                         Category Name
                     </th>
                     <th>
-                        Display Orders
+                        Tax
                     </th>
                     <th>
 
@@ -46,7 +52,7 @@
                         </td>
 
                         <td>
-                            @category.DisplayOrder
+                            @category.Tax
                         </td>
 
                         <td>

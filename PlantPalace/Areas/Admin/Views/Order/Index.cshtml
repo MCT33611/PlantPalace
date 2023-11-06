@@ -32,13 +32,15 @@
 <partial name="_Notification" />
 
 <div class="mb-5">
-    <div class="row pt-4 pb-3">
-        <div class="col-6 ">
-            <h2 class="text-primary">
-                Category List
-            </h2>
-        </div>
-    </div>
+    <div class="pagetitle">
+        <h1>Oder List</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">@(User.IsInRole(SD.Role_Admin) ?"Admin":"Customer")</a></li>
+                <li class="breadcrumb-item active">Oders</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
     <div class="d-flex justify-content-between pb-5 pt-2">
         <span></span>
         <ul class="list-group list-group-horizontal-sm">

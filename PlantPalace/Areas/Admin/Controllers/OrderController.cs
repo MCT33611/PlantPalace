@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using IronPdf.Extensions.Mvc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlantPalace.DataAccess.Repository.IRepository;
 using PlantPalace.Models;
@@ -15,11 +16,13 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
 	public class OrderController : Controller
 	{	
 		private readonly IUnitOfWork _unitOfWork;
+		private readonly IRazorViewRenderer _viewRenderService;
         [BindProperty]
         public OrderVM OrderVM { get; set; }
-        public OrderController(IUnitOfWork unitOfWork)
+        public OrderController(IUnitOfWork unitOfWork, IRazorViewRenderer viewRenderService)
         {
 			_unitOfWork = unitOfWork;
+            _viewRenderService = viewRenderService;
         }
         public IActionResult Index()
 		{
@@ -134,6 +137,30 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
             return RedirectToAction(nameof(Details), new { orderId = OrderVM.OrderHeader.Id });
         }
 
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Invoice(int id)
+        {
+            var OrderVM = new OrderVM()
+            {
+                OrderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == id, incluedProperties: "ApplicationUser"),
+                OrderDetail = _unitOfWork.OrderDetail.GetALL(u => u.OrderHeaderId == id, incluedProperties: "Product")
+            };
+
+
+
+            ChromePdfRenderer renderer = new ChromePdfRenderer();
+
+
+
+            // Render View to PDF document
+            PdfDocument pdf = renderer.RenderRazorViewToPdf(_viewRenderService, "Areas/Admin/Views/Order/Invoice.cshtml", OrderVM);
+            Response.Headers.Add("Content-Disposition", "inline");
+
+            // Output PDF document
+            return File(pdf.BinaryData, "application/pdf", $"Invoice_{'#' + id + '_' + DateTime.Now.ToShortDateString()}.pdf");
+
+        }
 
 
         [HttpPost]

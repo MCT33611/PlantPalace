@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PlantPalace.DataAccess.Data;
@@ -178,87 +179,89 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
         }
 
 
-/*        public IActionResult Edit(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-
-            Product? product = _unitOfWork.Product.Get(u => u.Id == id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-            return View(product);
-        }
-        [HttpPost]
-        public IActionResult Edit(Product model)
-        {
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Product.Update(model);
-                _unitOfWork.Save();
-                TempData["success"] = "Product " + model.Name + " Edited Successfully";
-                return RedirectToAction("Index");
-            }
-            return View();
-        }*/
-
-
-/*        public IActionResult Delete(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-
-            Product? product = _unitOfWork.Product.Get(u => u.Id == id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-            return View(product);
-        }
-
-
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePost(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-
-            var product = _unitOfWork.Product.Get(u => u.Id == id);
-            string wwwRootPath = _env.WebRootPath;
-
-            if (product == null)
-                return NotFound();
-            if (!string.IsNullOrEmpty(product.ImageUrl))
-            {
-                var oldImagePath = Path.Combine(wwwRootPath, product.ImageUrl.TrimStart('\\'));
-
-                if (System.IO.File.Exists(oldImagePath))
+        /*        public IActionResult Edit(int? id)
                 {
-                    System.IO.File.Delete(oldImagePath);
-                }
-            }
+                    if (id == null || id == 0)
+                    {
+                        return NotFound();
+                    }
 
-            _unitOfWork.Product.Remove(product);
-            _unitOfWork.Save();
-            TempData["success"] = "Product " + product.Name + " Deleted Successfully";
-            return RedirectToAction("Index");
-        }*/
+                    Product? product = _unitOfWork.Product.Get(u => u.Id == id);
+                    if (product == null)
+                    {
+                        return NotFound();
+                    }
+                    return View(product);
+                }
+                [HttpPost]
+                public IActionResult Edit(Product model)
+                {
+                    if (ModelState.IsValid)
+                    {
+                        _unitOfWork.Product.Update(model);
+                        _unitOfWork.Save();
+                        TempData["success"] = "Product " + model.Name + " Edited Successfully";
+                        return RedirectToAction("Index");
+                    }
+                    return View();
+                }*/
+
+
+        /*        public IActionResult Delete(int? id)
+                {
+                    if (id == null || id == 0)
+                    {
+                        return NotFound();
+                    }
+
+                    Product? product = _unitOfWork.Product.Get(u => u.Id == id);
+                    if (product == null)
+                    {
+                        return NotFound();
+                    }
+                    return View(product);
+                }
+
+
+                [HttpPost, ActionName("Delete")]
+                public IActionResult DeletePost(int? id)
+                {
+                    if (id == null || id == 0)
+                    {
+                        return NotFound();
+                    }
+
+                    var product = _unitOfWork.Product.Get(u => u.Id == id);
+                    string wwwRootPath = _env.WebRootPath;
+
+                    if (product == null)
+                        return NotFound();
+                    if (!string.IsNullOrEmpty(product.ImageUrl))
+                    {
+                        var oldImagePath = Path.Combine(wwwRootPath, product.ImageUrl.TrimStart('\\'));
+
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+
+                    _unitOfWork.Product.Remove(product);
+                    _unitOfWork.Save();
+                    TempData["success"] = "Product " + product.Name + " Deleted Successfully";
+                    return RedirectToAction("Index");
+                }*/
 
 
         #region API CALLS
         [HttpGet]
         public IActionResult GetAll()
         {
-            var products = _unitOfWork.Product.GetALL(incluedProperties: "Category").ToList();
+            var products = _unitOfWork.Product.GetALL(incluedProperties: "Category");
+            
             return Json(new { data = products });
         }
+
 
 
         public IActionResult Delete(int? id)

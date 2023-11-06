@@ -1,6 +1,52 @@
 ﻿@model OrderVM
 <partial name="_Notification" />
-    
+ <style>
+    .downLink {
+        position: relative;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        text-decoration: none;
+        padding: 35px 20px 13px 60px;
+        margin-right: 40px;
+        color: #444;
+        background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/41294/download.png') 2px 0 no-repeat;
+    }
+
+        .downLink :hover {
+            border-color: #444;
+            box-shadow: 0 0 10px #444;
+        }
+
+        .downLink :active {
+            border-color: #ccc;
+            box-shadow: none;
+        }
+
+        .downLink [href$=".pdf"]:before {
+            position: absolute;
+            width: 62px;
+            height: 72px;
+            top: 2px;
+            left: 2px;
+            transition: all .4s;
+        }
+
+        .downLink [href$=".pdf"]:before {
+            content: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/41294/pdf.png');
+        }
+
+        .downLink [href$=".pdf"]:hover:before {
+            opacity: 0;
+        }
+
+        .downLink [href$=".ppt"]:after, a[href$=".pdf"]:after {
+            content: "Download";
+            position: absolute;
+            top: 10px;
+            left: 60px;
+            color: #aaa;
+        }
+ </style>
 <form method="post">
     <input asp-for="OrderHeader.Id" hidden />
     <br />
@@ -277,6 +323,10 @@
                             Model.OrderHeader.OrderStatus != SD.StatusShipped)
                             {
                                 <button asp-action="CancelOrder" type="submit" class="btn btn-danger form-control my-1">Cancel Order</button>
+                            }
+                            else
+                            {
+                                <a asp-action="Invoice" asp-route-id="@Model.OrderHeader.Id" class="btn btn-dark form-control my-1"><i class="bi bi-filetype-pdf fs-5 text"></i>&nbsp; Downloand Invoice</a>
                             }
                         </div>
                     </div>

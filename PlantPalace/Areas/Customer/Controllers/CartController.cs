@@ -22,13 +22,11 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 
 
         private readonly IEmailSender _emailSender;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IRazorViewRenderer _viewRenderService;
-        public CartController(IUnitOfWork unitOfWork, IEmailSender emailSender, IHttpContextAccessor httpContextAccessor, IRazorViewRenderer viewRenderService)
+        public CartController(IUnitOfWork unitOfWork, IEmailSender emailSender, IRazorViewRenderer viewRenderService)
         {
             _unitOfWork = unitOfWork;
             _emailSender = emailSender;
-            _httpContextAccessor = httpContextAccessor;
             _viewRenderService = viewRenderService;
         }
 
@@ -315,28 +313,7 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
             return View(id);
         }
 
-        public async Task<IActionResult> Invoice(int id)
-        {
-            var OrderVM = new OrderVM()
-            {
-                OrderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == id, incluedProperties: "ApplicationUser"),
-                OrderDetail = _unitOfWork.OrderDetail.GetALL(u => u.OrderHeaderId == id, incluedProperties: "Product")
-            };
 
-
-
-            ChromePdfRenderer renderer = new ChromePdfRenderer();
-
-
-
-            // Render View to PDF document
-            PdfDocument pdf = renderer.RenderRazorViewToPdf(_viewRenderService, "Areas/Customer/Views/Cart/Invoice.cshtml", OrderVM);
-            Response.Headers.Add("Content-Disposition", "inline");
-
-            // Output PDF document
-            return File(pdf.BinaryData, "application/pdf", $"Invoice_{'#' + id + '_' + DateTime.Now.ToShortDateString()}.pdf");
-
-        }
 
         public IActionResult OrderConfirmationOffline(int id)
         {

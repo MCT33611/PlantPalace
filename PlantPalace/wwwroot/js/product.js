@@ -1,11 +1,37 @@
+
 $(document).ready(function () {
-    loadDataTable();
+    var url = window.location.search;
+    if (url.includes("Indoor")) {
+        loadDataTable("Indoor");
+    }
+    else {
+        if (url.includes("Outdoor")) {
+            loadDataTable("Outdoor");
+        }
+        else {
+            if (url.includes("Pots")) {
+                loadDataTable("Pots");
+            }
+            else {
+                if (url.includes("Seeds")) {
+                    loadDataTable("Seeds");
+                }
+                else {
+
+                    loadDataTable();
+                }
+            }
+        }
+    }
+
 });
 
-function loadDataTable() {
-    dataTabel = $('#tblData').DataTable({
-        "ajax": { url: '/admin/product/getall' },
 
+function loadDataTable(category) {
+    dataTabel = $('#tblData').DataTable({
+        "ajax": {
+            url: '/admin/product/getall?',
+        },
         "columns": [
 
             { data: 'name', "width": "20%" },

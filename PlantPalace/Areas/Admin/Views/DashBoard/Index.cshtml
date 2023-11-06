@@ -40,21 +40,8 @@
                     <div class="col-xxl-4 col-md-6">
                         <div class="card info-card sales-card">
 
-                            <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                    <li class="dropdown-header text-start">
-                                        <h6>Filter</h6>
-                                    </li>
-
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
-                                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                                </ul>
-                            </div>
-
                             <div class="card-body">
-                                <h5 class="card-title">Sales <span>| Today</span></h5>
+                                <h5 class="card-title">Sales <span>| This Month</span></h5>
 
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -62,29 +49,11 @@
                                     </div>
                                     <div class="ps-3">
 
-
-                                        @if (((Model.orders.Count(order => order.OrderDate == DateTime.Today) /
-                                        Model.orders.Count()) * 100) > ((Model.orders.Count(order => order.OrderDate == DateTime.Now.AddDays(-1)) /
-                                        Model.orders.Count()) * 100))
-                                        {
-                                            <h6>@Model.orders.Count(order => order.OrderDate == DateTime.Today)</h6>
-                                            <span class="text-success small pt-1 fw-bold">
-                                                @((Model.orders.Count(order => order.OrderDate == DateTime.Today) /
-                                                    Model.orders.Count()) * 100)%
-                                            </span>
-                                            <span class="text-muted small pt-2 ps-1">increase</span>
-
-                                        }
-                                        else
-                                        {
-                                            <h6>@Model.orders.Count(order => order.OrderDate == DateTime.Today)</h6>
-                                            <span class="text-danger small pt-1 fw-bold">
-                                                @((Model.orders.Count(order => order.OrderDate == DateTime.Today) /
-                                                    Model.orders.Count()) * 100)%
-                                            </span>
-                                            <span class="text-muted small pt-2 ps-1">decrease</span>
-
-                                        }
+                                        <h6>@Model.orders.Count(order => order.OrderDate.Month == DateTime.Today.Month)</h6>
+                                        <span class="text-success small pt-1 fw-bold">
+                                                @Model.orders.Count(order => order.OrderDate.Date == DateTime.Today.Date) +
+                                        </span>
+                                        <span class="text-muted small pt-2 ps-1">today</span>
 
                                     </div>
                                 </div>
@@ -96,18 +65,7 @@
                     <div class="col-xxl-4 col-md-6">
                         <div class="card info-card revenue-card">
 
-                            <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                    <li class="dropdown-header text-start">
-                                        <h6>Filter</h6>
-                                    </li>
-
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
-                                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                                </ul>
-                            </div>
+                            
 
                             <div class="card-body">
                                 <h5 class="card-title">Revenue <span>| This Month</span></h5>
@@ -140,18 +98,7 @@
 
                         <div class="card info-card customers-card">
 
-                            <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                    <li class="dropdown-header text-start">
-                                        <h6>Filter</h6>
-                                    </li>
-
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
-                                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                                </ul>
-                            </div>
+                            
 
                             <div class="card-body">
                                 <h5 class="card-title">Customers <span>| This Year</span></h5>
@@ -162,7 +109,7 @@
                                     </div>
                                     <div class="ps-3">
                                         <h6>@Model.users.Count()</h6>
-                                        <span class="text-success small pt-1 fw-bold">@Model.users.Count(u => u.joinDate == DateTime.Now)+</span> <span class="text-muted small pt-2 ps-1">today</span>
+                                        <span class="text-success small pt-1 fw-bold">@Model.users.Count(u => u.joinDate.Date == DateTime.Today.Date)+</span> <span class="text-muted small pt-2 ps-1">today</span>
 
                                     </div>
                                 </div>
@@ -200,33 +147,33 @@
                                             series: [{
                                                 name: 'Sales',
                                                 data: [@Model.orders.Count(u => u.OrderDate.Month == 05),
-                                                        @Model.orders.Count(u => u.OrderDate.Month == 06),
-                                                        @Model.orders.Count(u => u.OrderDate.Month == 07),
-                                                        @Model.orders.Count(u => u.OrderDate.Month == 08),
-                                                        @Model.orders.Count(u => u.OrderDate.Month == 09),
-                                                        @Model.orders.Count(u => u.OrderDate.Month == 10),
-                                                        @Model.orders.Count(u => u.OrderDate.Month == 11)
-                                                    ],
+                                    @Model.orders.Count(u => u.OrderDate.Month == 06),
+                                    @Model.orders.Count(u => u.OrderDate.Month == 07),
+                                    @Model.orders.Count(u => u.OrderDate.Month == 08),
+                                    @Model.orders.Count(u => u.OrderDate.Month == 09),
+                                    @Model.orders.Count(u => u.OrderDate.Month == 10),
+                                    @Model.orders.Count(u => u.OrderDate.Month == 11)
+                                                                                                                            ],
                                             }, {
                                                 name: 'Revenue',
-                                                data: [@(Model.orders.Where(u => u.OrderDate.Month == 05).Sum(order => order.OrderTotal)/100),
-                                                        @(Model.orders.Where(u => u.OrderDate.Month == 06).Sum(order => order.OrderTotal) / 100),
-                                                        @(Model.orders.Where(u => u.OrderDate.Month == 07).Sum(order => order.OrderTotal)/100),
-                                                        @(Model.orders.Where(u => u.OrderDate.Month == 08).Sum(order => order.OrderTotal)/100),
-                                                        @(Model.orders.Where(u => u.OrderDate.Month == 09).Sum(order => order.OrderTotal)/100),
-                                                        @(Model.orders.Where(u => u.OrderDate.Month == 10).Sum(order => order.OrderTotal)/100),
-                                                        @(Model.orders.Where(u => u.OrderDate.Month == 11).Sum(order => order.OrderTotal)/100)
-                                                                                                                                ]
+                                                data: [@(Model.orders.Where(u => u.OrderDate.Month == 05).Sum(order => order.OrderTotal) / 100),
+                                    @(Model.orders.Where(u => u.OrderDate.Month == 06).Sum(order => order.OrderTotal) / 100),
+                                    @(Model.orders.Where(u => u.OrderDate.Month == 07).Sum(order => order.OrderTotal) / 100),
+                                    @(Model.orders.Where(u => u.OrderDate.Month == 08).Sum(order => order.OrderTotal) / 100),
+                                    @(Model.orders.Where(u => u.OrderDate.Month == 09).Sum(order => order.OrderTotal) / 100),
+                                    @(Model.orders.Where(u => u.OrderDate.Month == 10).Sum(order => order.OrderTotal) / 100),
+                                    @(Model.orders.Where(u => u.OrderDate.Month == 11).Sum(order => order.OrderTotal) / 100)
+                                                                                                                                                                                                        ]
                                             }, {
                                                 name: 'Customers',
                                                 data: [@Model.users.Count(u => u.joinDate.Month == 05),
-                                                        @Model.users.Count(u => u.joinDate.Month == 06),
-                                                        @Model.users.Count(u => u.joinDate.Month == 07),
-                                                        @Model.users.Count(u => u.joinDate.Month == 08),
-                                                        @Model.users.Count(u => u.joinDate.Month == 09),
-                                                        @Model.users.Count(u => u.joinDate.Month == 10),
-                                                        @Model.users.Count(u => u.joinDate.Month == 11)
-                                                                                                            ],
+                                    @Model.users.Count(u => u.joinDate.Month == 06),
+                                    @Model.users.Count(u => u.joinDate.Month == 07),
+                                    @Model.users.Count(u => u.joinDate.Month == 08),
+                                    @Model.users.Count(u => u.joinDate.Month == 09),
+                                    @Model.users.Count(u => u.joinDate.Month == 10),
+                                    @Model.users.Count(u => u.joinDate.Month == 11)
+                                                                                                                                                                                    ],
                                             }],
                                             chart: {
                                                 height: 350,
@@ -277,19 +224,6 @@
                     <div class="col-12">
                         <div class="card recent-sales overflow-auto">
 
-                            <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                    <li class="dropdown-header text-start">
-                                        <h6>Filter</h6>
-                                    </li>
-
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
-                                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                                </ul>
-                            </div>
-
                             <div class="card-body">
                                 <h5 class="card-title">Recent Sales <span>| Today</span></h5>
 
@@ -304,7 +238,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach(var order in Model.ordersDetail)
+                                        @foreach (var order in Model.ordersDetail)
                                         {
                                             <tr>
                                                 <th scope="row"><a href="#">#@order.Id</a></th>
@@ -312,12 +246,12 @@
                                                 <td><a href="#" class="text-primary">@order.Product.Name</a></td>
                                                 <td>₹@order.Product.Price</td>
                                                 <td>
-                                                    @if(order.OrderHeader.OrderStatus == SD.StatusCancelled)
+                                                    @if (order.OrderHeader.OrderStatus == SD.StatusCancelled)
                                                     {
                                                         <span class="badge bg-danger">@order.OrderHeader.OrderStatus</span>
 
                                                     }
-                                                    
+
                                                     else if (order.OrderHeader.OrderStatus == SD.StatusPending)
                                                     {
                                                         <span class="badge bg-warning">@order.OrderHeader.OrderStatus</span>
@@ -331,8 +265,8 @@
                                                 </td>
                                             </tr>
                                         }
-                                        
-                                        
+
+
                                     </tbody>
                                 </table>
 
@@ -387,7 +321,7 @@
                                                 <td>₹@(product.Price * Model.ordersDetail.Count(od => od.ProductId == product.Id))</td>
                                             </tr>
                                         }
-                                        
+
                                     </tbody>
                                 </table>
 
@@ -490,156 +424,7 @@
 
                     </div>
                 </div><!-- End Recent Activity -->
-                <!-- Budget Report -->
-                <div class="card">
-                    <div class="filter">
-                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <li class="dropdown-header text-start">
-                                <h6>Filter</h6>
-                            </li>
-
-                            <li><a class="dropdown-item" href="#">Today</a></li>
-                            <li><a class="dropdown-item" href="#">This Month</a></li>
-                            <li><a class="dropdown-item" href="#">This Year</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="card-body pb-0">
-                        <h5 class="card-title">Budget Report <span>| This Month</span></h5>
-
-                        <div id="budgetChart" style="min-height: 400px;" class="echart"></div>
-
-                        <script>
-                            document.addEventListener("DOMContentLoaded", () => {
-                                var budgetChart = echarts.init(document.querySelector("#budgetChart")).setOption({
-                                    legend: {
-                                        data: ['Allocated Budget', 'Actual Spending']
-                                    },
-                                    radar: {
-                                        // shape: 'circle',
-                                        indicator: [{
-                                            name: 'Sales',
-                                            max: 6500
-                                        },
-                                        {
-                                            name: 'Administration',
-                                            max: 16000
-                                        },
-                                        {
-                                            name: 'Information Technology',
-                                            max: 30000
-                                        },
-                                        {
-                                            name: 'Customer Support',
-                                            max: 38000
-                                        },
-                                        {
-                                            name: 'Development',
-                                            max: 52000
-                                        },
-                                        {
-                                            name: 'Marketing',
-                                            max: 25000
-                                        }
-                                        ]
-                                    },
-                                    series: [{
-                                        name: 'Budget vs spending',
-                                        type: 'radar',
-                                        data: [{
-                                            value: [4200, 3000, 20000, 35000, 50000, 18000],
-                                            name: 'Allocated Budget'
-                                        },
-                                        {
-                                            value: [5000, 14000, 28000, 26000, 42000, 21000],
-                                            name: 'Actual Spending'
-                                        }
-                                        ]
-                                    }]
-                                });
-                            });
-                        </script>
-
-                    </div>
-                </div><!-- End Budget Report -->
-                <!-- Website Traffic -->
-                <div class="card">
-                    <div class="filter">
-                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <li class="dropdown-header text-start">
-                                <h6>Filter</h6>
-                            </li>
-
-                            <li><a class="dropdown-item" href="#">Today</a></li>
-                            <li><a class="dropdown-item" href="#">This Month</a></li>
-                            <li><a class="dropdown-item" href="#">This Year</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="card-body pb-0">
-                        <h5 class="card-title">Website Traffic <span>| Today</span></h5>
-
-                        <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
-
-                        <script>
-                            document.addEventListener("DOMContentLoaded", () => {
-                                echarts.init(document.querySelector("#trafficChart")).setOption({
-                                    tooltip: {
-                                        trigger: 'item'
-                                    },
-                                    legend: {
-                                        top: '5%',
-                                        left: 'center'
-                                    },
-                                    series: [{
-                                        name: 'Access From',
-                                        type: 'pie',
-                                        radius: ['40%', '70%'],
-                                        avoidLabelOverlap: false,
-                                        label: {
-                                            show: false,
-                                            position: 'center'
-                                        },
-                                        emphasis: {
-                                            label: {
-                                                show: true,
-                                                fontSize: '18',
-                                                fontWeight: 'bold'
-                                            }
-                                        },
-                                        labelLine: {
-                                            show: false
-                                        },
-                                        data: [{
-                                            value: 1048,
-                                            name: 'Search Engine'
-                                        },
-                                        {
-                                            value: 735,
-                                            name: 'Direct'
-                                        },
-                                        {
-                                            value: 580,
-                                            name: 'Email'
-                                        },
-                                        {
-                                            value: 484,
-                                            name: 'Union Ads'
-                                        },
-                                        {
-                                            value: 300,
-                                            name: 'Video Ads'
-                                        }
-                                        ]
-                                    }]
-                                });
-                            });
-                        </script>
-
-                    </div>
-                </div><!-- End Website Traffic -->
+                
                 <!-- News & Updates Traffic -->
                 <div class="card">
                     <div class="filter">
@@ -703,7 +488,7 @@
 @section Scripts{
     <!-- Vendor JS Files -->
     <script src="~/vendor/apexcharts/apexcharts.min.js"></script>
-    
+
     <script src="~/vendor/chart.js/chart.umd.js"></script>
     <script src="~/vendor/echarts/echarts.min.js"></script>
     <script src="~/vendor/quill/quill.min.js"></script>
