@@ -45,6 +45,12 @@ body, html {
         float: left;
     }
 
+
+
+
+
+
+
 img {
     max-width: 100%;
     height: auto;
@@ -338,7 +344,6 @@ ul.product_list {
         width: 19.5%;
     }
 }
-
 
 
 /*==========  Non-Mobile First Method  ==========*/

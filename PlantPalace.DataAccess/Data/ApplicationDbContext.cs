@@ -19,6 +19,8 @@ namespace PlantPalace.DataAccess.Data
         public DbSet<OrderDetail> OrderDetail { get; set; }
         public DbSet<OrderHeader> OrderHeader { get; set; }
 
+        public DbSet<Banner> Banners { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -37,7 +39,22 @@ namespace PlantPalace.DataAccess.Data
 
 
                 );
-
+            modelBuilder.Entity<Banner>().HasData(
+                new Banner
+                {
+                    Id = 1,
+                    BannerUrl = "/images/banners/Up to 70% off .jpg",
+                    BannerName = "Banner 1",
+                    Description = "Description for Banner 1"
+                },
+                new Banner
+                {   
+                    Id=2,
+                    BannerUrl = "/images/banners/Zephyranthes Bulbs.jpg",
+                    BannerName = "Banner 2",
+                    Description = "Description for Banner 2"
+                }
+                );
 
             modelBuilder.Entity<Product>().HasData(
                 new Product { Id = 1,

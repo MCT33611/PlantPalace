@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PlantPalace.DataAccess.Repository;
 using PlantPalace.DataAccess.Repository.IRepository;
 using PlantPalace.Models;
+using PlantPalace.Models.ViewModels;
 using PlantPalace.Utility;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -79,8 +80,17 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
             {
                 return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
             }
-            IEnumerable<Product> products = _unitOfWork.Product.GetALL(incluedProperties: "Category");
-            return View(products);
+
+            HomeVM homeModel = new()
+            {
+                products = _unitOfWork.Product.GetALL(incluedProperties: "Category"),
+
+                banners = _unitOfWork.Banner.GetALL()
+
+            };
+
+            
+            return View(homeModel);
         }
 
         public IActionResult Details(int productId)

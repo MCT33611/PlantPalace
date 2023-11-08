@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlantPalace.DataAccess.Data;
 
 #nullable disable
 
-namespace PlantPalace.DataAccess.Data
+namespace PlantPalace.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231108052314_BannersTabel")]
+    partial class BannersTabel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -236,9 +239,6 @@ namespace PlantPalace.DataAccess.Data
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("AddedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("BannerName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -248,6 +248,7 @@ namespace PlantPalace.DataAccess.Data
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -258,7 +259,6 @@ namespace PlantPalace.DataAccess.Data
                         new
                         {
                             Id = 1,
-                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             BannerName = "Banner 1",
                             BannerUrl = "/images/banners/Up to 70% off .jpg",
                             Description = "Description for Banner 1"
@@ -266,7 +266,6 @@ namespace PlantPalace.DataAccess.Data
                         new
                         {
                             Id = 2,
-                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             BannerName = "Banner 2",
                             BannerUrl = "/images/banners/Zephyranthes Bulbs.jpg",
                             Description = "Description for Banner 2"

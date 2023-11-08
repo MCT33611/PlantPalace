@@ -19,6 +19,7 @@ namespace PlantPalace.DataAccess.Repository.IRepository
         IOrderDetailRepository OrderDetail { get; }
 
         IOrderHeaderRepository OrderHeader { get; }
+        IBannerRepository Banner { get; }
 
         void Save();
     }

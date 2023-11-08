@@ -21,9 +21,9 @@ namespace PlantPalace.DataAccess.Repository
 
 		public IOrderHeaderRepository OrderHeader { get; set; }
 
+        public IBannerRepository Banner { get; set; }
 
-
-		public UnitOfWork(ApplicationDbContext db)
+        public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
             Product = new ProductRepository(_db);
@@ -33,6 +33,8 @@ namespace PlantPalace.DataAccess.Repository
             ApplicationUser = new ApplicationUserRepository(_db);
             OrderDetail = new OrderDetailRepository(_db);
             OrderHeader = new OrderHeaderRepository(_db);
+
+            Banner = new BannerRepository(_db);
         }
 
         public void Save()

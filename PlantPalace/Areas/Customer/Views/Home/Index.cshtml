@@ -1,22 +1,77 @@
-﻿@model IEnumerable<Product>
+﻿@model HomeVM
 
-@* @model IEnumerable<Product> *@
 <link href="~/css/homelist.css" rel="stylesheet" />
-<div class="row pb-3 card-home-c">
+<div id="carouselExampleControlsNoTouching" class="carousel slide" data-bs-touch="false" data-bs-interval="false">
+    <div class="carousel-inner">
+        @foreach (var banner in Model.banners.Select((value, index) => new { Value = value, Index = index }))
+        {
+            <div class="carousel-item @(banner.Index == 0 ? "active" : "")">
+                <img src="@banner.Value.BannerUrl" class="d-block w-100" alt="@banner.Value.BannerName">
+            </div>
+        }
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<div class="my-3 py-1">
+    <!-- Search Bar -->
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Search...">
+        <button class="btn btn-primary" type="button">Search</button>
+    </div>
+
+    <!-- Dropdown Menus -->
+    <div class="row">
+        <div class="col-md-3">
+            <select class="form-select" aria-label="Select Make">
+                <option selected>Select Make</option>
+                <!-- Add your options here -->
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-select" aria-label="Select Model">
+                <option selected>Select Model</option>
+                <!-- Add your options here -->
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-select" aria-label="Select Type">
+                <option selected>Select Type</option>
+                <!-- Add your options here -->
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-select" aria-label="Select Drive Type">
+                <option selected>Select Drive Type</option>
+                <!-- Add your options here -->
+            </select>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="row pb-3 card-home-c ps-0 ">
     <div class="product_grid">
         <ul class="product_list list">
-            @foreach (var product in Model)
+            @foreach (var product in Model.products)
             {
                 <li class="col-12 p-1 product_item m-3 mx-4 rounded">
                     <div class="product_image d-flex justify-content-center align-items-center">
                         <a href="#"><img id="img" src="@product.ImageUrl" alt=""></a>
                         <div class="product_buttons">
                             <button onclick="AddORremove(@product.Id)" class="product_heart"><i class="fa fa-heart"></i></button>
-                            <button onclick="AddToCart(@product.Id)" class="add_to_cart"><i class="fa fa-shopping-cart"></i></button>
-@*                             <div class="quick_view">
+                            <button onclick="AddToCart(@product.Id)" class="add_to_cart"><i class="fa fa-shopping-cart"></i></button>                          <div class="quick_view">
                                 <a onclick="openQuickViewPopup('@product.ImageUrl')"><h6>Quick View</h6></a>
                             </div>
- *@
+ 
                         </div>
                     </div>
                     <div class="product_values">
@@ -43,12 +98,6 @@
                 </li>
             }
         </ul>
-    </div>
-</div>
-<div id="quickViewPopup" class="popup">
-    <div class="popup-content">
-        <span class="close" onclick="closeQuickViewPopup()">&times;</span>
-        <img id="quickViewImage" src="" alt="">
     </div>
 </div>
 
