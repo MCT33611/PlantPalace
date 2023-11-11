@@ -132,18 +132,18 @@
                         @if(!User.IsInRole(SD.Role_Admin))
                         {
                             <div class="row pl-2 mb-3">
-                                <div class="col-md-4">
+                                <div class="col-md-5">
                                     <div class="input-group mb-3">
                                         <span class="input-group-text bg-primary text-white border-0 fw-semibold"
                                               id="inputGroup-sizing-default">
                                             Count
                                         </span>
-                                        <input asp-for="Quantity" type="number" value="1" min="1" class="form-control text-end"
-                                               aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
-
+                                        <input type="number" class="form-control text-end" aria-label="Sizing example input"
+                                               aria-describedby="inputGroup-sizing-default" value="1">
                                     </div>
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="col-12 col-md-6 pb-1">
                                     <button type="submit"

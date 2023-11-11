@@ -12,8 +12,8 @@ using PlantPalace.DataAccess.Data;
 namespace PlantPalace.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231019174000_OrderHeaderAndDetailTablesAdd")]
-    partial class OrderHeaderAndDetailTablesAdd
+    [Migration("20231111125932_restart_the_data_base")]
+    partial class restart_the_data_base
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -231,6 +231,33 @@ namespace PlantPalace.DataAccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("PlantPalace.Models.Banner", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("BannerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BannerUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Banners");
+                });
+
             modelBuilder.Entity("PlantPalace.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -239,43 +266,17 @@ namespace PlantPalace.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DisplayOrder")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<int>("Tax")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Categorries");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DisplayOrder = 1,
-                            Name = "Indoor"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            DisplayOrder = 1,
-                            Name = "Outdoor"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            DisplayOrder = 1,
-                            Name = "Tree"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            DisplayOrder = 1,
-                            Name = "Hanging"
-                        });
                 });
 
             modelBuilder.Entity("PlantPalace.Models.OrderDetail", b =>
@@ -348,6 +349,9 @@ namespace PlantPalace.DataAccess.Migrations
                     b.Property<string>("PaymentIntentId")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PaymentMethod")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PaymentStatus")
                         .HasColumnType("nvarchar(max)");
 
@@ -391,10 +395,22 @@ namespace PlantPalace.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("ImageOne")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageThree")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageTwo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -417,6 +433,9 @@ namespace PlantPalace.DataAccess.Migrations
                     b.Property<double>("Price50")
                         .HasColumnType("float");
 
+                    b.Property<int>("Stock")
+                        .HasColumnType("int");
+
                     b.Property<int>("categoryId")
                         .HasColumnType("int");
 
@@ -425,128 +444,6 @@ namespace PlantPalace.DataAccess.Migrations
                     b.HasIndex("categoryId");
 
                     b.ToTable("Products");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                            ImageUrl = "",
-                            ListPrice = 100.0,
-                            Name = "Product 1",
-                            Price = 95.0,
-                            Price100 = 85.0,
-                            Price50 = 90.75,
-                            categoryId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                            ImageUrl = "",
-                            ListPrice = 100.0,
-                            Name = "Product 2",
-                            Price = 95.0,
-                            Price100 = 85.0,
-                            Price50 = 90.75,
-                            categoryId = 4
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                            ImageUrl = "",
-                            ListPrice = 100.0,
-                            Name = "Product 3",
-                            Price = 95.0,
-                            Price100 = 85.0,
-                            Price50 = 90.75,
-                            categoryId = 2
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                            ImageUrl = "",
-                            ListPrice = 100.0,
-                            Name = "Product 4",
-                            Price = 95.0,
-                            Price100 = 85.0,
-                            Price50 = 90.75,
-                            categoryId = 3
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                            ImageUrl = "",
-                            ListPrice = 100.0,
-                            Name = "Product 5",
-                            Price = 95.0,
-                            Price100 = 85.0,
-                            Price50 = 90.75,
-                            categoryId = 1
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                            ImageUrl = "",
-                            ListPrice = 100.0,
-                            Name = "Product 6",
-                            Price = 95.0,
-                            Price100 = 85.0,
-                            Price50 = 90.75,
-                            categoryId = 1
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                            ImageUrl = "",
-                            ListPrice = 100.0,
-                            Name = "Product 7",
-                            Price = 95.0,
-                            Price100 = 85.0,
-                            Price50 = 90.75,
-                            categoryId = 3
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                            ImageUrl = "",
-                            ListPrice = 100.0,
-                            Name = "Product 8",
-                            Price = 95.0,
-                            Price100 = 85.0,
-                            Price50 = 90.75,
-                            categoryId = 2
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                            ImageUrl = "",
-                            ListPrice = 100.0,
-                            Name = "Product 9",
-                            Price = 95.0,
-                            Price100 = 85.0,
-                            Price50 = 90.75,
-                            categoryId = 4
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                            ImageUrl = "",
-                            ListPrice = 100.0,
-                            Name = "Product 10",
-                            Price = 95.0,
-                            Price100 = 85.0,
-                            Price50 = 90.75,
-                            categoryId = 3
-                        });
                 });
 
             modelBuilder.Entity("PlantPalace.Models.ShoppingCart", b =>
@@ -576,6 +473,30 @@ namespace PlantPalace.DataAccess.Migrations
                     b.ToTable("ShoppingCarts");
                 });
 
+            modelBuilder.Entity("PlantPalace.Models.WishList", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("userId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("WishList");
+                });
+
             modelBuilder.Entity("PlantPalace.Models.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -587,6 +508,9 @@ namespace PlantPalace.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Pic")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PostalCode")
                         .HasColumnType("nvarchar(max)");
 
@@ -595,6 +519,9 @@ namespace PlantPalace.DataAccess.Migrations
 
                     b.Property<string>("StreetAdderss")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("joinDate")
+                        .HasColumnType("datetime2");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
@@ -692,6 +619,25 @@ namespace PlantPalace.DataAccess.Migrations
                 });
 
             modelBuilder.Entity("PlantPalace.Models.ShoppingCart", b =>
+                {
+                    b.HasOne("PlantPalace.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PlantPalace.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("PlantPalace.Models.WishList", b =>
                 {
                     b.HasOne("PlantPalace.Models.Product", "Product")
                         .WithMany()

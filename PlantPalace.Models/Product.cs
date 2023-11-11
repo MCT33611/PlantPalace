@@ -18,14 +18,20 @@ namespace PlantPalace.Models
 
         [Required(ErrorMessage = "Name is required")]
         [MaxLength(255, ErrorMessage = "Maximum characters for Name is 30")]
-        [DisplayName("Category Name")]
+        [DisplayName("Product Name")]
         public string Name { get; set; }
 
         [MaxLength(1000, ErrorMessage = "Maximum characters for Description is 255")]
         public string Description { get; set; }
 
-       /* [Range(0, int.MaxValue, ErrorMessage = "Stock must be a positive number")]
-        public int Stock { get; set; }*/
+
+        [DataType(DataType.DateTime)]
+        [Required]
+        public DateTime AddedDate { get; set; }
+
+
+        /* [Range(0, int.MaxValue, ErrorMessage = "Stock must be a positive number")]
+         public int Stock { get; set; }*/
 
         [Range(1, double.MaxValue, ErrorMessage = "Price must be a positive number")]
         [Display(Name = "List Price")]

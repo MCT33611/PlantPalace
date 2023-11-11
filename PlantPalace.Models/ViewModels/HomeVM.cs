@@ -11,5 +11,9 @@ namespace PlantPalace.Models.ViewModels
         public IEnumerable<Banner> banners { get; set; }
 
         public IEnumerable<Product> products { get; set; }
+
+        public IEnumerable<Category> categories { get; set; }
+
+        public IEnumerable<OrderDetail> orderDetails { get; set; }
     }
 }

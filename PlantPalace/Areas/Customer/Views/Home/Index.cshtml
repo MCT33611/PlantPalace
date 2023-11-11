@@ -20,66 +20,31 @@
     </button>
 </div>
 
-<div class="my-3 py-1">
-    <!-- Search Bar -->
-    <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Search...">
-        <button class="btn btn-primary" type="button">Search</button>
-    </div>
 
-    <!-- Dropdown Menus -->
-    <div class="row">
-        <div class="col-md-3">
-            <select class="form-select" aria-label="Select Make">
-                <option selected>Select Make</option>
-                <!-- Add your options here -->
-            </select>
-        </div>
-        <div class="col-md-3">
-            <select class="form-select" aria-label="Select Model">
-                <option selected>Select Model</option>
-                <!-- Add your options here -->
-            </select>
-        </div>
-        <div class="col-md-3">
-            <select class="form-select" aria-label="Select Type">
-                <option selected>Select Type</option>
-                <!-- Add your options here -->
-            </select>
-        </div>
-        <div class="col-md-3">
-            <select class="form-select" aria-label="Select Drive Type">
-                <option selected>Select Drive Type</option>
-                <!-- Add your options here -->
-            </select>
-        </div>
-    </div>
+@*------------- Latest arrivals-------------------- *@
+<div class="row pb-3">
+    <div class="continer">
+        <h6 class="bg-primary text-white w-100 my-3 p-2 text-start">New Arrivels</h6>
 
-</div>
+        <ul class="product_list mb-2 list">
 
-
-<div class="row pb-3 card-home-c ps-0 ">
-    <div class="product_grid">
-        <ul class="product_list list">
-            @foreach (var product in Model.products)
+            @foreach (var product in Model.products.OrderByDescending(p => p.AddedDate).Take(6))
             {
-                <li class="col-12 p-1 product_item m-3 mx-4 rounded">
-                    <div class="product_image d-flex justify-content-center align-items-center">
+                <li class="product_item  me-4 mb-3 rounded">
+                    <div class="product_image d-flex justify-content-center align-items-center flex-wrap">
                         <a href="#"><img id="img" src="@product.ImageUrl" alt=""></a>
                         <div class="product_buttons">
                             <button onclick="AddORremove(@product.Id)" class="product_heart"><i class="fa fa-heart"></i></button>
-                            <button onclick="AddToCart(@product.Id)" class="add_to_cart"><i class="fa fa-shopping-cart"></i></button>                          <div class="quick_view">
-                                <a onclick="openQuickViewPopup('@product.ImageUrl')"><h6>Quick View</h6></a>
-                            </div>
- 
+                            <button onclick="AddToCart(@product.Id)" class="add_to_cart"><i class="fa fa-shopping-cart"></i></button>
+
                         </div>
                     </div>
                     <div class="product_values">
-                        <div class="product_title">
+                        <div class="product_title text-nowrap overflow-hidden">
                             <h5>@product.Name</h5>
                         </div>
                         <div class="product_price">
-                            <a href="#"><span class="price_old">@product.ListPrice.ToString("c")</span> <span class="price_new">@product.Price100.ToString("c")</span></a>
+                            <a href="#">@* <span class="price_old">@product.ListPrice.ToString("c")</span> *@ <span class="price_new">@product.Price100.ToString("c")</span></a>
                         </div>
                         <div class="col-12">
                             <div>
@@ -99,6 +64,80 @@
             }
         </ul>
     </div>
+        
+</div>
+
+@*------------- BEST SELLING PRODUCTS-------------------- *@
+<div class="row pb-3">
+    <div class="continer">
+        <h6 class="bg-primary text-white w-100 my-3 p-2 text-start">BEST SELLING PRODUCTS</h6>
+
+        <ul class="product_list mb-2 list">
+
+            @foreach (var product in Model.products
+            .OrderByDescending(p => Model.orderDetails.Count(od => od.ProductId == p.Id))
+            .ToList().Take(6))
+            {
+                <li class="product_item  me-4 mb-3 rounded">
+                    <div class="product_image d-flex justify-content-center align-items-center flex-wrap">
+                        <a href="#"><img id="img" src="@product.ImageUrl" alt=""></a>
+                        <div class="product_buttons">
+                            <button onclick="AddORremove(@product.Id)" class="product_heart"><i class="fa fa-heart"></i></button>
+                            <button onclick="AddToCart(@product.Id)" class="add_to_cart"><i class="fa fa-shopping-cart"></i></button>
+                            
+                        </div>
+                    </div>
+                    <div class="product_values">
+                        <div class="product_title text-nowrap overflow-hidden">
+                            <h5>@product.Name</h5>
+                        </div>
+                        <div class="product_price">
+                            <a href="#">@* <span class="price_old">@product.ListPrice.ToString("c")</span> *@ <span class="price_new">@product.Price100.ToString("c")</span></a>
+                        </div>
+                        <div class="col-12">
+                            <div>
+                                <a asp-action="Details"
+                                   asp-route-productId="@product.Id"
+                                   class="btn btn-primary bg-gradient border-0 form-control ">
+                                    Details
+                                </a>
+                            </div>
+                        </div>
+                        <div class="product_buttons">
+                            <button onclick="AddORremove(@product.Id)" class="product_heart"><i class="fa fa-heart"></i></button>
+                            <button onclick="AddToCart(@product.Id)" class="add_to_cart"><i class="fa fa-shopping-cart"></i></button>
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+
+</div>
+
+@*------------- BEST SELLING PRODUCTS-------------------- *@
+<div class="row pb-3">
+    <div class="continer">
+        <h6 class="bg-primary text-white w-100 my-3 p-2 text-start">BEST SELLING PRODUCTS</h6>
+
+        <ul class="product_list mb-2 list">
+
+            @foreach (var Cate in  Model.categories.ToList())
+            {
+                <li class="product_item  me-4 mb-3 rounded">
+                    @* <div class="product_image d-flex justify-content-center align-items-center flex-wrap">
+                        <a href="#"><img id="img" src="@Cate.ImageUrl" alt=""></a>
+                    </div> *@
+                    <div class="product_values">
+                        <div class="product_title text-nowrap overflow-hidden">
+                            <h5>@Cate.Name</h5>
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+
 </div>
 
 @section Scripts{
@@ -129,6 +168,6 @@
         }
 
 
-        
+
     </script>
 }

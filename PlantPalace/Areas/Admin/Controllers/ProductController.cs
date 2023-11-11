@@ -152,6 +152,7 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
 
                 if (productVM.Product.Id == 0)
                 {
+                    productVM.Product.AddedDate = DateTime.Now;
                     _unitOfWork.Product.Add(productVM.Product);
                     TempData["success"] = "Product " + productVM.Product.Name + " Created Successfully";
 

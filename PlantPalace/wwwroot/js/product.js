@@ -1,32 +1,4 @@
 
-$(document).ready(function () {
-    var url = window.location.search;
-    if (url.includes("Indoor")) {
-        loadDataTable("Indoor");
-    }
-    else {
-        if (url.includes("Outdoor")) {
-            loadDataTable("Outdoor");
-        }
-        else {
-            if (url.includes("Pots")) {
-                loadDataTable("Pots");
-            }
-            else {
-                if (url.includes("Seeds")) {
-                    loadDataTable("Seeds");
-                }
-                else {
-
-                    loadDataTable();
-                }
-            }
-        }
-    }
-
-});
-
-
 function loadDataTable(category) {
     dataTabel = $('#tblData').DataTable({
         "ajax": {

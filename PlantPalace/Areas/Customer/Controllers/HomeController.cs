@@ -85,7 +85,11 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
             {
                 products = _unitOfWork.Product.GetALL(incluedProperties: "Category"),
 
-                banners = _unitOfWork.Banner.GetALL()
+                banners = _unitOfWork.Banner.GetALL(),
+
+                categories = _unitOfWork.Category.GetALL(),
+
+                orderDetails = _unitOfWork.OrderDetail.GetALL(incluedProperties: "OrderHeader,Product"),
 
             };
 
