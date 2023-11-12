@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using PlantPalace.DataAccess.Repository.IRepository;
 using PlantPalace.Models.ViewModels;
 using PlantPalace.Utility;
+using System.Globalization;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace PlantPalace.Areas.Admin.Controllers
@@ -97,5 +99,62 @@ namespace PlantPalace.Areas.Admin.Controllers
             }
             return View(orders);
         }
+
+
+
+        public IActionResult ChartOfAdminData()
+        {
+            try
+            {
+                var Dates = new List<string>();
+                var currentDate = DateTime.UtcNow;
+
+                for (int i = 0; i < 7; i++)
+                {
+                    Dates.Add(currentDate.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"));
+                    currentDate = currentDate.AddDays(1);
+                }
+
+                var Customers = new List<string>(); // Change to string
+                var Sales = new List<string>(); // Change to string
+                var Revenue = new List<string>(); // Change to string
+
+                var totalUsers = _unitOfWork.ApplicationUser.GetALL();
+                var totalSales = _unitOfWork.OrderDetail.GetALL(incluedProperties: "OrderHeader,Product").ToList();
+                var totalRevenue = _unitOfWork.OrderHeader.GetALL(incluedProperties: "ApplicationUser").ToList();
+
+                for (int i = 0; i < 7; i++)
+                {
+                    var date = DateTime.ParseExact(Dates[i], "yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture);
+
+                    // Customers
+                    Customers.Add(totalUsers.Count(u => u.joinDate.Month == date.Month && u.joinDate.Date == date.Date).ToString());
+
+                    // Sales
+                    var dailySales = totalSales
+                        .Where(u => u.OrderHeader.OrderDate.Date == date.Date && u.OrderHeader.OrderDate.Month == date.Month)
+                        .ToList();
+
+                    Sales.Add((dailySales.Count * dailySales.Sum(u => u.Count)).ToString());
+
+                    // Revenue
+                    Revenue.Add(((int)totalRevenue
+                        .Where(u => u.OrderDate.Date == date.Date && u.OrderDate.Month == date.Month)
+                        .Sum(u => u.OrderTotal)).ToString());
+                }
+
+                var data = new { Dates, Customers, Sales, Revenue };
+                return Json(data);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception for debugging
+                Console.WriteLine(ex.Message);
+                return BadRequest("Error processing data");
+            }
+        }
+
+
+
     }
 }

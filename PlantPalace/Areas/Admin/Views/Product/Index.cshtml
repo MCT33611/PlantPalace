@@ -1,20 +1,28 @@
-﻿@model List<Product>
+﻿@model ProductListVM
+@section head{
+    <link href="~/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="~/vendor/quill/quill.snow.css" rel="stylesheet">
+    <link href="~/vendor/quill/quill.bubble.css" rel="stylesheet">
+    <link href="~/vendor/remixicon/remixicon.css" rel="stylesheet">
+    <link href="~/vendor/simple-datatables/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Template Main CSS File -->
+    <link href="~/css/Dash_style.css" rel="stylesheet">
 
+}
 <div class="mb-5">
     <div class="row pt-4 pb-3">
-
-        <div class="pagetitle col-12 ">
+        <div class="pagetitle col-12">
             <h1>Products List</h1>
-
             <div class="row d-flex">
-                <nav class="col-10">
+                <nav class="col-md-10">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/Admin/Dashboard/Index">Admin</a></li>
                         <li class="breadcrumb-item active">Product</li>
                     </ol>
-
                 </nav>
-                <div class="col-2">
+                <div class="col-md-2">
                     <a asp-controller="Product" asp-action="Upsert" class="btn btn-primary custum-controll-w">
                         <i class="bi bi-plus-circle-fill"></i>
                         <span class="text-nowrap ">Add New Product</span>
@@ -23,40 +31,98 @@
             </div>
         </div><!-- End Page Title -->
     </div>
+    <div class="mb-3">
+    <label for="categoryDropdown" class="form-label">Filter by Category:</label>
+    <select id="categoryDropdown" class="form-select border-3" onchange="onCategoryChange(this)">
+    <option value="0">All Categories</option>
+    @foreach (var category in Model.Categories)
+    {
+       <option value="@category.Id" > @category.Name</option>
+    }
+</select>
+
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Assuming Model.SelectedCategoryId holds the default category ID
+            var defaultCategoryId = @Model.SelectedCategoryId;
+            console.log('id =' + defaultCategoryId);
+            // Find the select element
+            var categoryDropdown = $("#categoryDropdown");
+
+            // Loop through the options and set the default selected option
+            categoryDropdown.val(defaultCategoryId);
+        });
+    </script>
+
+    <script>
+        
+        function onCategoryChange(dropdown) {
+            var categoryId = dropdown.value;
+            window.location.href = '/admin/Product/Index?categoryId=' + categoryId;
+        }
+    </script>
     <div class="table-responsive">
-        <table id="tblData" class="table table-bordered table-striped w-100 table-sm border-top">
+        <table id="tblData" class="table table-bordered table-striped w-100 table-sm border-top datatable">
             <thead>
                 <tr>
-                    <th>
-                        Product Name
-                    </th>
-                    <th>
-                        Category
-                    </th>
-                    <th>
-                        List Price
-                    </th>
-                    <th>
-                        Price for 1 - 50
-                    </th>
-                    <th>
-                        Price for 50 +
-                    </th>
-                    <th>
-                        Price for 100 +
-                    </th>
-                    <th>
-                        Action
-                    </th>
+                    <th>Product Id</th>
+                    <th width="5">Preview</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>SubCategory</th>
+                    <th>List Price</th>
+                    <th>Price for 1 - 50</th>
+                    <th>Price for 50 +</th>
+                    <th>Price for 100 +</th>
+                    <th>Action</th>
                 </tr>
             </thead>
+            <tbody>
+                @foreach (var product in Model.products)
+                {
+                    <tr>
+                        <th><a>#@product.Id</a></th>
+                        <th scope="row"><a href="#"><img src="@product.ImageUrl" width="100" alt=""></a></th>
+                        <td>@product.Name</td>
+                        <td>@product.Category.Name</td>
+                        <td>@product.SubCategory</td>
+                        <td>@product.ListPrice</td>
+                        <td>@product.Price</td>
+                        <td>@product.Price50</td>
+                        <td>@product.Price100</td>
+                        <td>
+                            <div class="row">
+                                <a href="Product/Upsert?id=@product.Id" class="btn btn-primary rounded text-nowrap">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+                                <a onClick=Delete('Product/Delete/@product.Id') class="btn btn-danger rounded text-nowrap">
+                                    <i class="bi bi-trash3-fill"></i> Delete
+                                </a>
+                            </div>
+                        </td>
+
+                    </tr>
+                }
+
+
+            </tbody>
         </table>
     </div>
-    
-
 </div>
 
 @section Scripts{
+    <script src="~/vendor/chart.js/chart.umd.js"></script>
+    <script src="~/vendor/echarts/echarts.min.js"></script>
+    <script src="~/vendor/quill/quill.min.js"></script>
+    <script src="~/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="~/vendor/tinymce/tinymce.min.js"></script>
+    <script src="~/vendor/php-email-form/validate.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="~/js/dash_main.js"></script>
 
     <script src="~/js/product.js"></script>
 }

@@ -29,11 +29,25 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
         }
 
 
-        public IActionResult Index()
+        public IActionResult Index(int categoryId = 0)
         {
-            var products= _unitOfWork.Product.GetALL(incluedProperties:"Category").ToList();
-            return View(products);
+            var productListVM = new ProductListVM
+            {
+                products = _unitOfWork.Product.GetALL(incluedProperties: "Category").ToList(),
+                Categories = _unitOfWork.Category.GetALL().ToList(),
+                SelectedCategoryId = categoryId
+            };
+
+            // If a specific category is selected, filter the products
+            if (categoryId > 0)
+            {
+                productListVM.products = productListVM.products.Where(p => p.categoryId == categoryId).ToList();
+            }
+
+            return View(productListVM);
         }
+
+
 
         public IActionResult Upsert(int? id)
         {
@@ -135,6 +149,10 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
                 if(productVM.Product.SubCategory.IsNullOrEmpty())
                 {
                     productVM.Product.SubCategory = "general";
+                }
+                else
+                {
+                    productVM.Product.SubCategory = productVM.Product.SubCategory.Normalize();
                 }
 
                 if (productVM.Product.Id == 0)
@@ -263,10 +281,13 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
+            // Fetch all products including related category information
             var products = _unitOfWork.Product.GetALL(incluedProperties: "Category");
-            
+
+            // Return the products as JSON
             return Json(new { data = products });
         }
+
 
 
 
@@ -323,4 +344,6 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
         }
         #endregion
     }
+    
+
 }

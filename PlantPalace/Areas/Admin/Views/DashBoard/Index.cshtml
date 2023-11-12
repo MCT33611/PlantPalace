@@ -137,7 +137,31 @@
 
                             <div class="card-body">
                                 <h5 class="card-title">Reports <span>/Month</span></h5>
+                                @{
+                                    var Sales = new List<string>(); // Change to string
+                                    var Revenue = new List<string>(); // Change to string
 
+                                    var totalSales = Model.ordersDetail.ToList();
+                                    var totalRevenue = Model.orders.ToList();
+
+                                    for (int i = 0; i < 7; i++)
+                                    {
+
+                                        // Customers
+
+                                        // Sales
+                                        var dailySales = totalSales
+                                        .Where(u => u.OrderHeader.OrderDate.Date == DateTime.UtcNow.AddDays(-i).Date && u.OrderHeader.OrderDate.Month == DateTime.UtcNow.AddDays(-i).Date.Month)
+                                        .ToList();
+
+                                        Sales.Add((dailySales.Count * dailySales.Sum(u => u.Count)).ToString());
+
+                                        // Revenue
+                                        Revenue.Add(((int)totalRevenue
+                                        .Where(u => u.OrderDate.Date == DateTime.UtcNow.AddDays(-i).Date && u.OrderDate.Month == DateTime.UtcNow.AddDays(-i).Month)
+                                        .Sum(u => u.OrderTotal)).ToString());
+                                    }
+                                }
                                 <!-- Line Chart -->
                                 <div id="reportsChart"></div>
 
@@ -146,34 +170,34 @@
                                         new ApexCharts(document.querySelector("#reportsChart"), {
                                             series: [{
                                                 name: 'Sales',
-                                                data: [@Model.orders.Count(u => u.OrderDate.Month == 05),
-                                    @Model.orders.Count(u => u.OrderDate.Month == 06),
-                                    @Model.orders.Count(u => u.OrderDate.Month == 07),
-                                    @Model.orders.Count(u => u.OrderDate.Month == 08),
-                                    @Model.orders.Count(u => u.OrderDate.Month == 09),
-                                    @Model.orders.Count(u => u.OrderDate.Month == 10),
-                                    @Model.orders.Count(u => u.OrderDate.Month == 11)
-                                                                                                                            ],
+                                                data: [
+                                                    @Sales[6],
+                                                    @Sales[5],
+                                                    @Sales[4],
+                                                    @Sales[3],
+                                                    @Sales[2],
+                                                    @Sales[1],
+                                                    @Sales[0]],
                                             }, {
                                                 name: 'Revenue',
-                                                data: [@(Model.orders.Where(u => u.OrderDate.Month == 05).Sum(order => order.OrderTotal) / 100),
-                                    @(Model.orders.Where(u => u.OrderDate.Month == 06).Sum(order => order.OrderTotal) / 100),
-                                    @(Model.orders.Where(u => u.OrderDate.Month == 07).Sum(order => order.OrderTotal) / 100),
-                                    @(Model.orders.Where(u => u.OrderDate.Month == 08).Sum(order => order.OrderTotal) / 100),
-                                    @(Model.orders.Where(u => u.OrderDate.Month == 09).Sum(order => order.OrderTotal) / 100),
-                                    @(Model.orders.Where(u => u.OrderDate.Month == 10).Sum(order => order.OrderTotal) / 100),
-                                    @(Model.orders.Where(u => u.OrderDate.Month == 11).Sum(order => order.OrderTotal) / 100)
-                                                                                                                                                                                                        ]
+                                                data: [
+                                                    @Revenue[6],
+                                                    @Revenue[5],
+                                                    @Revenue[4],
+                                                    @Revenue[3],
+                                                    @Revenue[2],
+                                                    @Revenue[1],
+                                                    @Revenue[0]]
                                             }, {
                                                 name: 'Customers',
-                                                data: [@Model.users.Count(u => u.joinDate.Month == 05),
-                                    @Model.users.Count(u => u.joinDate.Month == 06),
-                                    @Model.users.Count(u => u.joinDate.Month == 07),
-                                    @Model.users.Count(u => u.joinDate.Month == 08),
-                                    @Model.users.Count(u => u.joinDate.Month == 09),
-                                    @Model.users.Count(u => u.joinDate.Month == 10),
-                                    @Model.users.Count(u => u.joinDate.Month == 11)
-                                                                                                                                                                                    ],
+                                                data: [
+                                    @(Model.users.Where(u => u.joinDate.Date.ToShortDateString() == DateTime.UtcNow.AddDays(-6).Date.ToShortDateString()).Count()),
+                                    @(Model.users.Where(u => u.joinDate.Date.ToShortDateString() == DateTime.UtcNow.AddDays(-5).Date.ToShortDateString()).Count()),
+                                    @(Model.users.Where(u => u.joinDate.Date.ToShortDateString() == DateTime.UtcNow.AddDays(-4).Date.ToShortDateString()).Count()),
+                                    @(Model.users.Where(u => u.joinDate.Date.ToShortDateString() == DateTime.UtcNow.AddDays(-3).Date.ToShortDateString()).Count()),
+                                    @(Model.users.Where(u => u.joinDate.Date.ToShortDateString() == DateTime.UtcNow.AddDays(-2).Date.ToShortDateString()).Count()),
+                                    @(Model.users.Where(u => u.joinDate.Date.ToShortDateString() == DateTime.UtcNow.AddDays(-1).Date.ToShortDateString()).Count()),
+                                    @(Model.users.Where(u => u.joinDate.Date.ToShortDateString() == DateTime.UtcNow.Date.ToShortDateString()).Count())]
                                             }],
                                             chart: {
                                                 height: 350,
@@ -204,19 +228,20 @@
                                             },
                                             xaxis: {
                                                 type: 'datetime',
-                                                categories: ["05/01/2023", "06/01/2023", "07/01/2023", "08/01/2023", "09/01/2023", "10/01/2023", "11/01/2023"]
+                                                categories: ["@DateTime.UtcNow.AddDays(-7).Date.ToString("MM/dd/yy")", "@DateTime.UtcNow.AddDays(-6).Date.ToString("MM/dd/yy")", "@DateTime.UtcNow.AddDays(-4).Date.ToString("MM/dd/yy")", "@DateTime.UtcNow.AddDays(-3).Date.ToString("MM/dd/yy")", "@DateTime.UtcNow.AddDays(-2).Date.ToString("MM/dd/yy")", "@DateTime.UtcNow.AddDays(-1).Date.ToString("MM/dd/yy")", "@DateTime.UtcNow.Date.ToString("MM/dd/yy")"]
                                             },
                                             tooltip: {
                                                 x: {
-                                                    format: 'dd/MM/yy '
+                                                    format: 'MM/dd/yy'
                                                 },
                                             }
                                         }).render();
                                     });
                                 </script>
                                 <!-- End Line Chart -->
-
                             </div>
+
+
 
                         </div>
                     </div><!-- End Reports -->

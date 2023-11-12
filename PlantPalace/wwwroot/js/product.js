@@ -1,8 +1,19 @@
+$(document).ready(function () {
+    // Example: Call loadDataTable with a specific category
+    //var category = "exampleCategory";
+    console.log('yes');
+    loadDataTable();
+});
 
-function loadDataTable(category) {
+function loadDataTable() {
+    console.log('yes');
+
     dataTabel = $('#tblData').DataTable({
         "ajax": {
-            url: '/admin/product/getall?',
+            url: '/admin/product/getall',
+            error: function (xhr, error, thrown) {
+                console.log("DataTables error:", error, thrown);
+            }
         },
         "columns": [
 
