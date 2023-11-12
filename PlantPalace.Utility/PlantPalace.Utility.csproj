@@ -19,6 +19,7 @@
     <PackageReference Include="MimeKit" Version="4.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="runtime.any.System.Diagnostics.Tools" Version="4.3.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
   </ItemGroup>
 
   <ItemGroup>

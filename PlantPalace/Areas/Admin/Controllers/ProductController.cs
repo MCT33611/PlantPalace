@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.IdentityModel.Tokens;
 using PlantPalace.DataAccess.Data;
 using PlantPalace.DataAccess.Repository;
 using PlantPalace.DataAccess.Repository.IRepository;
 using PlantPalace.Models;
 using PlantPalace.Models.ViewModels;
 using PlantPalace.Utility;
+using Stripe;
 
 namespace PlantPalaceWeb.Areas.Admin.Controllers
 {
@@ -44,7 +46,7 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
                     Value = u.Id.ToString(),
                 }),
 
-                Product = new Product()
+                Product = new PlantPalace.Models.Product()
             };
             if (id == null || id == 0)
             {
@@ -59,15 +61,16 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
             }
             
         }
+        
         [HttpPost]
-        public IActionResult Upsert(ProductVM productVM, IFormFile? file, IFormFile? file1, IFormFile? file2, IFormFile? file3)
+        public IActionResult Upsert(ProductVM productVM, string? newfile, string? newfile1, string? newfile2, string? newfile3)
         {
             if (ModelState.IsValid)
             {
                 string wwwRootPath = _env.WebRootPath;
-                if(file != null)
+                if(newfile != null)
                 {
-                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    
                     string productPath = wwwRootPath + @"\Images\product\";
 
                     if(!string.IsNullOrEmpty(productVM.Product.ImageUrl))
@@ -79,16 +82,11 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
                             System.IO.File.Delete(oldImagePath);
                         }
                     }
-
-                    using (var fileStream = new FileStream(Path.Combine(productPath, filename), FileMode.Create))
-                    {
-                        file.CopyTo(fileStream);
-                    }
-                    productVM.Product.ImageUrl = @"\Images\product\" + filename;
+                    productVM.Product.ImageUrl = @"\Images\product\" + newfile;
                 }
-                if (file1 != null)
+                if (newfile1 != null)
                 {
-                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(file1.FileName);
+
                     string productPath = wwwRootPath + @"\Images\product\";
 
                     if (!string.IsNullOrEmpty(productVM.Product.ImageOne))
@@ -100,16 +98,11 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
                             System.IO.File.Delete(oldImagePath);
                         }
                     }
-
-                    using (var fileStream = new FileStream(Path.Combine(productPath, filename), FileMode.Create))
-                    {
-                        file1.CopyTo(fileStream);
-                    }
-                    productVM.Product.ImageOne = @"\Images\product\" + filename;
+                    productVM.Product.ImageOne = @"\Images\product\" + newfile1;
                 }
-                if (file2 != null)
+                if (newfile2 != null)
                 {
-                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(file2.FileName);
+
                     string productPath = wwwRootPath + @"\Images\product\";
 
                     if (!string.IsNullOrEmpty(productVM.Product.ImageTwo))
@@ -121,16 +114,11 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
                             System.IO.File.Delete(oldImagePath);
                         }
                     }
-
-                    using (var fileStream = new FileStream(Path.Combine(productPath, filename), FileMode.Create))
-                    {
-                        file2.CopyTo(fileStream);
-                    }
-                    productVM.Product.ImageTwo = @"\Images\product\" + filename;
+                    productVM.Product.ImageTwo = @"\Images\product\" + newfile2;
                 }
-                if (file3 != null)
+                if (newfile3 != null)
                 {
-                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(file3.FileName);
+
                     string productPath = wwwRootPath + @"\Images\product\";
 
                     if (!string.IsNullOrEmpty(productVM.Product.ImageThree))
@@ -142,12 +130,11 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
                             System.IO.File.Delete(oldImagePath);
                         }
                     }
-
-                    using (var fileStream = new FileStream(Path.Combine(productPath, filename), FileMode.Create))
-                    {
-                        file3.CopyTo(fileStream);
-                    }
-                    productVM.Product.ImageThree = @"\Images\product\" + filename;
+                    productVM.Product.ImageThree = @"\Images\product\" + newfile3;
+                }
+                if(productVM.Product.SubCategory.IsNullOrEmpty())
+                {
+                    productVM.Product.SubCategory = "general";
                 }
 
                 if (productVM.Product.Id == 0)
@@ -179,6 +166,24 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult CropAndSave(string FORfilename,IFormFile? file)
+        {
+            string wwwRootPath = _env.WebRootPath;
+            if (file != null)
+            {
+                string filename = Guid.NewGuid().ToString() + "_"+FORfilename;
+                string productPath = wwwRootPath + @"\Images\product\";
+
+
+                ImageCrop crop = new ImageCrop();
+                crop.Crop(Path.Combine(productPath, filename), file);
+                
+                return Json(new { message = "OK" ,filename = filename.ToString()});
+            }
+
+            return Json(new { message = "ERROR" });
+        }
 
         /*        public IActionResult Edit(int? id)
                 {

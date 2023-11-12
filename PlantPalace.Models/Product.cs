@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Numerics;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PlantPalace.Models
 {
@@ -76,6 +77,10 @@ namespace PlantPalace.Models
         [Range(1, double.MaxValue, ErrorMessage = "Quantity must be a positive number")]
         [Required]
         public int Stock { get;set; }
+
+        [ValidateNever]
+        [AllowNull]
+        public string SubCategory { get; set; }
     }
 
 }

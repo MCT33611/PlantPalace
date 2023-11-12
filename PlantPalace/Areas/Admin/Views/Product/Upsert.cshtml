@@ -1,7 +1,6 @@
 ﻿@model ProductVM
 @{
 }
-
 <form asp-action="Upsert" asp-controller="Product" enctype="multipart/form-data">
     <div class="border p-3 mt-4 mb-5">
         <div class="row pb-2">
@@ -10,34 +9,76 @@
             </h2>
             <hr />
         </div>
-        <div asp-validation-summary="All"></div>
+        <!-- Hidden inputs for product properties -->
         <input asp-for="Product.Id" type="hidden" />
         <input asp-for="Product.ImageUrl" type="hidden" />
         <input asp-for="Product.ImageOne" type="hidden" />
         <input asp-for="Product.ImageTwo" type="hidden" />
         <input asp-for="Product.ImageThree" type="hidden" />
-        <div class="row d-flex justify-content-center">
-            <label class="col-3" for="img"><img src="@Model.Product.ImageUrl" id="output" class=" rounded-3 w-75 shadow-lg" style="border-radius:20px; border :1px solid #ffff;" /></label>
-            <label class="col-3" for="img1"><img src="@Model.Product.ImageOne" id="output1" class="rounded-3 w-75 shadow-lg" style="border-radius:20px; border :1px solid #ffff;" /></label>
-            <label class="col-3" for="img2"><img src="@Model.Product.ImageTwo" id="output2" class="rounded-3 w-75 shadow-lg" style="border-radius:20px; border :1px solid #ffff;" /></label>
-            <label class="col-3" for="img3"><img src="@Model.Product.ImageThree" id="output3" class="rounded-3 w-75 shadow-lg" style="border-radius:20px; border :1px solid #ffff;" /></label>
-        </div>
+
+        
+
+
         <div class="row p-1 mb-3">
+            <!-- Cropper for ImageUrl -->
             <label class="p-0">Product Image</label>
-            <input type="file" name="file" id="img" class="form-control my-2 " onchange="loadFile(event)" />
-            <input type="file" name="file1" id="img1" class="form-control my-2" onchange="loadFile1(event)" />
-            <input type="file" name="file2" id="img2" class="form-control my-2" onchange="loadFile2(event)" />
-            <input type="file" name="file3" id="img3" class="form-control my-2" onchange="loadFile3(event)" />
+            <div class="card">
+                <div class="card-header">Crop Image Main</div>
+                <div class="card-body">
+                    <div id="cropper" data-default="@Model.Product.ImageUrl"></div>
+                    
+                </div>
+                <div class="card-footer row">
+                    <input type="file" id="img" class="form-control" accept="image/*" />
+                    <button type="button" id="newfileupload" style="margin-top:10px"  hidden  class="btn btn-success">Crop</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">Crop Image First</div>
+                <div class="card-body">
+                    <div id="cropper1" data-default="@Model.Product.ImageOne"></div>
+                    
+                </div>
+                <div class="card-footer row">
+                    <input type="file" id="img1" class="form-control" accept="image/*" />
+                    <button type="button" id="newfile1upload" style="margin-top:10px" hidden  class="btn btn-success">Crop</button>
+                </div>
+             </div>
+            <div class="card">
+                <div class="card-header">Crop Image Second</div>
+                <div class="card-body">
+                    <div id="cropper2" data-default="@Model.Product.ImageTwo"></div>
+                    
+                </div>
+                <div class="card-footer row">
+                    <input type="file" id="img2" class="form-control" accept="image/*" />
+                    <button type="button" id="newfile2upload" style="margin-top:10px" hidden  class="btn btn-success">Crop</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">Crop Image Third</div>
+                <div class="card-body">
+                    <div id="cropper3" data-default="@Model.Product.ImageThree"></div>
+                    
+                </div>
+                <div class="card-footer row">
+                    <input type="file" id="img3" class="form-control" accept="image/*" />
+                    <button type="button" id="newfile3upload" style="margin-top:10px"  hidden class="btn btn-success">Crop</button>
+                </div>
+            </div>
         </div>
+        <!-- Hidden inputs for cropped image filenames -->
+        <input name="newfile" id="newfile" type="hidden" />
+        <input name="newfile1" id="newfile1" type="hidden" />
+        <input name="newfile2" id="newfile2" type="hidden" />
+        <input name="newfile3" id="newfile3" type="hidden" />
+
+
+
         <div class="row p-1 mb-3">
             <label asp-for="Product.Name" class="p-0"></label>
             <input asp-for="Product.Name" class="form-control" />
             <span asp-validation-for="Product.Name" class="text-danger"></span>
-        </div>
-        <div class="row p-1 mb-3">
-            <label asp-for="Product.Stock" class="p-0"></label>
-            <input asp-for="Product.Stock" class="form-control" />
-            <span asp-validation-for="Product.Stock" class="text-danger"></span>
         </div>
         <div class="row p-1 mb-3">
             <label asp-for="Product.categoryId" class="p-0">Category</label>
@@ -46,6 +87,17 @@
                 <option disabled selected>--Select Category--</option>
             </select>
             <span asp-validation-for="Product.categoryId" class="text-danger"></span>
+        </div>
+        <div class="row p-1 mb-3">
+            <label asp-for="Product.SubCategory" class="p-0">Sub Category</label>
+
+            <input asp-for="Product.SubCategory" class="form-control" />
+            <span asp-validation-for="Product.SubCategory" class="text-danger"></span>
+        </div>
+        <div class="row p-1 mb-3">
+            <label asp-for="Product.Stock" class="p-0"></label>
+            <input asp-for="Product.Stock" class="form-control" />
+            <span asp-validation-for="Product.Stock" class="text-danger"></span>
         </div>
         <div class="row p-1 mb-3">
             <label asp-for="Product.ListPrice" class="p-0"></label>
@@ -89,7 +141,8 @@
     </div>
 </form>
 @section Scripts{
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
+
     <!-- Place the following <script> and <textarea> tags your HTML's <body> -->
     <script>
         tinymce.init({
@@ -99,42 +152,89 @@
         });
     </script>
     <script>
-        tinymce.init({
-            selector: 'textarea',
-            plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons     searchreplace  visualblocks wordcount checklist  casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode  tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',
-            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-            tinycomments_mode: 'embedded',
-            tinycomments_author: 'Author name',
-            mergetags_list: [
-                { value: 'First.Name', title: 'First Name' },
-                { value: 'Email', title: 'Email' },
-            ],
-            ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+        $(document).ready(function () {
+            function initializeCropper(elementId, defaultImageUrl, resultInputId) {
+                var cropper = $('#' + elementId);
+                cropper.croppie({
+                    viewport: {
+                        width: 150,
+                        height: 150,
+                    },
+                    boundary: {
+                        width: 800,
+                        height: 500
+                    },
+                    showZoomer: true,
+                    url: defaultImageUrl,
+                    format: 'png'
+                });
+
+                // Find the file input inside the same card
+                var fileInput = cropper.closest('.card').find('input[type="file"]');
+
+                fileInput.on('change', function () {
+                    $('#' + resultInputId + 'upload').removeAttr('hidden');
+                    var input = this;
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            cropper.croppie('bind', {
+                                url: e.target.result
+                            });
+                        };
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                });
+
+                // Find the button inside the same card
+                console.log('cropper:', cropper);
+                console.log('resultInputId:', resultInputId);
+
+                var cropButton = cropper.closest('.card').find('#' + resultInputId + 'upload');
+                console.log('cropButton:', cropButton);
+
+                cropButton.on('click', function () {
+                    console.log('Crop button clicked');
+
+                    cropper.croppie('result', {
+                        type: 'blob',
+                        format: 'png', // or 'jpeg' or another supported format
+                    }).then(function (blob) {
+                        var formData = new FormData();
+                        formData.append('FORfilename', 'Product.png');
+
+                        formData.append('file', blob);
+
+                        $.ajax({
+                            url: '@Url.Action("CropAndSave", "Product", new { area = "Admin" })',
+                            method: 'POST',
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function (response) {
+                                if (response.message === 'OK') {
+                                    alert('Photo Cropped Successfully!');
+                                    $('#' + resultInputId).val(response.filename);
+                                } else {
+                                    alert('Error occurred while cropping the photo.');
+                                }
+                            },
+                            error: function () {
+                                alert('Error occurred while cropping the photo.');
+                            }
+                        });
+                    });
+                });
+            }
+
+            initializeCropper('cropper', '@Model.Product.ImageUrl', 'newfile');
+            initializeCropper('cropper1', '@Model.Product.ImageOne', 'newfile1');
+            initializeCropper('cropper2', '@Model.Product.ImageTwo', 'newfile2');
+            initializeCropper('cropper3', '@Model.Product.ImageThree', 'newfile3');
         });
-
     </script>
 
-    <script>
-        var loadFile = function (event) {
-            var image = document.getElementById("output");
-            image.src = URL.createObjectURL(event.target.files[0]);
-        };
 
-        var loadFile1 = function (event) {
-            var image = document.getElementById("output1");
-            image.src = URL.createObjectURL(event.target.files[0]);
-        };
-
-        var loadFile2 = function (event) {
-            var image = document.getElementById("output2");
-            image.src = URL.createObjectURL(event.target.files[0]);
-        };
-
-        var loadFile3 = function (event) {
-            var image = document.getElementById("output3");
-            image.src = URL.createObjectURL(event.target.files[0]);
-        };
-    </script>
     @{
 
         <partial name="_ValidationScriptsPartial.cshtml" />
