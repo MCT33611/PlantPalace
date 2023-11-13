@@ -1,0 +1,95 @@
+﻿@model List<Banner>
+@{
+}
+@section head{
+    <!-- Bootstrap CSS -->
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <!-- Bootstrap JS -->
+
+}
+
+
+<div class="">
+    <div class="row pt-4 pb-3">
+
+        <div class="pagetitle col-12 ">
+            <h1>Banners Management</h1>
+            
+            <div class="row d-flex">
+                <nav class="col-md-10">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/Admin/Dashboard/Index">Admin</a></li>
+                        <li class="breadcrumb-item active">Banner Management</li>
+                    </ol>
+
+                </nav>
+                <div class="col-md-2">
+                    <a asp-controller="Banner" asp-action="Create" class="btn btn-primary custum-controll-w">
+                        <i class="bi bi-plus-circle-fill"></i>
+                        <span class="text-nowrap ">Add New Banner</span>
+                    </a>
+                </div>
+            </div>
+        </div><!-- End Page Title -->
+    </div>
+
+    @foreach (var banner in Model)
+    {
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title" id="banner-name-@banner.Id">@banner.BannerName</h5>
+                <button class="btn btn-primary w-100" type="button" onclick="toggleCardBody('@banner.Id')" aria-expanded="false" aria-controls="card-body-@banner.Id">
+                    Show
+                </button>
+
+
+            </div>
+            <div class="collapse" id="card-body-@banner.Id">
+                <div class="card-body">
+                    <img src="@banner.ImageUrl" alt="@banner.BannerName" class="img-fluid">
+                </div>
+            </div>
+            <div class="card-footer row ">
+                
+                <a asp-action="Edit" asp-controller="Banner" asp-route-id="@banner.Id" class="btn btn-primary m-1 col-md-3"  id="edit-button-@banner.Id">Edit</a>
+                <button onclick="Delete('Banner/Delete/@banner.Id')" class="btn btn-danger m-1 col-md-3" type="button" id="delete-button-@banner.Id">Delete</button>
+            </div>
+        </div>
+    }
+
+
+    
+
+</div>
+@section Scripts {
+    <script type="text/javascript">
+        function toggleCardBody(bannerId) {
+            $('#card-body-' + bannerId).collapse('toggle');
+        }
+        function Delete(url) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to Delete this banner!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        type: 'DELETE',
+                        success: function (data) {
+                            window.location.reload();
+                            toastr.success(data.message)
+                        }
+                    })
+                }
+            })
+        }
+    </script>
+}

@@ -20,5 +20,20 @@ namespace PlantPalace.Utility
                 Console.WriteLine(ex.Message);
             }
         }
+        public void CropBanner(string path, IFormFile img)
+        {
+            try
+            {
+                using (var image = Image.Load(img.OpenReadStream()))
+                {
+                    image.Mutate(x => x.Resize(759, 225));
+                    image.Save(path);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
     }
 }
