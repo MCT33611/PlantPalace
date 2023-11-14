@@ -29,7 +29,7 @@
                     
                 </div>
                 <div class="card-footer row">
-                    <input type="file" id="img" class="form-control" accept="image/*" />
+                    <input type="file" id="img" name="img" class="form-control" accept="image/*" />
                     <button type="button" id="newfileupload" style="margin-top:10px"  hidden  class="btn btn-success">Crop</button>
                 </div>
             </div>
@@ -215,14 +215,33 @@
                             processData: false,
                             success: function (response) {
                                 if (response.message === 'OK') {
-                                    alert('Photo Cropped Successfully!');
+                                    $('#' + resultInputId + 'upload').attr('hidden',true);
+
                                     $('#' + resultInputId).val(response.filename);
+                                    Swal.fire({
+                                        position: "center-center",
+                                        icon: "success",
+                                        title: "Your Image has been saved",
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
+                                    
                                 } else {
-                                    alert('Error occurred while cropping the photo.');
+                                    Swal.fire({
+                                        title: 'Error!',
+                                        text: 'Please Refresh and continue',
+                                        icon: 'error',
+                                        confirmButtonText: 'Ok'
+                                    })
                                 }
                             },
                             error: function () {
-                                alert('Error occurred while cropping the photo.');
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'Please Refresh and continue',
+                                    icon: 'error',
+                                    confirmButtonText: 'Cool'
+                                })
                             }
                         });
                     });

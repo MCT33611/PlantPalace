@@ -107,6 +107,16 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
                 //ShoppingCartVM.ListCart = _unitOfWork.ShoppingCart.GetALL(u => u.userId == claim.Value, incluedProperties: "Product");
 
                 ShoppingCartVM.ListCart = HttpContext.Session.GetObject<IEnumerable<ShoppingCart>>("ShoppingCartVMproducts");
+                foreach(var cart in ShoppingCartVM.ListCart)
+                {
+                    if (!_unitOfWork.Product.IsStockAvailable(cart.Quantity, cart.ProductId))
+                    {
+                        TempData["error"] = "Stock is not more";
+
+                        return View(ShoppingCartVM);
+
+                    }
+                }
                 ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
                 ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusPending;
                 ShoppingCartVM.OrderHeader.PaymentMethod = SD.PaymentMethodOnline;
@@ -349,6 +359,13 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
         public IActionResult Plus(int cartId)
         {
             var cart = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
+            if(!_unitOfWork.Product.IsStockAvailable(cart.Quantity + 1, cart.ProductId))
+            {
+                TempData["error"] = "Stock is not more";
+
+                return RedirectToAction("Index");
+
+            }
             _unitOfWork.ShoppingCart.QuantityIncrement(cart, 1);
             _unitOfWork.Save();
             return RedirectToAction("Index");

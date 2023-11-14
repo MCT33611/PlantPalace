@@ -79,6 +79,13 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Upsert(ProductVM productVM, string? newfile, string? newfile1, string? newfile2, string? newfile3)
         {
+            if(newfile.IsNullOrEmpty())
+            {
+                TempData["error"] = "Main Image is Mandatory";
+                ModelState.AddModelError("img", "main Image is Mandatory");
+                return View(productVM);
+
+            }
             if (ModelState.IsValid)
             {
                 string wwwRootPath = _env.WebRootPath;

@@ -136,10 +136,24 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
                 
             if(cartDb == null)
             {
+                if (!_unitOfWork.Product.IsStockAvailable(1, cart.ProductId))
+                {
+                    TempData["error"] = "Stock is not more";
+
+                    return RedirectToAction(nameof(Index));
+
+                }
                 _unitOfWork.ShoppingCart.Add(cart);
             }
             else
             {
+                if (!_unitOfWork.Product.IsStockAvailable(cartDb.Quantity, cart.ProductId))
+                {
+                    TempData["error"] = "Stock is not more";
+
+                    return RedirectToAction(nameof(Index));
+
+                }
                 _unitOfWork.ShoppingCart.QuantityIncrement(cartDb,cart.Quantity);
 
             }
@@ -186,12 +200,28 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
             ShoppingCart cartDb =
                 _unitOfWork.ShoppingCart.Get(u => u.userId == claim.Value && u.ProductId == cart.ProductId);
 
+            
+
             if (cartDb == null)
             {
+                if (!_unitOfWork.Product.IsStockAvailable( 1, cart.ProductId))
+                {
+                    TempData["error"] = "Stock is not more";
+
+                    return RedirectToAction(nameof(Index));
+
+                }
                 _unitOfWork.ShoppingCart.Add(cart);
             }
             else
             {
+                if (!_unitOfWork.Product.IsStockAvailable(cartDb.Quantity + 1, cart.ProductId))
+                {
+                    TempData["error"] = "Stock is not more";
+
+                    return RedirectToAction(nameof(Index));
+
+                }
                 _unitOfWork.ShoppingCart.QuantityIncrement(cartDb, 1);
 
             }

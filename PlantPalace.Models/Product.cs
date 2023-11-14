@@ -22,7 +22,7 @@ namespace PlantPalace.Models
         [DisplayName("Product Name")]
         public string Name { get; set; }
 
-        [MaxLength(1000, ErrorMessage = "Maximum characters for Description is 255")]
+        [Required]
         public string Description { get; set; }
 
 

@@ -59,16 +59,7 @@
                     @foreach (var item in Model.ListCart)
                     {
                         <div class="row border-bottom pb-3">
-                            @* <div class="d-none d-lg-block col-lg-1 text-center py-2">
-                                @if (item.Product.ProductImages != null && item.Product.ProductImages.Count() > 0)
-                                {
-                                    <img src="@item.Product.ProductImages.FirstOrDefault().ImageUrl" class="card-img-top rounded w-100" />
-                                }
-                                else
-                                {
-                                    <img src="https://placehold.co/500x600/png" class="card-img-top rounded w-100" />
-                                }
-                            </div> *@
+                            
                             <div class="d-none d-lg-block col-lg-1 text-center py-2">
                                 <img src="@item.Product.ImageUrl" class="card-img-top rounded w-100" />
 
@@ -115,7 +106,7 @@
                         <ul class="list-group mb-4">
                             <li class="d-flex justify-content-between align-items-center">
                                 <h5 class="text-dark fw-semibold text-uppercase"> Total (MRP)</h5>
-                                <h4 class="text-dark fw-bolder">@Model.OrderHeader.OrderTotal.ToString("c")</h4>@* @Model.OrderHeader.OrderTotal.ToString("c") *@
+                                <h4 class="text-dark fw-bolder">@Model.OrderHeader.OrderTotal.ToString("c")</h4>
                             </li>
                         </ul>
                     </div>

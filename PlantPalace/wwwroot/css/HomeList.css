@@ -169,13 +169,21 @@ ul.product_list {
     width: 100%;
     text-transform: uppercase;
 }
+    .product_title h5 {
+        font-size: 20px;
+        font-weight: 600;
+        color: #000;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
 
-.product_price a {
-    border-top: #FFD700 1px solid;
-    border-bottom: #FFD700 1px solid;
-    color: #000;
-    text-decoration:none;
-}
+    .product_price a {
+        border-top: #FFD700 1px solid;
+        border-bottom: #FFD700 1px solid;
+        color: #000;
+        text-decoration: none;
+    }
 
 .price_old {
     color: #ea2e49;

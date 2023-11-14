@@ -18,6 +18,8 @@ namespace PlantPalace.DataAccess.Repository
             _db = db;
         }
 
+        
+
         public void Update(Product obj)
         {
             var objFormDb =  _db.Products.FirstOrDefault(u => u.Id == obj.Id);
@@ -53,6 +55,19 @@ namespace PlantPalace.DataAccess.Repository
                     objFormDb.ImageThree = obj.ImageThree;
                 }
             }
+        }
+
+        public bool IsStockAvailable(int count, int productId)
+        {
+            var objFormDb =  _db.Products.FirstOrDefault(u => u.Id == productId);
+
+            if(objFormDb != null && objFormDb.Stock >= count) 
+            {
+                
+                return true;
+            }
+            return false;
+            
         }
 
     }
