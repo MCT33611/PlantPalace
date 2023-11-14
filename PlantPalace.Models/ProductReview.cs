@@ -31,7 +31,7 @@ namespace PlantPalace.Models
         public DateTime? CreatedDate { get; set; }
 
         [Required(ErrorMessage = "Please provide a rating.")]
-        [Range(1, 5, ErrorMessage = "The rating must be between 1 and 5.")]
+        [Range(0, 5, ErrorMessage = "The rating must be between 1 and 5.")]
         public int Rate { get; set; }
 
 

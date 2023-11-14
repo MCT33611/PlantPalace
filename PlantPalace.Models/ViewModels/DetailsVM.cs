@@ -9,8 +9,9 @@ namespace PlantPalace.Models.ViewModels
     public class DetailsVM
     {
         public ShoppingCart? cart { get; set; }
-        public ProductReview? review { get; set; }
+        public List<ProductReview>? reviewList { get; set; }
 
-        public bool IsEligibleToReview { get; set; }
+        public bool eligible { get; set; }
+
     }
 }

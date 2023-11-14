@@ -81,6 +81,9 @@ namespace PlantPalace.Models
         [ValidateNever]
         [AllowNull]
         public string SubCategory { get; set; }
+
+        [Range(0, 5)]
+        public int Rate { get; set; }
     }
 
 }

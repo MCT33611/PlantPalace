@@ -19,7 +19,7 @@ namespace PlantPalace.DataAccess.Repository
 
         public void Update(ProductReview obj)
         {
-            /*_db.ProductReview.Update(obj);*/
+            _db.ProductReview.Update(obj);
         }
     }
 }

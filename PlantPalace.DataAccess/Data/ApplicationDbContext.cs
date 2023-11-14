@@ -12,6 +12,7 @@ namespace PlantPalace.DataAccess.Data
 
         public DbSet<Category> Categorries { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductReview> ProductReview { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }

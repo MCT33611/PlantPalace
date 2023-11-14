@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PlantPalace.DataAccess.Repository;
 using PlantPalace.DataAccess.Repository.IRepository;
 using PlantPalace.Models;
@@ -105,7 +106,20 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
                 Quantity = 1,
                 ProductId = productId
             };
-            return View(cart);
+            DetailsVM detailsVM = new()
+            {
+                cart = cart,
+                reviewList = _unitOfWork.ProductReview.GetALL(incluedProperties: "User").ToList(),
+                eligible = false
+            };
+            if(User.IsInRole(SD.Role_Customer))
+            {
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                detailsVM.eligible = _unitOfWork.ProductReview.GetALL(u => u.ProductId == productId && u.UserId == claim.Value).Count() == 0;
+
+            }
+            return View(detailsVM);
         }
 
         [HttpPost]
@@ -187,6 +201,52 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 
 
 
+        }
+
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult AddReview(int rate,string review, int productId)
+        {
+            try
+            {
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                var user = _unitOfWork.ApplicationUser.Get(u => u.Id == claim.Value);
+
+                if (user == null)
+                    return NotFound();
+                ProductReview reviewModel = new()
+                {
+                    Rate = rate,
+                    Description = review,
+                    ProductId = productId,
+                    UserId = user.Id,
+                    CreatedDate = DateTime.UtcNow,
+
+                };
+
+                var product = _unitOfWork.Product.Get(u=>u.Id == productId);
+                product.Rate = _unitOfWork.ProductReview.GetALL(u=> u.ProductId == productId).Sum(u => u.Rate) / _unitOfWork.ProductReview.GetALL(u => u.ProductId == productId).Count();
+                if (reviewModel != null)
+                {
+                    _unitOfWork.ProductReview.Add(reviewModel);
+                }
+                else
+                {
+                    throw new Exception();
+                }
+
+                _unitOfWork.Save();
+                TempData["success"] = "review Send Successfully";
+
+                return RedirectToAction(nameof(Details), new {productId});
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction(nameof(Details), new { productId });
+
+            }
         }
 
         #endregion

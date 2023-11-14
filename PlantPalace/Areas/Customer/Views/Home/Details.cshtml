@@ -1,18 +1,18 @@
-﻿@model ShoppingCart
+﻿@model DetailsVM
 
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 <link href='https://fonts.googleapis.com/css?family=Anton' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Neucha' rel='stylesheet' type='text/css'>
 
-<form method="post" class="mb-5">
-    <input hidden asp-for="Id" />
+<form asp-action="Details" class="mb-5">
+    <input hidden asp-for="cart.ProductId" />
     <link href="~/css/imagezoom.css" rel="stylesheet" />
     <div class="card shadow border-0 mt-4 mb-5">
         <div class="card-header bg-secondary bg-gradient text-light py-4">
             <div class="row">
                 <div class="col-12 text-center">
-                    <h3 class="text-white text-uppercase">@Model.Product.Name</h3>
-                    <p class="text-white-50 fw-semibold mb-0">@Model.Product.Category.Name</p>
+                    <h3 class="text-white text-uppercase">@Model.cart.Product.Name</h3>
+                    <p class="text-white-50 fw-semibold mb-0">@Model.cart.Product.Category.Name</p>
                 </div>
             </div>
         </div>
@@ -33,28 +33,28 @@
 
                             <div id="slider-wrap">
                                 <ul id="slider" style="margin-right:-68px">
-                                   
+
                                     <li data-color="#1abc9c">
                                         <div class="wrap" style="width:300px ; margin:0">
-                                            <div class="div col-10" id="imgMain" data-image="@Model.Product.ImageUrl" data-image-zoom="@Model.Product.ImageUrl" data-size="100"></div>
+                                            <div class="div col-10" id="imgMain" data-image="@Model.cart.Product.ImageUrl" data-image-zoom="@Model.cart.Product.ImageUrl" data-size="100"></div>
                                         </div>
                                     </li>
 
                                     <li data-color="#1abc9c">
                                         <div class="wrap" style="width:300px; margin:0">
-                                            <div class="div col-10" id="imgMain" data-image="@Model.Product.ImageOne" data-image-zoom="@Model.Product.ImageOne" data-size="100"></div>
+                                            <div class="div col-10" id="imgMain" data-image="@Model.cart.Product.ImageOne" data-image-zoom="@Model.cart.Product.ImageOne" data-size="100"></div>
                                         </div>
                                     </li>
 
                                     <li data-color="#1abc9c">
                                         <div class="wrap" style="width:300px; margin:0">
-                                            <div class="div col-10" id="imgMain" data-image="@Model.Product.ImageTwo" data-image-zoom="@Model.Product.ImageTwo" data-size="100"></div>
+                                            <div class="div col-10" id="imgMain" data-image="@Model.cart.Product.ImageTwo" data-image-zoom="@Model.cart.Product.ImageTwo" data-size="100"></div>
                                         </div>
                                     </li>
 
                                     <li data-color="#1abc9c">
                                         <div class="wrap" style="width:300px; margin:0">
-                                            <div class="div col-10" id="imgMain" data-image="@Model.Product.ImageThree" data-image-zoom="@Model.Product.ImageThree" data-size="100"></div>
+                                            <div class="div col-10" id="imgMain" data-image="@Model.cart.Product.ImageThree" data-image-zoom="@Model.cart.Product.ImageThree" data-size="100"></div>
                                         </div>
                                     </li>
 
@@ -77,24 +77,24 @@
                         </div>
 
 
-                        @* <img src="@Model.Product.ImageUrl" width="100" class="rounded w-75" /> *@
+                        @* <img src="@Model.cart.Product.ImageUrl" width="100" class="rounded w-75" /> *@
 
 
                     </div>
                     <div class="col-12 col-lg-6 offset-lg-1">
 
                         <div class="col-12 col-md-6 pb-4">
-                            <span class="badge">@Model.Product.Category.Name</span>
+                            <span class="badge">@Model.cart.Product.Category.Name</span>
                         </div>
                         <div class="row">
-                            <h3 class="text-dark text-uppercase">@Model.Product.Name</h3>
+                            <h3 class="text-dark text-uppercase">@Model.cart.Product.Name</h3>
 
                         </div>
                         <div class="row ps-2">
                             <h6 class="text-dark text-opacity-50  pb-2">
                                 List Price:
                                 <span class="text-decoration-line-through">
-                                    @Model.Product.ListPrice.ToString("c")
+                                    @Model.cart.Product.ListPrice.ToString("c")
                                 </span>
                             </h6>
                         </div>
@@ -117,19 +117,19 @@
                                 <div>Price</div>
                             </div>
                             <div class="p-1 col-3 col-lg-2 bg-white text-warning fw-bold">
-                                <div>@Model.Product.Price.ToString("c")</div>
+                                <div>@Model.cart.Product.Price.ToString("c")</div>
                             </div>
                             <div class="p-1 col-3 col-lg-2 bg-white text-warning fw-bold">
-                                <div>@Model.Product.Price50.ToString("c")</div>
+                                <div>@Model.cart.Product.Price50.ToString("c")</div>
                             </div>
                             <div class="p-1 col-3 col-lg-2 bg-white text-warning fw-bold">
-                                <div>@Model.Product.Price100.ToString("c")</div>
+                                <div>@Model.cart.Product.Price100.ToString("c")</div>
                             </div>
                         </div>
                         <div class="row pl-2 my-3">
-                            <p class="text-secondary lh-sm">@Html.Raw(Model.Product.Description)</p>
+                            <p class="text-secondary lh-sm">@Html.Raw(Model.cart.Product.Description)</p>
                         </div>
-                        @if(!User.IsInRole(SD.Role_Admin))
+                        @if (!User.IsInRole(SD.Role_Admin))
                         {
                             <div class="row pl-2 mb-3">
                                 <div class="col-md-5">
@@ -138,7 +138,7 @@
                                               id="inputGroup-sizing-default">
                                             Count
                                         </span>
-                                        <input asp-for="Quantity" type="number" class="form-control text-end" aria-label="Sizing example input"
+                                        <input asp-for="cart.Quantity" type="number" class="form-control text-end" aria-label="Sizing example input"
                                                aria-describedby="inputGroup-sizing-default" value="1">
                                     </div>
                                 </div>
@@ -160,8 +160,198 @@
         </div>
     </div>
 </form>
+
+@if (User.IsInRole(SD.Role_Customer) && Model.eligible)
+{
+    <form asp-action="AddReview">
+        <div class="card shadow border-0 mt-4 mb-5">
+            <div class="card-header bg-secondary bg-gradient text-light py-4">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <p class="text-dark fw-semibold mb-0">Review</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="py-3">
+                    <div class="row">
+                        <label for="review-Description" class="p-0 text-muted"></label>
+                        <textarea id="review-Description" name="review" class="form-control"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <input type="hidden" id="rate" name="rate" value="0">
+                <input type="hidden" id="productId" name="productId" value="@Model.cart.ProductId">
+
+                <style>
+                    .rating {
+                        display: inline-block;
+                        position: relative;
+                        height: 50px;
+                        line-height: 50px;
+                        font-size: 50px;
+                    }
+
+                        .rating label {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            height: 100%;
+                            cursor: pointer;
+                        }
+
+                            .rating label:last-child {
+                                position: static;
+                            }
+
+                            .rating label:nth-child(1) {
+                                z-index: 5;
+                            }
+
+                            .rating label:nth-child(2) {
+                                z-index: 4;
+                            }
+
+                            .rating label:nth-child(3) {
+                                z-index: 3;
+                            }
+
+                            .rating label:nth-child(4) {
+                                z-index: 2;
+                            }
+
+                            .rating label:nth-child(5) {
+                                z-index: 1;
+                            }
+
+                            .rating label input {
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                opacity: 0;
+                            }
+
+                            .rating label .icon {
+                                float: left;
+                                color: transparent;
+                            }
+
+                            .rating label:last-child .icon {
+                                color: #000;
+                            }
+
+                        .rating:not(:hover) label input:checked ~ .icon,
+                        .rating:hover label:hover input ~ .icon {
+                            color: #09f;
+                        }
+
+                        .rating label input:focus:not(:checked) ~ .icon:last-child {
+                            color: #000;
+                            text-shadow: 0 0 5px #09f;
+                        }
+                </style>
+                <div class="rating">
+                    <label>
+                        <input type="radio" name="stars" value="1" />
+                        <span class="icon">★</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="stars" value="2" />
+                        <span class="icon">★</span>
+                        <span class="icon">★</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="stars" value="3" />
+                        <span class="icon">★</span>
+                        <span class="icon">★</span>
+                        <span class="icon">★</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="stars" value="4" />
+                        <span class="icon">★</span>
+                        <span class="icon">★</span>
+                        <span class="icon">★</span>
+                        <span class="icon">★</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="stars" value="5" />
+                        <span class="icon">★</span>
+                        <span class="icon">★</span>
+                        <span class="icon">★</span>
+                        <span class="icon">★</span>
+                        <span class="icon">★</span>
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary w-100" id="reviewSent">Send</button>
+            </div>
+        </div>
+    </form>
+
+
+}
+
+@foreach (var reviewCard in Model.reviewList)
+{
+    <div class="card">
+        <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+                <button class="btn btn-primary w-100 " type="button" onclick="toggleCardBody('@reviewCard.Id')" aria-expanded="false" aria-controls="card-body-@reviewCard.Id">
+                    
+                    <span class="mr-2">@reviewCard.User.Name</span>
+                    <i class="fa fa-angle-down"></i>
+                    <span class="mr-2 text-end">
+                        @for (int i = 1; i <= reviewCard.Rate; i++)
+                        {
+                            <span class="text-warning">★</span>
+                        }
+                    </span>
+                </button>
+            </h5>
+        </div>
+
+        <div id="card-body-@reviewCard.Id" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+                <span class="mr-2">
+                    @for (int i = 1; i <= reviewCard.Rate; i++)
+                    {
+                        <span class="text-warning">★</span>
+                    }
+                </span>
+                <p class="text">@Html.Raw(reviewCard.Description)</p>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
 @section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            // Function to update hidden input value when a radio button is changed
+            $(':radio').change(function () {
+                $('#rate').val(this.value);
+            });
+
+            
+        });
+
+
+
+    </script>
     <script src="~/js/detailsimg.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'anchor autolink   emoticons  searchreplace  visualblocks wordcount',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | align lineheight | numlist bullist indent outdent | removeformat',
+        });
+    </script>
     <script>
         $.fn.magnifierRentgen = function () {
 
@@ -228,6 +418,12 @@
         };
 
         $(".div").magnifierRentgen();
+
+    </script>
+    <script>
+        function toggleCardBody(bannerId) {
+            $('#card-body-' + bannerId).collapse('toggle');
+        }
     </script>
 
 }

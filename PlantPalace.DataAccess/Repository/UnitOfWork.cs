@@ -13,6 +13,7 @@ namespace PlantPalace.DataAccess.Repository
         private ApplicationDbContext _db;
         public ICategoryRepository Category { get; private set; }
         public IProductRepository Product { get; private set; }
+        public IProductReviewRepository ProductReview { get; set; }
         public IShoppingCartRepository ShoppingCart { get; set; }
         public IWishListRepository WishList { get; set; }
         public IApplicationUserRepository ApplicationUser { get; set; }
@@ -27,6 +28,7 @@ namespace PlantPalace.DataAccess.Repository
         {
             _db = db;
             Product = new ProductRepository(_db);
+            ProductReview = new ProductReviewRepository(_db);
             Category = new CategoryRepository(_db);
             ShoppingCart = new ShoppingCartRepository(_db);
             WishList = new WishListRepository(_db);
