@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using PlantPalace.DataAccess.Repository;
 using PlantPalace.DataAccess.Repository.IRepository;
@@ -98,11 +99,65 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
             return View(homeModel);
         }
 
-        public IActionResult ProductList()
+        /*public IActionResult ProductList(int[]? Rate, int[]? Categories, int? priceRange, string? search)*/
+        public IActionResult ProductList(ProductFilterVM model)
         {
-            var productList = _unitOfWork.Product.GetALL();
-            return View(productList);
+            ProductListVM list = new()
+            {
+                products = _unitOfWork.Product.GetALL().ToList(),
+                Categories = _unitOfWork.Category.GetALL().ToList(),
+            };
+            var random = new Random();
+            list.products = list.products.OrderBy(x => random.Next()).ToList();
+            int[] rates = JsonConvert.DeserializeObject<int[]>(model.Rates ?? "[]");
+            int[] categories = JsonConvert.DeserializeObject<int[]>(model.Categories ?? "[]");
+
+            if ((model.Rates?.Any() == true) || (model.Categories?.Any() == true) || (model.PriceRange.HasValue && model.PriceRange != 0) || !string.IsNullOrEmpty(model.search))
+            {
+                try
+                {
+                    if (rates?.Any() == true)
+                    {
+                        list.products = list.products.Where(u => u.Rate >= rates.Min()).ToList();
+                    }
+
+                    if (categories?.Any() == true)
+                    {
+                        
+                        list.products = list.products.Where(u => categories.Contains(u.categoryId)).ToList();
+                    }
+
+
+                    if (model.PriceRange.HasValue && model.PriceRange != 0)
+                    {
+                        list.products = list.products.Where(u => u.Price <= model.PriceRange).ToList();
+                    }
+
+                    if (!string.IsNullOrEmpty(model.search))
+                    {
+                        list.products = list.products.Where(u =>
+                            u.Name.Normalize().Contains(model.search.Normalize()) ||
+                            u.Category.Name.Normalize().Contains(model.search.Normalize()) ||
+                            u.SubCategory.Normalize().Contains(model.search.Normalize())
+                        ).ToList();
+                    }
+
+                    return PartialView("_ProductListPartial", list.products );
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception details
+                    _logger.LogError(ex, "An error occurred in the ProductList action.");
+
+                    // Return a generic error response
+                    return StatusCode(500, "Internal Server Error");
+                }
+
+            }
+
+            return View(list);
         }
+
 
         public IActionResult Details(int productId)
         {

@@ -1,0 +1,174 @@
+﻿@model ProductListVM
+<link href="~/css/homelist.css" rel="stylesheet" />
+<link href="~/css/productlist.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<div class="container-fluid mt-1">
+
+
+    <div class="row d-flex justify-content-center h-100 mb-5">
+
+        
+        <div class="col-md-9 " id="ListLoder">
+            <partial name="_ProductListPartial" model="@Model.products" />
+        </div>
+        <div class="col-md-3">
+
+
+            <div class="card">
+                <article class="filter-group">
+                    <header class="card-header">
+                        <input type="text" id="search" class="border-0 w-100" placeholder="search ...." />
+
+                    </header>
+                </article>
+                <article class="filter-group">
+                    <header class="card-header">
+                        <a data-toggle="collapse" data-target="#collapse_aside3" data-abc="true" aria-expanded="false" class="collapsed">
+                            <i class="icon-control fa fa-chevron-down"></i>
+                            <h6 class="title">Categories </h6>
+                        </a>
+                    </header>
+                    <div class="filter-content collapse" id="collapse_aside3" style="">
+                        <div class="card-body">
+                            @foreach (var cate in Model.Categories)
+                            {
+                                <label class="checkbox-btn">
+                                    <input type="checkbox" class="Categories" name="Categories[]" value="@cate.Id">
+                                    <span class="btn btn-light m-1"> @cate.Name </span>
+                                </label>
+                            }
+                        </div>
+                    </div>
+                </article>
+
+                <article class="filter-group">
+                    <header class="card-header">
+                        <a data-toggle="collapse" data-target="#collapse_aside2" data-abc="true" aria-expanded="false" class="collapsed">
+                            <i class="icon-control fa fa-chevron-down"></i>
+                            <h6 class="title">Price </h6>
+                        </a>
+                    </header>
+                    <div class="filter-content collapse" id="collapse_aside2" style="">
+                        <div class="card-body">
+                            <div>
+                                <input type="range" id="priceRange" onchange="livePriceRange(this.value)" class="custom-range" min="@Model.products.Min(u=> u.Price)" max="@Model.products.Max(u=> u.Price)" name="priceRange">
+                                <div class="border-1 border" id="livePrice">Under:</div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Min</label>
+                                    <input class="form-control" placeholder="₹" value="@Model.products.Min(u=> u.Price)" type="number" onchange="minChange(this.value)">
+                                </div>
+                                <div class="form-group text-right col-md-6">
+                                    <label>Max</label>
+                                    <input class="form-control" placeholder="₹" value="@Model.products.Max(u=> u.Price)" type="number" onchange="maxChange(this.value)">
+                                </div>
+                            </div>
+                            @* <a  class="highlight-button btn btn-medium button xs-margin-bottom-five" data-abc="true">Apply Now</a> *@
+                        </div>
+                    </div>
+                </article>
+
+
+
+                <article class="filter-group">
+                    <header class="card-header">
+                        <a data-toggle="collapse" data-target="#collapse_aside4" data-abc="true" class="collapsed" aria-expanded="false">
+                            <i class="icon-control fa fa-chevron-down"></i>
+                            <h6 class="title">Rating </h6>
+                        </a>
+                    </header>
+                    <div class="filter-content collapse" id="collapse_aside4" style="">
+                        <div class="card-body">
+                            <label class="custom-control">
+                                <input type="checkbox" name="Rate[]" value="5" class="custom-control-input Rate">
+                                <div class="custom-control-label">Better  </div>
+                            </label>
+
+                            <label class="custom-control">
+                                <input type="checkbox" name="Rate[]" value="4" class="custom-control-input Rate">
+                                <div class="custom-control-label">Best </div>
+                            </label>
+
+                            <label class="custom-control">
+                                <input type="checkbox" name="Rate[]" value="3" class="custom-control-input Rate">
+                                <div class="custom-control-label">Good</div>
+                            </label>
+
+                            <label class="custom-control">
+                                <input type="checkbox" name="Rate[]" value="2" class="custom-control-input Rate">
+                                <div class="custom-control-label">Not good</div>
+                            </label>
+                        </div>
+                    </div>
+                </article>
+                <article class="filter-group">
+                    <button id="submitBtn" class="btn btn-primary w-100 bx-border-circle">Apply</button>
+                </article>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#submitBtn").on("click", function () {
+                var rateData = [];
+                $(".Rate:checked").each(function () {
+                    rateData.push(parseInt($(this).val()));
+                });
+                console.log("Rate Data:", rateData);
+
+                var categoryData = [];
+                $(".Categories:checked").each(function () {
+                    categoryData.push(parseInt($(this).val()));
+                });
+                console.log("Category Data:", categoryData);
+
+                var priceRangeData = parseInt($("#priceRange").val());
+                var searchData = $("#search").val();
+
+                $.ajax({
+                    type: "GET",
+                    url: "/Customer/Home/ProductList",
+                    data: {
+                        Rates: JSON.stringify(rateData),
+                        Categories: JSON.stringify(categoryData),
+                        search: searchData,
+                        PriceRange: priceRangeData
+                    },
+                    success: function (data) {
+                        console.log("Success:", data);
+                        $("#ListLoder").html(data);
+
+                        // Uncomment the following line if you want to display an alert on success
+                        // alert("Success");
+                    },
+                    error: function (error) {
+                        console.error("Error:", error);
+                        // Uncomment the following line if you want to display an alert on error
+                        // alert("Error");
+                    }
+                });
+            });
+        });
+
+        function minChange(min)
+        {
+            $('#priceRange').attr('min', min);
+        }
+        function maxChange(max) {
+            $('#priceRange').attr('max', max);
+        }
+        function livePriceRange(val) 
+        {
+            $('#livePrice').html("Under:₹"+val+"");
+        }
+    </script>
+}

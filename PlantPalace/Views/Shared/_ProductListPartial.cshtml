@@ -1,0 +1,64 @@
+﻿@model List<Product>
+@if (Model.Count() == 0)
+{
+    <div class="col-12 d-flex justify-content-center align-items-center flex-column">
+        <img src="~/Images/notAndDeadIcon.png">
+        <h1>Product Not Available</h1>
+        <p>on this filter</p>
+        <button id="refresh" class="btn btn-primary">Refresh</button>
+    </div>
+}
+else
+{
+    <ul class="product_list mb-2 list">
+        @foreach (var product in Model)
+        {
+            <li class="product_item  me-4 mb-3 rounded">
+                @if (product.Stock == 0)
+                {
+                    <div class="product_sale">
+                        <p>Out Of Stock</p>
+                    </div>
+                }
+
+                <div class="product_image d-flex justify-content-center align-items-center flex-wrap">
+                    <a asp-action="Details" asp-route-productId="@product.Id"><img id="img" src="@product.ImageUrl" alt=""></a>
+                    <div class="product_buttons">
+                        <button onclick="AddORremove(@product.Id)" class="product_heart"><i class="fa fa-heart"></i></button>
+                        <button onclick="AddToCart(@product.Id)" class="add_to_cart"><i class="fa fa-shopping-cart"></i></button>
+
+                    </div>
+                </div>
+                <div class="product_values">
+                    <div class="product_title  text-nowrap overflow-hidden">
+                        <h5 style="text-overflow:ellipsis;">@product.Name</h5>
+                    </div>
+                    <div class="product_price">
+                        <a href="#">@* <span class="price_old">@product.ListPrice.ToString("c")</span> *@ <span class="price_new">@product.Price100.ToString("c")</span></a>
+                    </div>
+                    <div class="col-12">
+                        <div>
+                            <a asp-action="Details"
+                               asp-route-productId="@product.Id"
+                               class="btn btn-primary bg-gradient rounded text-lowercase">
+                                Details
+                            </a>
+                        </div>
+                    </div>
+                    <div class="product_buttons">
+                        <button onclick="AddORremove(@product.Id)" class="product_heart"><i class="fa fa-heart"></i></button>
+                        <button onclick="AddToCart(@product.Id)" class="add_to_cart"><i class="fa fa-shopping-cart"></i></button>
+                    </div>
+                </div>
+            </li>
+        }
+
+
+    </ul>
+}
+<script>
+    document.getElementById('refresh').addEventListener('click', function () {
+        // Handle refresh action here
+        location.reload(); // This will reload the page, you can replace it with your custom logic
+    });
+</script>

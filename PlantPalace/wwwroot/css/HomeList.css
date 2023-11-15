@@ -232,7 +232,7 @@ ul.product_list {
         }
 
     .product_image {
-        height: 150px;
+        /*height: 150px;*/
         float: left;
         width: 100px;
     }
@@ -396,7 +396,7 @@ ul.product_list {
     }
 
     .product_image {
-        height: 150px;
+        /*height: 150px;*/
         float: left;
         width: 100px;
     }
