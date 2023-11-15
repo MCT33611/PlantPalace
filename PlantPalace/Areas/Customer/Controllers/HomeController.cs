@@ -98,6 +98,12 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
             return View(homeModel);
         }
 
+        public IActionResult ProductList()
+        {
+            var productList = _unitOfWork.Product.GetALL();
+            return View(productList);
+        }
+
         public IActionResult Details(int productId)
         {
             ShoppingCart cart = new()
@@ -180,6 +186,70 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 
 
         #region API CALLS
+
+        public IActionResult PicUpload(IFormFile file, string FORfilename)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            var user = _unitOfWork.ApplicationUser.Get(u => u.Id == claim.Value);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (file != null && file.Length > 0)
+            {
+                // Define a folder path to save user photos
+                var uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Images/profiles");
+
+                // Ensure the folder exists
+                Directory.CreateDirectory(uploadFolder);
+
+                // Generate a unique file name for the photo
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                fileName += fileName + '_' + FORfilename;
+                // Combine the folder path and file name
+                var filePath = Path.Combine(uploadFolder, fileName);
+
+
+                // if user profile alldriady exist it delete
+
+
+                if (!string.IsNullOrEmpty(user.Pic))
+                {
+                    var oldImagePath = Directory.GetCurrentDirectory() + "\\wwwroot\\" + user.Pic.TrimStart('\\');
+
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
+                ImageCrop crop = new();
+
+                crop.Crop(filePath, file);
+                // Save the photo to the server
+                /*using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await photo.CopyToAsync(stream);
+                }*/
+
+                // Store the file path in the database (update your database model accordingly)
+                user.Pic = "/Images/profiles\\" + fileName; // Update the user's profile photo property in the database
+
+                
+            }
+
+            _unitOfWork.ApplicationUser.Update(user);
+            _unitOfWork.Save();
+            return Json(new {success = true});
+        }
         [HttpGet]
         [Authorize]
         public IActionResult AddTOcart(int ProductId)

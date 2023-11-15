@@ -29,20 +29,23 @@
     </div>
     <div class="col-md-6">
         <div class="card mb-4">
-            <form asp-page-handler="PicUpload" enctype="multipart/form-data">
+            <div >
                 <div class="card-body text-center">
                     <div class="profile-pic">
                         <label class="-label" for="file">
                             <span class="glyphicon glyphicon-camera"></span>
                             <img id="output" src="@Model.ProfilePhoto" class="rounded-circle position-relative" style="background-size:cover;width:10rem;height:10rem">
                         </label>
-                        <input id="file" type="file" name="photo" onchange="loadFile(event)" hidden />
+                        <input id="file" type="file" value="" name="photo"  hidden />
                     </div>
+                    <div id="cropper"  hidden></div>
+                    <button type="button" id="CropBtn" style="margin-top:10px" hidden class="btn btn-success">Crop</button>
+
                     <div class="d-flex justify-content-center mb-2">
                         <button type="submit" id="btnSubmit" class="btn btn-primary my-2" hidden>Upload New Image</button>
                     </div>
                 </div>
-            </form>
+            </div>
             
         </div>
     </div>
@@ -54,11 +57,100 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        var loadFile = function (event) {
-            var image = document.getElementById("output");
-            image.src= URL.createObjectURL(event.target.files[0]);
-            document.getElementById("btnSubmit").removeAttribute("hidden")
-        };
+        function initializeCropper() {
+            var cropper = $('#cropper');
+            cropper.croppie({
+                viewport: {
+                    width: 150,
+                    height: 150,
+                    type: 'circle' // You can change this to 'square' if needed
+                },
+                boundary: {
+                    width: 300,
+                    height: 300
+                },
+                showZoomer: true,
+                enableOrientation: true // Enable this if you want to handle image orientation
+            });
 
+            var fileInput = $('#file');
+
+            fileInput.on('change', function (event) {
+                $('#cropper').removeAttr('hidden');
+                $('#CropBtn').removeAttr('hidden');
+                var image = document.getElementById("output");
+                image.src = URL.createObjectURL(event.target.files[0]);
+               // document.getElementById("btnSubmit").removeAttribute("hidden");
+
+                var input = this;
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        cropper.croppie('bind', {
+                            url: e.target.result
+                        });
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            });
+
+            var cropButton = $('#CropBtn');
+            cropButton.on('click', function () {
+                
+                cropper.croppie('result', {
+                    type: 'blob',
+                    format: 'png'
+                }).then(function (blob) {
+                    
+
+                    // Display the cropped image
+                    $('#output').attr('src', URL.createObjectURL(blob));
+                    var formData = new FormData();
+                    formData.append('file', blob);
+                    formData.append('FORfilename', 'Profile.png');  // Replace with the actual value
+
+                    $.ajax({
+                        url: '/Customer/Home/PicUpload',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            if (response.success) {
+                                $('#cropper').attr('hidden', true);
+                                $('#CropBtn').attr('hidden', true);
+
+                                
+                                Swal.fire({
+                                    position: "center-center",
+                                    icon: "success",
+                                    title: "Your Image has been saved",
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+
+                            } else {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'Please Refresh and continue',
+                                    icon: 'error',
+                                    confirmButtonText: 'Ok'
+                                })
+                            }
+                        },
+                        error: function (error) {
+                            console.error('Error:', error);
+                            alert("error2");
+
+                        }
+                    });
+
+                    
+                });
+            });
+        }
+
+        initializeCropper();
     </script>
+
 }

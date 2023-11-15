@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Org.BouncyCastle.Pqc.Crypto.Picnic;
 using PlantPalace.DataAccess.Repository.IRepository;
 using PlantPalace.Models.ViewModels;
+using PlantPalace.Utility;
 
 namespace PlantPalace.Areas.Identity.Pages.Account.Manage
 {
@@ -155,77 +156,8 @@ namespace PlantPalace.Areas.Identity.Pages.Account.Manage
 
 
 
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> OnPostPicUploadAsync(IFormFile photo)
-        {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-
-            var user =  _unitOfWork.ApplicationUser.Get(u => u.Id == claim.Value);
-            if (user == null)
-            {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                await LoadAsync(user);
-                return Page();
-            }
-
-            if (photo != null && photo.Length > 0)
-            {
-                // Define a folder path to save user photos
-                var uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Images/profiles");
-
-                // Ensure the folder exists
-                Directory.CreateDirectory(uploadFolder);
-
-                // Generate a unique file name for the photo
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(photo.FileName);
-
-                // Combine the folder path and file name
-                var filePath = Path.Combine(uploadFolder, fileName);
-
-
-                // if user profile alldriady exist it delete
-
-
-                if (!string.IsNullOrEmpty(user.Pic))
-                {
-                    var oldImagePath = Directory.GetCurrentDirectory()+ "\\wwwroot\\"+user.Pic.TrimStart('\\');
-
-                    if (System.IO.File.Exists(oldImagePath))
-                    {
-                        System.IO.File.Delete(oldImagePath);
-                    }
-                }
-                // Save the photo to the server
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await photo.CopyToAsync(stream);
-                }
-
-                // Store the file path in the database (update your database model accordingly)
-                user.Pic = "/Images/profiles\\" + fileName; // Update the user's profile photo property in the database
-
-                // Update the user in the database
-                var updateResult = await _userManager.UpdateAsync(user);
-
-                if (updateResult.Succeeded)
-                {
-                    StatusMessage = "Your profile has been updated";
-                }
-                else
-                {
-                    StatusMessage = "Error updating the profile photo.";
-                }
-            }
-
-            _unitOfWork.ApplicationUser.Update(user);
-            _unitOfWork.Save();
-            return RedirectToPage();
-        }
+        
+        
 
     }
 }

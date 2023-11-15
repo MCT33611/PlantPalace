@@ -74,7 +74,7 @@ namespace PlantPalace.Models
         public string? ImageThree { get; set; }
 
 
-        [Range(1, double.MaxValue, ErrorMessage = "Quantity must be a positive number")]
+        [Range(0, int.MaxValue, ErrorMessage = "Quantity must be a positive number")]
         [Required]
         public int Stock { get;set; }
 

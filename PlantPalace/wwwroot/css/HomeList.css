@@ -216,10 +216,11 @@ ul.product_list {
     .product_sale {
         position: absolute;
         z-index: 99;
-        right: -28px;
+        right: -35px;
         -webkit-transform: rotate(45deg);
         -moz-transform: rotate(45deg);
         transform: rotate(45deg);
+        top:28px;
     }
 
         .product_sale p {

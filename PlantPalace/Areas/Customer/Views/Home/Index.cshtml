@@ -7,7 +7,7 @@
         {
 
             <a href="@banner.Value.BannerUrl" class="carousel-item  @(banner.Index == 0 ? "active" : "")">
-                <div >
+                <div>
                     <img src="@banner.Value.ImageUrl" class="d-block w-100" alt="@banner.Value.BannerName">
                 </div>
             </a>
@@ -34,6 +34,13 @@
             @foreach (var product in Model.products.OrderByDescending(p => p.AddedDate).Take(6))
             {
                 <li class="product_item  me-4 mb-3 rounded">
+                    @if (product.Stock == 0)
+                    {
+                        <div class="product_sale">
+                            <p>Out Of Stock</p>
+                        </div>
+                    }
+                    
                     <div class="product_image d-flex justify-content-center align-items-center flex-wrap">
                         <a href="#"><img id="img" src="@product.ImageUrl" alt=""></a>
                         <div class="product_buttons">
@@ -67,7 +74,7 @@
             }
         </ul>
     </div>
-        
+
 </div>
 
 @*------------- BEST SELLING PRODUCTS-------------------- *@
@@ -82,12 +89,18 @@
             .ToList().Take(6))
             {
                 <li class="product_item  me-4 mb-3 rounded">
+                    @if (product.Stock == 0)
+                    {
+                        <div class="product_sale">
+                            <p>Out Of Stock</p>
+                        </div>
+                    }
                     <div class="product_image d-flex justify-content-center align-items-center flex-wrap">
                         <a href="#"><img id="img" src="@product.ImageUrl" alt=""></a>
                         <div class="product_buttons">
                             <button onclick="AddORremove(@product.Id)" class="product_heart"><i class="fa fa-heart"></i></button>
                             <button onclick="AddToCart(@product.Id)" class="add_to_cart"><i class="fa fa-shopping-cart"></i></button>
-                            
+
                         </div>
                     </div>
                     <div class="product_values">
@@ -125,12 +138,12 @@
 
         <ul class="product_list mb-2 list">
 
-            @foreach (var Cate in  Model.categories.ToList())
+            @foreach (var Cate in Model.categories.ToList())
             {
                 <li class="product_item  me-4 mb-3 rounded">
                     @* <div class="product_image d-flex justify-content-center align-items-center flex-wrap">
-                        <a href="#"><img id="img" src="@Cate.ImageUrl" alt=""></a>
-                    </div> *@
+                <a href="#"><img id="img" src="@Cate.ImageUrl" alt=""></a>
+                </div> *@
                     <div class="product_values">
                         <div class="product_title text-nowrap overflow-hidden">
                             <h5>@Cate.Name</h5>
