@@ -15,7 +15,7 @@
                 <label asp-for="Username" class="form-label"></label>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number."/>
+                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number." />
                 <label asp-for="Input.PhoneNumber" class="form-label"></label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
@@ -29,26 +29,64 @@
     </div>
     <div class="col-md-6">
         <div class="card mb-4">
-            <div >
+            <div>
                 <div class="card-body text-center">
                     <div class="profile-pic">
                         <label class="-label" for="file">
                             <span class="glyphicon glyphicon-camera"></span>
                             <img id="output" src="@Model.ProfilePhoto" class="rounded-circle position-relative" style="background-size:cover;width:10rem;height:10rem">
                         </label>
-                        <input id="file" type="file" value="" name="photo"  hidden />
+                        <input id="file" type="file" value="" name="photo" hidden />
                     </div>
-                    <div id="cropper"  hidden></div>
+                    <div id="cropper" hidden></div>
                     <button type="button" id="CropBtn" style="margin-top:10px" hidden class="btn btn-success">Crop</button>
 
-                    <div class="d-flex justify-content-center mb-2">
+                    @* <div class="d-flex justify-content-center mb-2">
                         <button type="submit" id="btnSubmit" class="btn btn-primary my-2" hidden>Upload New Image</button>
-                    </div>
+                    </div> *@
                 </div>
             </div>
-            
+
         </div>
+
+        <div class="card mb-4">
+            <div class="card-header d-flex text-start">
+                <h3>Wallet Balance : <span>₹@Model.Input.WalletBalance &nbsp;&nbsp;</span></h3>
+                <a href="#card-body" data-toggle="collapse">
+                    <i class="fa fa-chevron-down"></i>
+                </a>
+            </div>
+            <div class="card-body collapse" id="card-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="list-group">
+                            @foreach(var transaction in Model.Input.WalletHistory)
+                            {
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    Date:@transaction.Date.ToShortDateString()
+                                    @if (transaction.Amount < 0)
+                                    {
+                                        <span class='text-danger'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-@transaction.Amount</span>
+                                    }
+                                    else
+                                    {
+                                        <span class='text-success'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+@transaction.Amount</span>
+                                    }
+                                </a>
+
+
+                            }
+                            
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
     </div>
+
+
 </div>
 
 
@@ -80,7 +118,7 @@
                 $('#CropBtn').removeAttr('hidden');
                 var image = document.getElementById("output");
                 image.src = URL.createObjectURL(event.target.files[0]);
-               // document.getElementById("btnSubmit").removeAttribute("hidden");
+                // document.getElementById("btnSubmit").removeAttribute("hidden");
 
                 var input = this;
                 if (input.files && input.files[0]) {
@@ -96,12 +134,12 @@
 
             var cropButton = $('#CropBtn');
             cropButton.on('click', function () {
-                
+
                 cropper.croppie('result', {
                     type: 'blob',
                     format: 'png'
                 }).then(function (blob) {
-                    
+
 
                     // Display the cropped image
                     $('#output').attr('src', URL.createObjectURL(blob));
@@ -120,7 +158,7 @@
                                 $('#cropper').attr('hidden', true);
                                 $('#CropBtn').attr('hidden', true);
 
-                                
+
                                 Swal.fire({
                                     position: "center-center",
                                     icon: "success",
@@ -145,7 +183,7 @@
                         }
                     });
 
-                    
+
                 });
             });
         }

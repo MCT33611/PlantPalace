@@ -13,6 +13,8 @@ namespace PlantPalace.DataAccess.Repository.IRepository
         IProductReviewRepository ProductReview { get; }
 
         IApplicationUserRepository ApplicationUser { get; }
+        IWalletTransactionRepository WalletTransaction { get; }
+
 
         IShoppingCartRepository ShoppingCart { get; }
         IWishListRepository WishList { get; }

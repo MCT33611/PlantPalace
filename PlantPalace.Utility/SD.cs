@@ -15,10 +15,11 @@ namespace PlantPalace.Utility
 
         public const string PaymentMethodOnline = "Online";
         public const string PaymentMethodCOD = "Offline";
+        public const string PaymentMethodWallet = "Wallet";
 
 
 
-        public const string StatusPending = "Pending";
+		public const string StatusPending = "Pending";
         public const string StatusApproved = "Approved";
         public const string StatusInProcess = "Processing";
         public const string StatusShipped = "Shipped";

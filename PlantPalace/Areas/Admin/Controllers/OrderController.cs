@@ -106,13 +106,14 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
 
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [AutoValidateAntiforgeryToken]
         public IActionResult CancelOrder()
         {
 
 
-            var orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == OrderVM.OrderHeader.Id);
+            var orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == OrderVM.OrderHeader.Id,incluedProperties: "ApplicationUser") ;
+            var orderDetails = _unitOfWork.OrderDetail.GetALL(u => u.OrderHeaderId == orderHeader.Id);
             if (orderHeader.PaymentStatus == SD.PaymentStatusApproved)
             {
                 var options = new RefundCreateOptions
@@ -132,8 +133,15 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
                 _unitOfWork.OrderHeader.UpdateStatus(orderHeader.Id, SD.StatusCancelled, SD.StatusRefunded);
 
             }
+            foreach(var item in orderDetails)
+            {
+                var product=_unitOfWork.Product.Get(u => u.Id == item.ProductId);
+                product.Stock += item.Count;
+                _unitOfWork.Product.Update(product);
+            }
+            _unitOfWork.ApplicationUser.UpdateWallet(orderHeader.ApplicationUser.Id, +orderHeader.OrderTotal);
             _unitOfWork.Save();
-            TempData["Success"] = "Order Cancelled Successfully.";
+            TempData["success"] = "Order Cancelled Successfully.";
             return RedirectToAction(nameof(Details), new { orderId = OrderVM.OrderHeader.Id });
         }
 

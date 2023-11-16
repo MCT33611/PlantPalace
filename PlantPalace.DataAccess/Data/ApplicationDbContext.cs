@@ -14,6 +14,7 @@ namespace PlantPalace.DataAccess.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductReview> ProductReview { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<WalletTransaction> WalletTransaction { get; set; }
 
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
 		public DbSet<WishList> WishList { get; set; }

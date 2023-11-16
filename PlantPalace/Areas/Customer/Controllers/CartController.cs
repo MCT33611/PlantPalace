@@ -9,6 +9,7 @@ using Stripe.Checkout;
 using System.Security.Claims;
 using PlantPalace.Utility;
 using IronPdf.Extensions.Mvc.Core;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace PlantPalaceWeb.Areas.Customer.Controllers
 {
@@ -96,10 +97,9 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
         [ActionName("Summary")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult SummaryPost()
+        public IActionResult SummaryPost(string PaymentMethod)
         {
-            bool isCheckBoxChecked = Request.Form["IsChecked"] == "on";
-            if (!isCheckBoxChecked)
+            if (PaymentMethod == "OnlinePayment")
             {
                 var claimsIdentity = (ClaimsIdentity)User.Identity;
                 var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -188,7 +188,57 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
                 Response.Headers.Add("Location", session.Url);
                 return new StatusCodeResult(303);
             }
-            else
+			else if (PaymentMethod == "WalletPayment")
+			{
+
+				var claimsIdentity = (ClaimsIdentity)User.Identity;
+				var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+				//ShoppingCartVM.ListCart = _unitOfWork.ShoppingCart.GetALL(u => u.userId == claim.Value, incluedProperties: "Product");
+				ShoppingCartVM.ListCart = HttpContext.Session.GetObject<IEnumerable<ShoppingCart>>("ShoppingCartVMproducts");
+
+				ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
+				ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusPending;
+				ShoppingCartVM.OrderHeader.PaymentMethod = SD.PaymentMethodWallet;
+				ShoppingCartVM.OrderHeader.OrderDate = System.DateTime.Now;
+				ShoppingCartVM.OrderHeader.ApplicationUserId = claim.Value;
+
+				foreach (var cart in ShoppingCartVM.ListCart)
+				{
+					cart.Price = GetPriceBasedOnQuantity(cart.Quantity, cart.Product.Price, cart.Product.Price50, cart.Product.Price100);
+					ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Quantity);
+				}
+
+				_unitOfWork.OrderHeader.Add(ShoppingCartVM.OrderHeader);
+				_unitOfWork.Save();
+
+				foreach (var cart in ShoppingCartVM.ListCart)
+				{
+					OrderDetail orderDetail = new()
+					{
+						ProductId = cart.ProductId,
+						OrderHeaderId = ShoppingCartVM.OrderHeader.Id,
+						Price = cart.Price,
+						Count = cart.Quantity,
+					};
+					_unitOfWork.OrderDetail.Add(orderDetail);
+					_unitOfWork.Save();
+
+				}
+
+                if(_unitOfWork.ApplicationUser.Get(u=> u.Id == claim.Value).WalletBalance < ShoppingCartVM.OrderHeader.OrderTotal)
+                {
+                    TempData["error"] = "Wallet Balance is not Enough for Payment Choose Other Method";
+                    ModelState.AddModelError("summarySubmit", "Choose Other Method");
+                    return View();
+                }
+                _unitOfWork.ApplicationUser.UpdateWallet(claim.Value, -ShoppingCartVM.OrderHeader.OrderTotal);
+				_unitOfWork.OrderHeader.Update(ShoppingCartVM.OrderHeader);
+				_unitOfWork.Save();
+
+				return RedirectToAction("OrderConfirmationOffline", "Cart", new { id = ShoppingCartVM.OrderHeader.Id });
+			}
+			else
             {
                 var claimsIdentity = (ClaimsIdentity)User.Identity;
                 var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -199,7 +249,7 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
                 ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
                 ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusPending;
                 ShoppingCartVM.OrderHeader.PaymentMethod = SD.PaymentMethodCOD;
-                ShoppingCartVM.OrderHeader.OrderDate = System.DateTime.Now;
+                ShoppingCartVM.OrderHeader.OrderDate = DateTime.Now;
                 ShoppingCartVM.OrderHeader.ApplicationUserId = claim.Value;
 
                 foreach (var cart in ShoppingCartVM.ListCart)

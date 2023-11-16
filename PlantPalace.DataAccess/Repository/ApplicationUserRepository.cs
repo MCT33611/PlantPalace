@@ -28,6 +28,13 @@ namespace PlantPalace.DataAccess.Repository
                     user.WalletBalance += amount;
                 }
                 _db.ApplicationUsers.Update(user);
+                var transaction = new WalletTransaction()
+                {
+                    userId = userId,
+                    Amount = amount,
+                    Date = DateTime.UtcNow,
+                };
+                _db.WalletTransaction.Add(transaction);
 
             }
             catch (Exception ex)

@@ -13,7 +13,7 @@ else
     <ul class="product_list mb-2 list">
         @foreach (var product in Model)
         {
-            <li class="product_item  me-4 mb-3 rounded">
+            <li class="product_item  ml-md-4 mb-3 rounded">
                 @if (product.Stock == 0)
                 {
                     <div class="product_sale">
@@ -61,4 +61,27 @@ else
         // Handle refresh action here
         location.reload(); // This will reload the page, you can replace it with your custom logic
     });
+    function AddToCart(productId) {
+        var url = "/Customer/Home/AddTOcart?ProductId=" + productId;
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (data) {
+
+                toastr.success(data.message);
+            }
+        });
+    }
+
+    function AddORremove(productId) {
+        var url = "/Customer/WishList/AddORremove?ProductId=" + productId;
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (data) {
+
+                toastr.success("add to wish list successfully");
+            }
+        });
+    }
 </script>

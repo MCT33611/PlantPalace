@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Org.BouncyCastle.Pqc.Crypto.Picnic;
 using PlantPalace.DataAccess.Repository.IRepository;
+using PlantPalace.Models;
 using PlantPalace.Models.ViewModels;
 using PlantPalace.Utility;
 
@@ -52,6 +53,8 @@ namespace PlantPalace.Areas.Identity.Pages.Account.Manage
 
         public string ProfilePhoto { get; set; }
 
+        public double WalletBalance { get; set; }
+        public List<WalletTransaction> WalletHistory { get; set; }
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -78,6 +81,11 @@ namespace PlantPalace.Areas.Identity.Pages.Account.Manage
             [Display(Name = "User Name")]
             public string UserName { get; set; }
 
+            public double WalletBalance { get; set; }
+
+            public List<WalletTransaction> WalletHistory { get; set; }
+
+            
         }
 
         private async Task LoadAsync(IdentityUser user)
@@ -86,7 +94,8 @@ namespace PlantPalace.Areas.Identity.Pages.Account.Manage
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
             var ProifilPicUser = _unitOfWork.ApplicationUser.Get(u => u.Id == claim.Value);
-
+            var WalletBalance = ProifilPicUser.WalletBalance;
+            var WalletHistory = _unitOfWork.WalletTransaction.GetALL(u => u.userId == claim.Value).ToList();
 
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
@@ -99,6 +108,8 @@ namespace PlantPalace.Areas.Identity.Pages.Account.Manage
             {
                 PhoneNumber = phoneNumber,
                 UserName = ProifilPicUser.UserName,
+                WalletBalance = WalletBalance,
+                WalletHistory = WalletHistory
             };
         }
 

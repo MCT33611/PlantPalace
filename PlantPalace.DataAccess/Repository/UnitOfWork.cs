@@ -17,8 +17,10 @@ namespace PlantPalace.DataAccess.Repository
         public IShoppingCartRepository ShoppingCart { get; set; }
         public IWishListRepository WishList { get; set; }
         public IApplicationUserRepository ApplicationUser { get; set; }
+        public IWalletTransactionRepository WalletTransaction { get;  set; }
 
-		public IOrderDetailRepository OrderDetail { get; set; }
+
+        public IOrderDetailRepository OrderDetail { get; set; }
 
 		public IOrderHeaderRepository OrderHeader { get; set; }
 
@@ -30,6 +32,7 @@ namespace PlantPalace.DataAccess.Repository
             Product = new ProductRepository(_db);
             ProductReview = new ProductReviewRepository(_db);
             Category = new CategoryRepository(_db);
+            WalletTransaction = new WalletTransactionRepository(_db);
             ShoppingCart = new ShoppingCartRepository(_db);
             WishList = new WishListRepository(_db);
             ApplicationUser = new ApplicationUserRepository(_db);
