@@ -24,6 +24,11 @@ namespace PlantPalace.Models
 
         public DateTime joinDate { get; set; } = DateTime.Now;
 
+
+        [AllowNull]
+        [Range(0,double.MaxValue)]
+        public double WalletBalance { get; set; }
+
         [NotMapped]
         public string Role { get; set; }
 

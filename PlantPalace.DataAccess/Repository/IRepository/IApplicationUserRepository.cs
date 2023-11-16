@@ -11,6 +11,9 @@ namespace PlantPalace.DataAccess.Repository.IRepository
     {
         public void Update(ApplicationUser applicationUser);
 
+
+        public void UpdateWallet(string userId,double amount);
+
     }
 }
  
