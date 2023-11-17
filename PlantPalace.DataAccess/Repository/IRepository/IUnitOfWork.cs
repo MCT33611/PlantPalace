@@ -9,7 +9,8 @@ namespace PlantPalace.DataAccess.Repository.IRepository
     public interface IUnitOfWork
     {
         ICategoryRepository Category { get; }
-        IProductRepository Product { get; }
+        ICouponRepository Coupon { get; }
+		IProductRepository Product { get; }
         IProductReviewRepository ProductReview { get; }
 
         IApplicationUserRepository ApplicationUser { get; }

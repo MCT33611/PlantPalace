@@ -1,0 +1,91 @@
+﻿@model Coupon
+@{
+}
+<form asp-action="Create" asp-controller="Coupon">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">
+                Create Coupon
+            </h2>
+            <hr />
+        </div>
+        <div class="row p-1 mb-3">
+            <label asp-for="Name" class="p-0"></label>
+            <input asp-for="Name"  class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="row p-1 mb-3">
+            <label asp-for="Code" class="p-0"></label>
+            <input asp-for="Code" class="form-control" />
+            <span asp-validation-for="Code" class="text-danger"></span>
+        </div>
+        <div class="row p-1 mb-3">
+            <label asp-for="MinPrice" class="p-0"></label>
+            <input asp-for="MinPrice" class="form-control" />
+            <span asp-validation-for="MinPrice" class="text-danger"></span>
+        </div>
+        <div class="form-control">
+
+            <input name="coupontype" type="radio" value="fixed" id="fixed" onchange="toggleFields()" checked />
+            <label for="fixed">Fixed Price discount</label>
+            <br />
+            <input name="coupontype" type="radio" value="percent" id="percent" onchange="toggleFields()" />
+            <label for="percent">Percentage discount</label>
+
+        </div>
+
+        <div class="row p-1 mb-3" id="percentRow">
+            <label asp-for="Percent" class="p-0"></label>
+            <input asp-for="Percent" class="form-control" />
+            <span asp-validation-for="Percent" class="text-danger"></span>
+        </div>
+
+        <div class="row p-1 mb-3" id="fixedRow">
+            <label asp-for="FixPrice" class="p-0"></label>
+            <input asp-for="FixPrice" class="form-control" />
+            <span asp-validation-for="FixPrice" class="text-danger"></span>
+        </div>
+        <div class="row p-1 mb-3">
+            <label asp-for="ExpiryDate" class="p-0"></label>
+            <input asp-for="ExpiryDate" class="form-control" />
+            <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+        </div>
+        <div class="row p-1 mb-3">
+            <label asp-for="IsPublic" class="p-0"></label>
+            <input asp-for="IsPublic"  class="form-control" />
+            <span asp-validation-for="IsPublic" class="text-danger"></span>
+        </div>
+        <div class="row ">
+            <div class="col-6 col-md-3">
+                <button type="submit" class="btn btn-primary form-control">Create</button>
+            </div>
+            <div class="col-6 col-md-3">
+                <a asp-action="Index" asp-controller="Coupon" class="btn btn-secondary border form-control">Back TO List</a>
+            </div>
+        </div>
+    </div>
+</form>
+@section Scripts{
+    <script>
+        $(document).ready(function ()
+        {
+            toggleFields();
+        })
+        function toggleFields() {
+            var fixedRow = document.getElementById("fixedRow");
+            var percentRow = document.getElementById("percentRow");
+            var fixedRadio = document.getElementById("fixed");
+
+            if (fixedRadio.checked) {
+                fixedRow.style.display = "block";
+                percentRow.style.display = "none";
+            } else {
+                fixedRow.style.display = "none";
+                percentRow.style.display = "block";
+            }
+        }
+    </script>
+    @{
+    <partial name="_ValidationScriptsPartial.cshtml"/>
+    }
+}

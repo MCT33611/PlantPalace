@@ -1,0 +1,92 @@
+﻿@model List<Coupon>
+@{
+}
+
+
+<div class="">
+    <div class="row pt-4 pb-3">
+
+        <div class="pagetitle col-12 ">
+            <h1>Coupons</h1>
+
+            <div class="row d-flex">
+                <nav class="col-md-10">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/Admin/Dashboard/Index">Admin</a></li>
+                        <li class="breadcrumb-item active">Coupons</li>
+                    </ol>
+
+                </nav>
+                <div class="col-md-2">
+                    <a asp-controller="Coupon" asp-action="Create" class="btn btn-primary custum-controll-w">
+                        <i class="bi bi-plus-circle-fill"></i>
+                        <span class="text-nowrap ">Add New Coupons</span>
+                    </a>
+                </div>
+            </div>
+        </div><!-- End Page Title -->
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped  table-sm">
+            <thead>
+                <tr>
+                    <th>
+                        Coupon Name
+                    </th>
+                    <th>
+                        Minimum Price
+                    </th>
+                    <th>
+                        Discount
+                    </th>
+                    <th>
+                        PercentAge
+                    </th>
+                    <th>
+                        Total Users
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var coupon in Model)
+                {
+                    <tr>
+                        <td>
+                            @coupon.Name
+                        </td>
+
+                        <td>
+                            @coupon.MinPrice
+                        </td>
+                        <td>
+                            @coupon.FixPrice
+                        </td>
+                        <td>
+                            @coupon.Percent
+                        </td>
+                        <td>
+                            @* @coupon.Percent *@
+                        </td>
+                        <td>
+                            <div class=" d-flex justify-content-center flex-column flex-lg-row align-item-center" role="group">
+                                <a asp-action="Edit" asp-controller="Coupon" asp-route-id="@coupon.Id" class="btn btn-primary rounded me-1 text-nowrap">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+                                <a asp-action="Delete" asp-controller="Coupon" asp-route-id="@coupon.Id" class="btn btn-danger rounded ms-1 text-nowrap">
+                                    <i class="bi bi-trash3-fill"></i> Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+
+</div>
