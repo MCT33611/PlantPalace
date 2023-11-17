@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
@@ -17,7 +18,7 @@ namespace PlantPalace.Models
 		public string? Name { get; set; }
 
 		[Required]
-		public string? Code { get; set; }
+        public string Code { get; set; }
 
         [Required]
         public double? MinPrice { get; set; }
@@ -34,6 +35,10 @@ namespace PlantPalace.Models
 		public DateTime ExpiryDate { get; set; }
 
         [Required]
-        public bool? IsPublic { get; set; }
+        public bool IsPublic { get; set; }
+
+
+		[Required]
+		public bool IsExpired { get; set; } = false;
     }
 }

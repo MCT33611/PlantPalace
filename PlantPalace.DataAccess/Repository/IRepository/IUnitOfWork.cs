@@ -10,7 +10,8 @@ namespace PlantPalace.DataAccess.Repository.IRepository
     {
         ICategoryRepository Category { get; }
         ICouponRepository Coupon { get; }
-		IProductRepository Product { get; }
+        ICouponsDataRepository CouponsData { get; }
+        IProductRepository Product { get; }
         IProductReviewRepository ProductReview { get; }
 
         IApplicationUserRepository ApplicationUser { get; }

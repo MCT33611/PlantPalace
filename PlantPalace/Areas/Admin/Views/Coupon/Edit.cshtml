@@ -24,11 +24,14 @@
             <input asp-for="MinPrice" class="form-control" />
             <span asp-validation-for="MinPrice" class="text-danger"></span>
         </div>
-        <div class="row">
-            <input name="coupontype" type="radio" value="fixed" id="fixed" onchange="toggleFields()" />
+        <div class="form-control">
+
+            <input name="coupontype" type="radio" value="fixed" id="fixed" onchange="toggleFields()" checked />
             <label for="fixed">Fixed Price discount</label>
+            <br />
             <input name="coupontype" type="radio" value="percent" id="percent" onchange="toggleFields()" />
             <label for="percent">Percentage discount</label>
+
         </div>
 
         <div class="row p-1 mb-3" id="percentRow">
@@ -49,7 +52,7 @@
         </div>
         <div class="row p-1 mb-3">
             <label asp-for="IsPublic" class="p-0"></label>
-            <input asp-for="IsPublic"  class="form-control" />
+            <input asp-for="IsPublic" class="form-control" />
             <span asp-validation-for="IsPublic" class="text-danger"></span>
         </div>
         <div class="row ">
@@ -64,6 +67,9 @@
 </form>
 @section Scripts{
     <script>
+        $(document).ready(function () {
+            toggleFields();
+        })
         function toggleFields() {
             var fixedRow = document.getElementById("fixedRow");
             var percentRow = document.getElementById("percentRow");

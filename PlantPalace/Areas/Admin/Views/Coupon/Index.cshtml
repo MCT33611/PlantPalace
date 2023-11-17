@@ -44,6 +44,9 @@
                         PercentAge
                     </th>
                     <th>
+                        Public/ Privet 
+                    </th>
+                    <th>
                         Total Users
                     </th>
                     <th>
@@ -60,13 +63,16 @@
                         </td>
 
                         <td>
-                            @coupon.MinPrice
+                            ₹@coupon.MinPrice
                         </td>
                         <td>
-                            @coupon.FixPrice
+                            @(coupon.FixPrice != null ? "₹" : "0") @coupon.FixPrice
                         </td>
                         <td>
-                            @coupon.Percent
+                            @coupon.Percent @(coupon.Percent != null ? "%":"0" )
+                        </td>
+                        <td>
+                            @(coupon.IsPublic ? "Public":"Privet" )
                         </td>
                         <td>
                             @* @coupon.Percent *@

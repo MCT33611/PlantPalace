@@ -14,9 +14,12 @@
             <input asp-for="Name"  class="form-control" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
+        @{
+            var code = Guid.NewGuid().ToString();
+        }
         <div class="row p-1 mb-3">
             <label asp-for="Code" class="p-0"></label>
-            <input asp-for="Code" class="form-control" />
+            <input asp-for="Code" value="@code" class="form-control" />
             <span asp-validation-for="Code" class="text-danger"></span>
         </div>
         <div class="row p-1 mb-3">
@@ -50,9 +53,10 @@
             <input asp-for="ExpiryDate" class="form-control" />
             <span asp-validation-for="ExpiryDate" class="text-danger"></span>
         </div>
-        <div class="row p-1 mb-3">
-            <label asp-for="IsPublic" class="p-0"></label>
-            <input asp-for="IsPublic"  class="form-control" />
+        <div class="d-flex p-1 mb-3">
+            <input asp-for="IsPublic" class="form-check" />
+            <label asp-for="IsPublic" class=" mx-1 p-0"></label>
+
             <span asp-validation-for="IsPublic" class="text-danger"></span>
         </div>
         <div class="row ">

@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 
 namespace PlantPalace.DataAccess.Repository.IRepository
 {
-    public interface ICouponRepository : IRepository<Coupon>
+    public interface ICouponsDataRepository : IRepository<CouponData>
     {
-        void Update(Coupon obj);
-
-        bool IsNotExpired(int Id);
-
     }
 }
  

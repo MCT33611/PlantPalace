@@ -1,6 +1,7 @@
 ﻿@model ShoppingCartVM
 @using Microsoft.Extensions.Options
 @inject IOptions<StripeSettings> Stripe
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 
 <form method="post">
 	<br />
@@ -10,7 +11,7 @@
 			<div class="card-header bg-secondary bg-gradient text-light ml-0 py-4">
 				<div class="row px-4">
 					<div class="col-6">
-						<h5 class="pt-2 text-white">
+						<h5 class="pt-2 text-primary">
 							Order Summary
 						</h5>
 					</div>
@@ -87,6 +88,18 @@
 							<h4 class="d-flex justify-content-between align-items-center mb-3">
 								<span class="text-info">Order Summary:</span>
 							</h4>
+							<div class="card">
+								<div class="card-body text-center">
+									<h5 class="card-title">Apply Coupon</h5>
+									<div class="form-group m-2 w-100">
+										<input id="couponCode" name="couponCode" class="form-control" />
+									</div>
+									<button type="button"  onclick="applyCoupon()" id="aplBtn" class="btn btn-primary m-2 w-100">
+										Apply Coupon
+									</button>
+								</div>
+
+							</div>
 							<ul class="list-group mb-3">
 								@foreach (var details in Model.ListCart)
 								{
@@ -100,8 +113,8 @@
 								}
 
 								<li class="list-group-item d-flex justify-content-between bg-light">
-									<small class="text-info">Total (USD)</small>
-									<strong class="text-info">@Model.OrderHeader.OrderTotal.ToString("c")</strong>
+									<small class="text-info">Total (MRP)</small>
+									<strong class="text-info" id="TotalLoder">@Model.OrderHeader.OrderTotal.ToString("c")</strong>
 								</li>
 							</ul>
 						</div>
@@ -163,3 +176,34 @@
 		</div>
 	</div>
 </form>
+@section Scripts{
+	<script type="text/javascript">
+		$('#aplBtn').on('click', function () {
+			console.log('asdfsd');
+			// Get the coupon code from the input field
+			var couponCode = $("#couponCode").val();
+
+			// Make an AJAX request to the server
+			$.ajax({
+				type: "GET",
+				url: "/Customer/Cart/CouponApply?couponCode=" + couponCode,
+				success: function (data) {
+					if (data.message === "OK") {
+						// Hide the aplBtn button
+						$('#aplBtn').hide();
+
+						// Update the total and show a success message
+						$('#TotalLoder').html("₹" + data.orderTotal);
+						toastr.success("Coupon Applied");
+					} else {
+						location.reload();
+					}
+				},
+				error: function () {
+					toastr.error("Something went wrong with coupon apply");
+				}
+			});
+		});
+	</script>
+
+}

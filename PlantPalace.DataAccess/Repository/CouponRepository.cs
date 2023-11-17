@@ -21,5 +21,25 @@ namespace PlantPalace.DataAccess.Repository
         {
             _db.Coupons.Update(obj);
         }
+
+        public bool IsNotExpired(int Id)
+        {
+            var coupon = _db.Coupons.Find(Id);
+
+            if(coupon != null)
+            {
+                if(DateTime.UtcNow <= coupon.ExpiryDate)
+                {
+                    coupon.IsExpired = false ;
+                    return true;
+                }
+                else
+                {
+                    coupon.IsExpired = true;
+                    return false;
+                }
+            }
+            return false;
+        }
     }
 }
