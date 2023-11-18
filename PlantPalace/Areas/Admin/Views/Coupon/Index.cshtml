@@ -1,4 +1,4 @@
-﻿@model List<Coupon>
+﻿@model CouponVM
 @{
 }
 
@@ -55,7 +55,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var coupon in Model)
+                @foreach (var coupon in Model.Coupons)
                 {
                     <tr>
                         <td>
@@ -75,7 +75,10 @@
                             @(coupon.IsPublic ? "Public":"Privet" )
                         </td>
                         <td>
-                            @* @coupon.Percent *@
+                            @{
+                                var userCound = Model.CouponsData.Count(u => u.CouponId == coupon.Id);
+                            }
+                            @userCound
                         </td>
                         <td>
                             <div class=" d-flex justify-content-center flex-column flex-lg-row align-item-center" role="group">

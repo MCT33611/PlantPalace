@@ -20,8 +20,13 @@ namespace PlantPalace.Areas.Admin.Controllers
 		}
 		public IActionResult Index()
 		{
-			var coupons = _unitOfWork.Coupon.GetALL();
-			return View(coupons);
+
+			CouponVM vm = new()
+			{
+				Coupons = _unitOfWork.Coupon.GetALL().ToList(),
+				CouponsData = _unitOfWork.CouponsData.GetALL().ToList(),
+			};
+			return View(vm);
 		}
 
 		public IActionResult Create()

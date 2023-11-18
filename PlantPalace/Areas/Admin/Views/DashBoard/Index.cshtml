@@ -138,12 +138,12 @@
 
                                         // Sales
                                         var dailySales = totalSales
-                                        .Where(u => u.OrderHeader.OrderDate.Date == DateTime.UtcNow.AddDays(-i).Date &&
-                                        u.OrderHeader.OrderDate == DateTime.UtcNow.AddDays(-i).Date)
+                                        .Where(u => u.OrderHeader.OrderDate.Date == DateTime.UtcNow.AddDays(-i).Date)
                                         .ToList();
+                                        
 
-                                        Sales.Add((dailySales.Count * dailySales.Sum(u => u.Count)).ToString());
-
+                                        //Sales.Add((dailySales.Count * dailySales.Sum(u => u.Count)).ToString());
+                                        Sales.Add((dailySales.Count()).ToString());
                                         // Revenue
                                         Revenue.Add(((int)totalRevenue
                                         .Where(u => u.OrderDate.Date == DateTime.UtcNow.AddDays(-i).Date && u.OrderDate.Month == DateTime.UtcNow.AddDays(-i).Month)

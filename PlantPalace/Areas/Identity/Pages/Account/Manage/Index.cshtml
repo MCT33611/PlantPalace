@@ -42,47 +42,50 @@
                     <button type="button" id="CropBtn" style="margin-top:10px" hidden class="btn btn-success">Crop</button>
 
                     @* <div class="d-flex justify-content-center mb-2">
-                        <button type="submit" id="btnSubmit" class="btn btn-primary my-2" hidden>Upload New Image</button>
+                    <button type="submit" id="btnSubmit" class="btn btn-primary my-2" hidden>Upload New Image</button>
                     </div> *@
                 </div>
             </div>
 
         </div>
+        @if (User.IsInRole(SD.Role_Customer))
+        {
+            <div class="card mb-4">
+                <div class="card-header d-flex text-start">
+                    <h3>Wallet Balance : <span>₹@Model.Input.WalletBalance &nbsp;&nbsp;</span></h3>
+                    <a href="#card-body" data-toggle="collapse">
+                        <i class="fa fa-chevron-down"></i>
+                    </a>
+                </div>
+                <div class="card-body collapse" id="card-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="list-group">
+                                @foreach (var transaction in Model.Input.WalletHistory.OrderByDescending(x => x.Date).ToList())
+                                {
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        Date:@transaction.Date.ToShortDateString()
+                                        @if (transaction.Amount < 0)
+                                        {
+                                            <span class='text-danger'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@transaction.Amount</span>
+                                        }
+                                        else
+                                        {
+                                            <span class='text-success'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+@transaction.Amount</span>
+                                        }
+                                    </a>
 
-        <div class="card mb-4">
-            <div class="card-header d-flex text-start">
-                <h3>Wallet Balance : <span>₹@Model.Input.WalletBalance &nbsp;&nbsp;</span></h3>
-                <a href="#card-body" data-toggle="collapse">
-                    <i class="fa fa-chevron-down"></i>
-                </a>
-            </div>
-            <div class="card-body collapse" id="card-body">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="list-group">
-                            @foreach (var transaction in Model.Input.WalletHistory.OrderByDescending(x => x.Date).ToList())
-                            {
-                                <a href="#" class="list-group-item list-group-item-action">
-                                    Date:@transaction.Date.ToShortDateString()
-                                    @if (transaction.Amount < 0)
-                                    {
-                                        <span class='text-danger'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@transaction.Amount</span>
-                                    }
-                                    else
-                                    {
-                                        <span class='text-success'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+@transaction.Amount</span>
-                                    }
-                                </a>
 
+                                }
 
-                            }
-                            
+                            </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
             </div>
-        </div>
+        }
+
 
     </div>
 
