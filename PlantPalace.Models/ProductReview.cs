@@ -28,7 +28,7 @@ namespace PlantPalace.Models
         public Product? Product { get; set; }
 
         [Required]
-        public DateTime? CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         [Required(ErrorMessage = "Please provide a rating.")]
         [Range(0, 5, ErrorMessage = "The rating must be between 1 and 5.")]

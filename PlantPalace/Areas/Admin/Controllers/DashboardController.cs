@@ -45,6 +45,8 @@ namespace PlantPalace.Areas.Admin.Controllers
 
                 users = _unitOfWork.ApplicationUser.GetALL().ToList(),
 
+                productReviews = _unitOfWork.ProductReview.GetALL().ToList(),
+
             };
 
 

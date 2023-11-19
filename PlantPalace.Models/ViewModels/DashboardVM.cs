@@ -16,5 +16,7 @@ namespace PlantPalace.Models.ViewModels
 
         public IEnumerable<OrderDetail> ordersDetail { get; set; }
 
+        public IEnumerable<ProductReview> productReviews { get; set; }
+
     }
 }
