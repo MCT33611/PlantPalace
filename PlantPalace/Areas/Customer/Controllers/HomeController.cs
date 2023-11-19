@@ -87,7 +87,7 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
             {
                 products = _unitOfWork.Product.GetALL(incluedProperties: "Category"),
 
-                banners = _unitOfWork.Banner.GetALL(u=> u.IsBanned),
+                banners = _unitOfWork.Offer.GetALL(u=> u.OfferType == "banner"),
 
                 categories = _unitOfWork.Category.GetALL(),
 
@@ -100,7 +100,7 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
         }
 
         /*public IActionResult ProductList(int[]? Rate, int[]? Categories, int? priceRange, string? search)*/
-        public IActionResult ProductList(ProductFilterVM model)
+        public IActionResult ProductList(ProductFilterVM model,string?offer)
         {
             ProductListVM list = new()
             {
@@ -111,6 +111,18 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
             list.products = list.products.OrderBy(x => random.Next()).ToList();
             int[] rates = JsonConvert.DeserializeObject<int[]>(model.Rates ?? "[]");
             int[] categories = JsonConvert.DeserializeObject<int[]>(model.Categories ?? "[]");
+
+            if (!string.IsNullOrEmpty(offer))
+            {
+                list.products.Clear();
+                var offerList = _unitOfWork.Offer.GetALL(incluedProperties: "Product");
+
+                foreach (var product in offerList.Where(u => u.OfferName.Normalize() == offer.Normalize()))
+                {
+                    list.products.Add(product.Product);
+                }
+            }
+
 
             if ((model.Rates?.Any() == true) || (model.Categories?.Any() == true) || (model.PriceRange.HasValue && model.PriceRange != 0) || !string.IsNullOrEmpty(model.search))
             {
@@ -142,7 +154,18 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
                         ).ToList();
                     }
 
-                    return PartialView("_ProductListPartial", list.products );
+                    if (!string.IsNullOrEmpty(model.search))
+                    {
+                        list.products = list.products.Where(u =>
+                            u.Name.Normalize().Contains(model.search.Normalize()) ||
+                            u.Category.Name.Normalize().Contains(model.search.Normalize()) ||
+                            u.SubCategory.Normalize().Contains(model.search.Normalize())
+                        ).ToList();
+                    }
+
+                    
+
+                    return PartialView("_ProductListPartial", list.products.ToList() );
                 }
                 catch (Exception ex)
                 {

@@ -47,7 +47,7 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 
 			foreach (var cart in ShoppingCartVM.ListCart)
 			{
-				cart.Price = GetPriceBasedOnQuantity(cart.Quantity, cart.Product.Price, cart.Product.Price50, cart.Product.Price100);
+				cart.Price = GetPriceBasedOnQuantity(cart.Quantity, cart.Product.Price, cart.Product.Price50, cart.Product.Price100,cart.Product.DiscountPrice);
 				ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Quantity);
 			}
 			return View(ShoppingCartVM);
@@ -84,7 +84,7 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 
 			foreach (var cart in ShoppingCartVM.ListCart)
 			{
-				cart.Price = GetPriceBasedOnQuantity(cart.Quantity, cart.Product.Price, cart.Product.Price50, cart.Product.Price100);
+				cart.Price = GetPriceBasedOnQuantity(cart.Quantity, cart.Product.Price, cart.Product.Price50, cart.Product.Price100, cart.Product.DiscountPrice);
 				ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Quantity);
 			}
 
@@ -127,7 +127,7 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 
 				foreach (var cart in ShoppingCartVM.ListCart)
 				{
-					cart.Price = GetPriceBasedOnQuantity(cart.Quantity, cart.Product.Price, cart.Product.Price50, cart.Product.Price100);
+					cart.Price = GetPriceBasedOnQuantity(cart.Quantity, cart.Product.Price, cart.Product.Price50, cart.Product.Price100, cart.Product.DiscountPrice);
 					ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Quantity);
 				}
 
@@ -210,7 +210,7 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 
 				foreach (var cart in ShoppingCartVM.ListCart)
 				{
-					cart.Price = GetPriceBasedOnQuantity(cart.Quantity, cart.Product.Price, cart.Product.Price50, cart.Product.Price100);
+					cart.Price = GetPriceBasedOnQuantity(cart.Quantity, cart.Product.Price, cart.Product.Price50, cart.Product.Price100, cart.Product.DiscountPrice);
 					ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Quantity);
 				}
 
@@ -259,13 +259,13 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 				ShoppingCartVM.OrderHeader.OrderDate = DateTime.Now;
 				ShoppingCartVM.OrderHeader.ApplicationUserId = claim.Value;
 
-				/*foreach (var cart in ShoppingCartVM.ListCart)
+                /*foreach (var cart in ShoppingCartVM.ListCart)
                 {
-                    cart.Price = GetPriceBasedOnQuantity(cart.Quantity, cart.Product.Price, cart.Product.Price50, cart.Product.Price100);
+                    cart.Price = GetPriceBasedOnQuantity(cart.Quantity, cart.Product.Price, cart.Product.Price50, cart.Product.Price100,cart.Product.DiscountPrice);
                     ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Quantity);
                 }*/
 
-				_unitOfWork.OrderHeader.Add(ShoppingCartVM.OrderHeader);
+                _unitOfWork.OrderHeader.Add(ShoppingCartVM.OrderHeader);
 				_unitOfWork.Save();
 
 				foreach (var cart in ShoppingCartVM.ListCart)
@@ -418,7 +418,7 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 			var cart = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
 			if (!_unitOfWork.Product.IsStockAvailable(cart.Quantity + 1, cart.ProductId))
 			{
-				TempData["error"] = "Stock is not more";
+				TempData["error"] = "no more Stock Avilable";
 
 				return RedirectToAction("Index");
 
@@ -550,24 +550,31 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 
 			}
 		}
-		private double GetPriceBasedOnQuantity(double quantity, double price, double price50, double price100)
+		private double GetPriceBasedOnQuantity(double quantity, double price, double price50, double price100,double discountPrice)
 		{
-			if (quantity <= 50)
+			if(discountPrice == 0)
 			{
-				return price;
-			}
-			else if (quantity <= 100)
-			{
-				return price50;
+                if (quantity <= 50)
+                {
+                    return price;
+                }
+                else if (quantity <= 100)
+                {
+                    return price50;
+                }
+                else
+                {
+                    if (quantity > 100)
+                    {
+                        return price100;
+                    }
+
+                    return price100;
+                }
 			}
 			else
 			{
-				if (quantity > 100)
-				{
-					return price100;
-				}
-
-				return price100;
+				return discountPrice;
 			}
 		}
 	}

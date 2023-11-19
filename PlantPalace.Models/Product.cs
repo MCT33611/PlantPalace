@@ -50,9 +50,26 @@ namespace PlantPalace.Models
         [Range(1, double.MaxValue, ErrorMessage = "Price must be a positive number")]
         [Display(Name = "Price for 100+")]
         public double Price100 { get; set; }
-    /*
-        [Range(0.0, 100.0, ErrorMessage = "Discount must be between 0 and 100")]
-        public double Discount { get; set; }*/
+
+
+        [AllowNull]
+        [Range(1, double.MaxValue, ErrorMessage = "Price must be a positive number")]
+        [Display(Name = "Discount Price")]
+        public double DiscountPrice
+        {
+            get => _discountPrice;
+            set
+            {
+                if (value > Price)
+                {
+                    // Handle the error, throw an exception, etc.
+                    throw new ArgumentOutOfRangeException(nameof(DiscountPrice), "Discount Price must be less than or equal to Price.");
+                }
+
+                _discountPrice = value;
+            }
+        }
+        private double _discountPrice;
 
         [Required(ErrorMessage = "Category ID is required")]
         public int categoryId { get; set; }
@@ -81,6 +98,7 @@ namespace PlantPalace.Models
         [ValidateNever]
         [AllowNull]
         public string SubCategory { get; set; }
+
 
         [Range(0, 5)]
         public int Rate { get; set; }

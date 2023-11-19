@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace PlantPalace.DataAccess.Repository.IRepository
 {
-    public interface IBannerRepository : IRepository<Banner>
+    public interface IOfferRepository : IRepository<Offer>
     {
-        void Update(Banner obj);
+        void Update(Offer obj);
     }
 }
  

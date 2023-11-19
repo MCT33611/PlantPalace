@@ -1,5 +1,6 @@
 ﻿using PlantPalace.DataAccess.Data;
 using PlantPalace.DataAccess.Repository.IRepository;
+using PlantPalace.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace PlantPalace.DataAccess.Repository
 
 		public IOrderHeaderRepository OrderHeader { get; set; }
 
-        public IBannerRepository Banner { get; set; }
+        public IOfferRepository Offer { get; set; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
@@ -44,7 +45,7 @@ namespace PlantPalace.DataAccess.Repository
             OrderDetail = new OrderDetailRepository(_db);
             OrderHeader = new OrderHeaderRepository(_db);
 
-            Banner = new BannerRepository(_db);
+            Offer = new OfferRepository(_db);
         }
 
         public void Save()

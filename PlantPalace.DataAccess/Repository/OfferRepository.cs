@@ -9,17 +9,17 @@ using System.Threading.Tasks;
 
 namespace PlantPalace.DataAccess.Repository
 {
-    public class BannerRepository : Repository<Banner>, IBannerRepository
+    public class OfferRepository : Repository<Offer>, IOfferRepository
     {
         private  ApplicationDbContext _db;
-        public BannerRepository(ApplicationDbContext db) : base(db)
+        public OfferRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
         }
 
-        public void Update(Banner obj)
+        public void Update(Offer obj)
         {
-            _db.Banners.Update(obj);
+            _db.Offer.Update(obj);
         }
 
     }

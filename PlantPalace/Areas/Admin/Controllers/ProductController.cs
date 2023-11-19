@@ -79,7 +79,7 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Upsert(ProductVM productVM, string? newfile, string? newfile1, string? newfile2, string? newfile3)
         {
-            if(newfile.IsNullOrEmpty())
+            if(newfile.IsNullOrEmpty() && productVM.Product.Id == 0 )
             {
                 TempData["error"] = "Main Image is Mandatory";
                 ModelState.AddModelError("img", "main Image is Mandatory");

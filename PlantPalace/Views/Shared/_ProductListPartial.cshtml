@@ -34,13 +34,22 @@ else
                         <h5 style="text-overflow:ellipsis;">@product.Name</h5>
                     </div>
                     <div class="product_price">
-                        <a href="#">@* <span class="price_old">@product.ListPrice.ToString("c")</span> *@ <span class="price_new">@product.Price100.ToString("c")</span></a>
+                        @if (product.DiscountPrice == 0)
+                        {
+                            <a href="#">@* <span class="price_old">@product.ListPrice.ToString("c")</span> *@ <span class="price_new">@product.Price.ToString("c")</span></a>
+
+                        }
+                        else
+                        {
+                            <a href="#"><span class="price_old">@product.Price.ToString("c")</span> <span class="price_new">@product.DiscountPrice.ToString("c")</span></a>
+
+                        }
                     </div>
                     <div class="col-12">
                         <div>
                             <a asp-action="Details"
                                asp-route-productId="@product.Id"
-                               class="btn btn-primary bg-gradient rounded text-lowercase">
+                               class="btn btn-primary bg-gradient rounded ">
                                 Details
                             </a>
                         </div>

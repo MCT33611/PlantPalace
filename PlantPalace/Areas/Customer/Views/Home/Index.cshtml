@@ -6,9 +6,9 @@
         @foreach (var banner in Model.banners.Select((value, index) => new { Value = value, Index = index }))
         {
 
-            <a href="@banner.Value.BannerUrl" class="carousel-item  @(banner.Index == 0 ? "active" : "")">
+            <a href="@banner.Value.OfferUrl" class="carousel-item  @(banner.Index == 0 ? "active" : "")">
                 <div>
-                    <img src="@banner.Value.ImageUrl" class="d-block w-100" alt="@banner.Value.BannerName">
+                    <img src="@banner.Value.ImageUrl" class="d-block w-100" alt="@banner.Value.OfferName">
                 </div>
             </a>
         }
@@ -54,7 +54,16 @@
                             <h5 style="text-overflow:ellipsis;">@product.Name</h5>
                         </div>
                         <div class="product_price">
-                            <a href="#">@* <span class="price_old">@product.ListPrice.ToString("c")</span> *@ <span class="price_new">@product.Price100.ToString("c")</span></a>
+                            @if(product.DiscountPrice == 0)
+                            {
+                                <a href="#">@* <span class="price_old">@product.ListPrice.ToString("c")</span> *@ <span class="price_new">@product.Price.ToString("c")</span></a>
+
+                            }
+                            else
+                            {
+                                <a href="#"><span class="price_old">@product.Price.ToString("c")</span> <span class="price_new">@product.DiscountPrice.ToString("c")</span></a>
+
+                            }
                         </div>
                         <div class="col-12">
                             <div>

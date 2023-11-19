@@ -65,14 +65,14 @@
 
                             </div>
 
-                            <div class="col-12 col-lg-6 pt-md-3">
+                            <div class="col-12 col-lg-6 pt-md-3 text-truncate" style="height:150px">
                                 <h5 class="text-uppercase text-secondary"><strong>@item.Product.Name</strong></h5>
                                 <p><small>@Html.Raw(item.Product.Description)</small></p>
                             </div>
                             <div class="col-12  col-lg-5 text-center row">
                                 <div class="col-3 text-md-right pt-2 pt-md-4">
                                     <h6 class="fw-semibold text-nowrap">
-                                        @item.Price.ToString("c")<span class="text-muted">&nbsp;x&nbsp;</span>@item.Quantity
+                                        @(item.Product.DiscountPrice == 0 ? item.Price.ToString("c") : item.Product.DiscountPrice)<span class="text-muted">&nbsp;x&nbsp;</span>@item.Quantity
                                         
                                     </h6>
                                 </div>

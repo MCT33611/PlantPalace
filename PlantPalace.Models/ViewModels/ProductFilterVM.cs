@@ -14,6 +14,7 @@ namespace PlantPalace.Models.ViewModels
         
         public string? search { get;set; }
 
+
         public int? PriceRange { get; set; }
     }
 }

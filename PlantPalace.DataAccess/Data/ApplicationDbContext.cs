@@ -23,7 +23,7 @@ namespace PlantPalace.DataAccess.Data
         public DbSet<OrderDetail> OrderDetail { get; set; }
         public DbSet<OrderHeader> OrderHeader { get; set; }
 
-        public DbSet<Banner> Banners { get; set; }
+        public DbSet<Offer> Offer { get; set; }
         /*public object Coupon { get; internal set; }*/
     }
 }

@@ -8,7 +8,7 @@ namespace PlantPalace.Models.ViewModels
 {
     public class HomeVM
     {
-        public IEnumerable<Banner> banners { get; set; }
+        public IEnumerable<Offer> banners { get; set; }
 
         public IEnumerable<Product> products { get; set; }
 
