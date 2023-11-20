@@ -34,7 +34,8 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
             OrderVM = new()
             {
                 OrderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == OrderId, incluedProperties: "ApplicationUser"),
-                OrderDetail = _unitOfWork.OrderDetail.GetALL(u => u.OrderHeaderId == OrderId, incluedProperties: "Product")
+                OrderDetail = _unitOfWork.OrderDetail.GetALL(u => u.OrderHeaderId == OrderId, incluedProperties: "Product"),
+                ProductReturnList = _unitOfWork.ProductReturn.GetALL(incluedProperties: "OrderDetail"),
             };
             return View(OrderVM);
         }
@@ -56,7 +57,7 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = SD.Role_Admin)]
         [AutoValidateAntiforgeryToken]
         public IActionResult SetASPaid()
         {
@@ -80,7 +81,7 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
 
         
         [HttpPost]
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = SD.Role_Admin)]
         [AutoValidateAntiforgeryToken]
         public IActionResult ShipOrder()
         {
@@ -103,7 +104,32 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
         }
 
 
+        [HttpPost]
+        [Authorize]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult CancelProduct(int orderDetailId)
+        {
+            var orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == OrderVM.OrderHeader.Id, incluedProperties: "ApplicationUser");
 
+            var orderDetail = _unitOfWork.OrderDetail.Get(u => u.Id == orderDetailId,incluedProperties:"Product");
+            if(orderDetail == null)
+            {
+                TempData["success"] = "Product Not Found";
+                return RedirectToAction(nameof(Details), new { orderId = OrderVM.OrderHeader.Id });
+            }
+            orderHeader.OrderTotal -= orderDetail.Price;
+
+            _unitOfWork.OrderHeader.Update(orderHeader);
+            _unitOfWork.OrderDetail.Remove(orderDetail);
+            var product = _unitOfWork.Product.Get(u => u.Id == orderDetail.ProductId);
+            product.Stock += orderDetail.Count;
+            _unitOfWork.Product.Update(product);
+
+            _unitOfWork.ApplicationUser.UpdateWallet(orderHeader.ApplicationUser.Id, +orderDetail.Price);
+            TempData["success"] = $"{orderDetail.Product.Name} Cancelled Successfully.";
+            _unitOfWork.Save();
+            return RedirectToAction(nameof(Details), new { orderId = OrderVM.OrderHeader.Id });
+        }
 
         [HttpPost]
         [Authorize]
@@ -145,6 +171,70 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
             return RedirectToAction(nameof(Details), new { orderId = OrderVM.OrderHeader.Id });
         }
 
+        [HttpPost]
+        [Authorize]
+        public IActionResult AddReturn(int orderDetailId,string Reason,int orderHeaderId)
+        {
+            var returnOrder = new ProductReturn()
+            {
+                Date = DateTime.UtcNow,
+                OrderDetailId = orderDetailId,
+                ReturnReason = Reason,
+                ReturnStatus = SD.ReturnPending,
+            };
+
+            _unitOfWork.ProductReturn.Add(returnOrder);
+            _unitOfWork.Save();
+            TempData["success"] = "Waiting for Seller approval";
+            return RedirectToAction(nameof(Details), new { orderId = orderHeaderId });
+
+
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult ChangeReturnStatus(string status,int ProductRetunId)
+        {
+            if(status != null)
+            {
+                if (status == SD.ReturnRejected)
+                {
+                    _unitOfWork.ProductReturn.UpdateStatus(ProductRetunId, SD.ReturnRejected);
+                }
+                else
+                {
+                    if (status == SD.ReturnPending)
+                    {
+                        _unitOfWork.ProductReturn.UpdateStatus(ProductRetunId, SD.ReturnPending);
+
+                    }
+                    else
+                    {
+                        _unitOfWork.ProductReturn.UpdateStatus(ProductRetunId, SD.ReturnApproved);
+
+                    }
+                }
+                _unitOfWork.Save();
+                return Json(new { message = $"request status update as {status} " });
+            }
+            return Json(new { message = "error" });
+
+        }
+
+        [HttpGet]
+        public IActionResult ReturnList()
+        {
+            var returnOrders = _unitOfWork.ProductReturn.GetALL(incluedProperties: "OrderDetail");
+            foreach (var returnOrder in returnOrders)
+            {
+                returnOrder.OrderDetail = _unitOfWork.OrderDetail.Get(u=> u.Id == returnOrder.OrderDetailId,incluedProperties: "OrderHeader,Product");
+                returnOrder.OrderDetail.OrderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == returnOrder.OrderDetail.OrderHeaderId,
+                    incluedProperties: "ApplicationUser");
+            }
+            return View(returnOrders.Reverse());
+        }
+
+
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> Invoice(int id)
@@ -172,7 +262,7 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
 
 
         [HttpPost]
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles =SD.Role_Admin)]
         [AutoValidateAntiforgeryToken]
         public IActionResult UpdateOrderDetail()
         {

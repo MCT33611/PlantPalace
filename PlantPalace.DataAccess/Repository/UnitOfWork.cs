@@ -17,6 +17,7 @@ namespace PlantPalace.DataAccess.Repository
         public ICouponsDataRepository CouponsData { get; set; }
 
         public IProductRepository Product { get; private set; }
+        public IProductReturnRepository ProductReturn { get; set; }
         public IProductReviewRepository ProductReview { get; set; }
         public IShoppingCartRepository ShoppingCart { get; set; }
         public IWishListRepository WishList { get; set; }
@@ -35,6 +36,7 @@ namespace PlantPalace.DataAccess.Repository
             _db = db;
             Product = new ProductRepository(_db);
             ProductReview = new ProductReviewRepository(_db);
+            ProductReturn = new ProductReturnRepository(_db);
             Category = new CategoryRepository(_db);
             Coupon = new CouponRepository(_db);
             CouponsData = new CouponsDataRepository(_db);

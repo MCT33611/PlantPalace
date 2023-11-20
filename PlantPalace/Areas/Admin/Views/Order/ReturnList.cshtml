@@ -1,0 +1,112 @@
+﻿@model IEnumerable<ProductReturn>
+@{
+}
+
+
+<div class="">
+    <div class="row pt-4 pb-3">
+
+        <div class="pagetitle col-12 ">
+            <h1>Return Requests</h1>
+
+            <div class="row d-flex">
+                <nav class="col-md-10">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/Admin/Dashboard/Index">Admin</a></li>
+                        <li class="breadcrumb-item active">Product Return</li>
+                    </ol>
+
+                </nav>
+            </div>
+        </div><!-- End Page Title -->
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped  table-sm">
+            <thead>
+                <tr>
+                    <th>
+                        User Name
+                    </th>
+                    <th>
+                        Product
+                    </th>
+                    <th>
+                        Quantity
+                    </th>
+                    <th>
+                        Total Price
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var request in Model)
+                {
+                    <tr>
+                        <td>
+                            @request.OrderDetail.OrderHeader.Name
+                        </td>
+
+                        <td>
+                            @request.OrderDetail.Product.Name
+
+                        </td>
+                        <td>
+                            @request.OrderDetail.Count
+
+                        </td>
+                        <td>
+                            @request.OrderDetail.Price
+
+                        </td>
+                        <td>
+                            <div class=" d-flex justify-content-center flex-column flex-lg-row align-item-center" role="group">
+                                <select onchange="UpdateStatus(this,@request.Id)" class="form-select">
+                                    <option value="@SD.ReturnApproved" >Approve</option>
+                                    <option value="@SD.ReturnRejected">Rejected</option>
+                                    <option value="@SD.ReturnPending">Pending</option>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        function UpdateStatus(select,productId) {
+            var selectedStatus = select.value;
+            console.log(productId);
+            $.ajax({
+                type: 'GET',
+                url: '/Admin/Order/ChangeReturnStatus',
+                data: { status: selectedStatus, ProductRetunId: productId },
+                success: function (data) {
+                    if (data.message != "error") {
+                        toastr.success(data.message);
+
+                    }
+                    else {
+                        toastr.error("Status Is null here");
+
+                    }
+
+                },
+                error: function (error) {
+                    toastr.error(error.message);
+
+                }
+            });
+        }
+    </script>
+
+}

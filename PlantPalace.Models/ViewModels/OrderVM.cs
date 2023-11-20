@@ -11,5 +11,6 @@ namespace PlantPalace.Models.ViewModels
         public OrderHeader OrderHeader { get; set; }
 
         public IEnumerable<OrderDetail> OrderDetail { get; set; }
+        public IEnumerable<ProductReturn> ProductReturnList { get; set; }
     }
 }
