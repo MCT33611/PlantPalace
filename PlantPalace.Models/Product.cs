@@ -71,6 +71,9 @@ namespace PlantPalace.Models
         }
         private double _discountPrice;
 
+        [AllowNull]
+        public string? OfferName { get; set; } = "none";
+
         [Required(ErrorMessage = "Category ID is required")]
         public int categoryId { get; set; }
 

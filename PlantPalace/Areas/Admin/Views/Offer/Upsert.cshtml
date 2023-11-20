@@ -1,7 +1,7 @@
 ﻿@model OfferVM
 @{
 }
-<style>
+<!--<style>
     select {
         display: none !important;
     }
@@ -183,6 +183,29 @@
                 color: #666;
             }
 
+</style>-->
+<style>
+    #popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+    }
+
+    #productList {
+        max-height: 400px; /* Set your desired height */
+        width: 600px; /* Set your desired height */
+        overflow-y: auto;
+        list-style-type: none; /* Remove default list style */
+        padding: 0; /* Remove default padding */
+        margin: 0; /* Remove default margin */
+    }
 </style>
 <form asp-action="Upsert" asp-controller="Offer">
     <input asp-for="Offer.Id" type="hidden" />
@@ -210,14 +233,26 @@
             </div>
         </div>
         <div class="row p-1 mb-3">
-            <select asp-for="Offer.ProductId" id="productIdDropdown">
-                <option value="0" selected>Select One Product</option>
+            <button type="button" id="showPopupBtn" class="btn btn-secondary">Select Products</button>
+        </div>
+        <div id="popup">
+            <input class="form-control" type="text" placeholder="Search products" id="searchInput">
+            <ul id="productList">
                 @foreach (var product in Model.Products)
                 {
-                    <option value="@product.Id" data-product-price="@product.Price" ><img src="@product.ImageUrl" /> &nbsp;&nbsp;@product.Name</option>
+                    <li>
+                        <input type="checkbox" class="form-check" value="@product.Id" name="selectedProducts" id="@("chk_" + product.Id)">
+                        <label for="@("chk_" + product.Id)">
+                            <img src="@product.ImageUrl" width="50" />
+                            <span class="productName text-nowrap text-truncate" data-category="@product.Category.Name" data-subcategory="@product.SubCategory">@product.Name</span>
+                        </label>
+                    </li>
                 }
-
-            </select>
+                
+            </ul>
+            <button type="button" id="selectAllBtn" class="btn btn-info m-3">Select All</button>
+            <button type="button" id="OkBtn" class="btn btn-info m-3">Ok</button>
+            <button type="button" id="ClearBtn" class="btn btn-info m-3">Clear</button>
         </div>
         <div class="row p-1 mb-3">
             <select asp-for="Offer.OfferType">
@@ -232,9 +267,9 @@
             <span asp-validation-for="Offer.OfferName" class="text-danger"></span>
         </div>
         <div class="row p-1 mb-3">
-            <label asp-for="Offer.OfferPrice" class="p-0"></label>
-            <input asp-for="Offer.OfferPrice" class="form-control" id="offerPriceInput" />
-            <span asp-validation-for="Offer.OfferPrice" class="text-danger"></span>
+            <label asp-for="Offer.OfferPercent" class="p-0"></label>
+            <input asp-for="Offer.OfferPercent" class="form-control" id="offerPriceInput" min="1" max="99" />
+            <span asp-validation-for="Offer.OfferPercent" class="text-danger"></span>
         </div>
         @* <div class="row p-1 mb-3">
             <label asp-for="Offer.OfferUrl" class="p-0"></label>
@@ -369,7 +404,7 @@
             initializeCropper('cropper', $('#cropper').attr('data-default'), 'newfile');
         });
     </script>
-    <script>
+    <!--<script>
         function create_custom_dropdowns() {
             $('select').each(function (i, select) {
                 if (!$(this).next().hasClass('dropdown-select')) {
@@ -474,8 +509,8 @@
         $(document).ready(function () {
             create_custom_dropdowns();
         });
-    </script>
-    <script type="text/javascript">
+    </script>-->
+    <!--<script type="text/javascript">
         $(document).ready(function () {
             $('#productIdDropdown').change(function () {
                 var selectedProductId = $(this).val();
@@ -489,7 +524,48 @@
                 }
             });
         });
+    </script>-->
+    <script>
+        $(document).ready(function () {
+            // Show the popup
+            $("#showPopupBtn").click(function () {
+                $("#popup").show();
+            });
+
+            // Filter products based on search input
+            $("#searchInput").on("input", function () {
+                var filter = $(this).val().toUpperCase();
+                $("#productList li").each(function () {
+                    var productName = $(this).find(".productName").text().toUpperCase();
+                    var category = $(this).find(".productName").data("category").toUpperCase();
+                    var subcategory = $(this).find(".productName").data("subcategory").toUpperCase();
+
+                    var shouldShow =
+                        productName.includes(filter) ||
+                        category.includes(filter) ||
+                        subcategory.includes(filter);
+
+                    $(this).toggle(shouldShow);
+                });
+            });
+            // Select only the searched products
+            $("#selectAllBtn").click(function () {
+                var $searchedCheckboxes = $("#productList li:visible input[type='checkbox']");
+                $searchedCheckboxes.prop("checked", !$searchedCheckboxes.prop("checked"));
+            });
+            // Save selected products
+            $("#OkBtn").click(function () {
+                // Code to save selected products
+                $("#popup").hide();
+            });
+
+            // Clear all checkboxes
+            $("#ClearBtn").click(function () {
+                $("#productList input[type='checkbox']").prop("checked", false);
+            });
+        });
     </script>
+    
     @{
         <partial name="_ValidationScriptsPartial.cshtml" />
     }

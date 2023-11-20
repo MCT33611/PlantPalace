@@ -35,32 +35,42 @@
             </div>
         </div><!-- End Page Title -->
     </div>
-
-    @foreach (var Offer in Model)
+    @if (Model.Count() == 0)
     {
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title" id="Offer-name-@Offer.Id">@Offer.OfferName</h5>
-                <button class="btn btn-primary w-100" type="button" onclick="toggleCardBody('@Offer.Id')" aria-expanded="false" aria-controls="card-body-@Offer.Id">
-                    Show
-                </button>
-
-
-            </div>
-            <div class="collapse" id="card-body-@Offer.Id">
-                <div class="card-body">
-                    <img src="@Offer.ImageUrl" alt="@Offer.OfferName" class="img-fluid">
-                </div>
-            </div>
-            <div class="card-footer row ">
-                
-                <a asp-action="Upsert" asp-controller="Offer" asp-route-id="@Offer.Id" class="btn btn-primary m-1 col-md-3"  id="edit-button-@Offer.Id">Edit</a>
-                <button onclick="Delete('Offer/Delete/@Offer.Id')" class="btn btn-danger m-1 col-md-3" type="button" id="delete-button-@Offer.Id">Delete</button>
-            </div>
+        <div class="col-12 d-flex justify-content-center align-items-center flex-column">
+            <img src="~/Images/notAndDeadIcon.png">
+            <h1>Offers Not Available</h1>
+            <p>Add New Offers</p>
+            
         </div>
     }
+    else
+    {
+        @foreach (var Offer in Model)
+        {
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title" id="Offer-name-@Offer.Id">@Offer.OfferName</h5>
+                    <button class="btn btn-primary w-100" type="button" onclick="toggleCardBody('@Offer.Id')" aria-expanded="false" aria-controls="card-body-@Offer.Id">
+                        Show
+                    </button>
 
 
+                </div>
+                <div class="collapse" id="card-body-@Offer.Id">
+                    <div class="card-body">
+                        <img src="@Offer.ImageUrl" alt="@Offer.OfferName" class="img-fluid">
+                    </div>
+                </div>
+                <div class="card-footer row ">
+                
+                    <a asp-action="Upsert" asp-controller="Offer" asp-route-id="@Offer.Id" class="btn btn-primary m-1 col-md-3"  id="edit-button-@Offer.Id">Edit</a>
+                    <button onclick="Delete('Offer/Delete/@Offer.Id')" class="btn btn-danger m-1 col-md-3" type="button" id="delete-button-@Offer.Id">Delete</button>
+                </div>
+            </div>
+        }
+
+    }
     
 
 </div>

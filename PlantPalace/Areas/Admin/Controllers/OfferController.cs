@@ -37,11 +37,11 @@ namespace PlantPalace.Areas.Admin.Controllers
 				vm.Offer = _unitOfWork.Offer.Get(u => u.Id == id);
 
 			}
-			vm.Products = _unitOfWork.Product.GetALL().ToList(); ;
+			vm.Products = _unitOfWork.Product.GetALL(incluedProperties: "Category").ToList(); ;
 			return View(vm);
 		}
 		[HttpPost]
-		public IActionResult Upsert(OfferVM model, string? newfile)
+		public IActionResult Upsert(OfferVM model, string? newfile,List<int> selectedProducts)
 		{
 			string wwwRootPath = _webHostEnvironment.WebRootPath;
 
@@ -73,9 +73,33 @@ namespace PlantPalace.Areas.Admin.Controllers
 			
 			if (ModelState.IsValid)
 			{
-				var product = _unitOfWork.Product.Get(u => u.Id == model.Offer.ProductId);
-				product.DiscountPrice = model.Offer.OfferPrice;
-				_unitOfWork.Product.Update(product);
+				if(selectedProducts == null)
+				{
+					ModelState.AddModelError("selectedProducts", "select any product atleast one in manitatory");
+                    return View();
+
+                }
+				else
+				{
+					foreach(var productid in selectedProducts)
+					{
+                        var product = _unitOfWork.Product.Get(u => u.Id == productid);
+						if(product != null && 100 > model.Offer.OfferPercent)
+						{
+                            product.DiscountPrice = (product.Price/100)*(100- model.Offer.OfferPercent);
+                            product.OfferName = model.Offer.OfferName;
+                            _unitOfWork.Product.Update(product);
+                        }
+						else
+						{
+							ModelState.AddModelError("OfferPrice", "Change Offer Price is not considerable");
+                            return View();
+
+                        }
+
+                    }
+				}
+                
 				if(model.Offer.Id != 0 && model.Offer.Id != null)
 				{
                     _unitOfWork.Offer.Update(model.Offer);
@@ -146,10 +170,27 @@ namespace PlantPalace.Areas.Admin.Controllers
 			if (Offer == null)
 				return NotFound();
 
-			var product = _unitOfWork.Product.Get(u => u.Id == Offer.ProductId);
+            /*var product = _unitOfWork.Product.Get(u => u.Id == Offer.ProductId);
 			product.DiscountPrice = 0;
-			_unitOfWork.Product.Update(product);
-			_unitOfWork.Offer.Remove(Offer);
+			_unitOfWork.Product.Update(product);*/
+
+            if (Offer.OfferName != null)
+            {
+                var products = _unitOfWork.Product.GetALL(u => u.OfferName != null)
+                                               .AsEnumerable() // Materialize data
+                                               .Where(u => u.OfferName.Normalize() == Offer.OfferName.Normalize())
+                                               .ToList();
+
+                foreach (var product in products)
+                {
+                    product.DiscountPrice = 0;
+                    product.OfferName = "";
+
+                    _unitOfWork.Product.Update(product);
+                }
+            }
+
+            _unitOfWork.Offer.Remove(Offer);
 			_unitOfWork.Save();
 			//TempData["success"] = "Offer Deleted Successfully";
 			return Json(new {message = "Offer Deleted Successfully" });

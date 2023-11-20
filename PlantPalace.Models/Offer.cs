@@ -14,11 +14,11 @@ namespace PlantPalace.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
+        /*[Required]
         public int ProductId { get; set; }
         [ValidateNever]
         [ForeignKey(nameof(ProductId))]
-        public Product Product { get; set; }
+        public Product Product { get; set; }*/
 
         [Required]
         [RegularExpression(@"\.(jpg|jpeg|png|gif|bmp|svg)$", ErrorMessage = "Invalid image file extension. Supported extensions are jpg, jpeg, png, gif, bmp, svg.")]
@@ -29,8 +29,8 @@ namespace PlantPalace.Models
         public string? OfferName { get; set;}
 
         [Required]
-        [Range(0, int.MaxValue)]
-        public double OfferPrice { get; set; }
+        [Range(1, 99,ErrorMessage ="Please enter 1 to 99 ")]
+        public double OfferPercent { get; set; }
 
 
         [Required]

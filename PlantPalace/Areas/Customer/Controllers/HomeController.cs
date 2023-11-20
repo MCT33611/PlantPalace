@@ -114,13 +114,7 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 
             if (!string.IsNullOrEmpty(offer))
             {
-                list.products.Clear();
-                var offerList = _unitOfWork.Offer.GetALL(incluedProperties: "Product");
-
-                foreach (var product in offerList.Where(u => u.OfferName.Normalize() == offer.Normalize()))
-                {
-                    list.products.Add(product.Product);
-                }
+                list.products=list.products.Where(u => u.OfferName.Normalize() == offer.Normalize()).ToList();
             }
 
 
