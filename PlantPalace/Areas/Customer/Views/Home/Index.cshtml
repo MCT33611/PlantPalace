@@ -3,7 +3,7 @@
 <link href="~/css/homelist.css" rel="stylesheet" />
 <div id="carouselExampleControlsNoTouching" class="carousel slide" data-bs-touch="false" data-bs-interval="false">
     <div class="carousel-inner">
-        @foreach (var banner in Model.banners.Select((value, index) => new { Value = value, Index = index }))
+        @foreach (var banner in Model.banners.Where(u => u.OfferType == "banner").Select((value, index) => new { Value = value, Index = index }))
         {
 
             <a href="@banner.Value.OfferUrl" class="carousel-item  @(banner.Index == 0 ? "active" : "")">
@@ -141,29 +141,29 @@
 </div>
 
 @*------------- BEST SELLING PRODUCTS-------------------- *@
-<div class="row pb-3">
+<!--<div class="row pb-3">
     <div class="continer">
         <h6 class="bg-primary text-white w-100 my-3 p-2 text-start">BEST SELLING PRODUCTS</h6>
 
         <ul class="product_list mb-2 list">
 
-            @foreach (var Cate in Model.categories.ToList())
+            @* @foreach (var Cate in Model.categories.ToList())
             {
                 <li class="product_item  me-4 mb-3 rounded">
                     @* <div class="product_image d-flex justify-content-center align-items-center flex-wrap">
                 <a href="#"><img id="img" src="@Cate.ImageUrl" alt=""></a>
-                </div> *@
+                </div> @
                     <div class="product_values">
                         <div class="product_title text-nowrap overflow-hidden">
                             <h5>@Cate.Name</h5>
                         </div>
                     </div>
                 </li>
-            }
+            } *@
         </ul>
     </div>
 
-</div>
+</div>-->
 
 @section Scripts{
     <script src="~/js/homelist.js"></script>
