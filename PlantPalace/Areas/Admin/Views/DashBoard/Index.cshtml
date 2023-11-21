@@ -348,21 +348,9 @@
             <!-- Right side columns -->
             <div class="col-lg-4">
                 <div class="card">
-                    <form class="card-body text-center" asp-area="Admin" asp-controller="DashBoard" asp-action="SalesReport" method="post">
+                    <a class="card-body text-center" asp-area="Admin" asp-controller="DashBoard" asp-action="SalesList">
                         <h5 class="card-title">SaleReport</h5>
-                        <div class="form-group m-2 w-100">
-                            <select id="filter" name="filter" class="form-control">
-                                <option value="all">All</option>
-                                <option value="today">Today</option>
-                                <option value="month">Month</option>
-                                <option value="year">Year</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary m-2 w-100">
-                            <i class="bi bi-arrow-down-circle-fill"></i>
-                            Download Sales Report
-                        </button>
-                    </form>
+                    </a>
 
                 </div>
                 

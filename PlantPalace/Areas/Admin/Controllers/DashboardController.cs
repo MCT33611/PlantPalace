@@ -102,8 +102,12 @@ namespace PlantPalace.Areas.Admin.Controllers
             return View(orders);
         }
 
+        public IActionResult SalesList()
+        {
+            var orders = _unitOfWork.OrderHeader.GetALL(u=> u.OrderStatus == SD.StatusShipped,incluedProperties: "ApplicationUser");
 
-
+            return View(orders);
+        }
         public IActionResult ChartOfAdminData()
         {
             try
