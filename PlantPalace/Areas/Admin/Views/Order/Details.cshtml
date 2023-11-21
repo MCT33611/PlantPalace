@@ -275,7 +275,7 @@
                                                     <button asp-action="CancelProduct" asp-route-orderDetailId="@detail.Id" type="submit" class="btn btn-danger ">Cancel</button>
                                                 }
 
-                                                @if(Model.OrderHeader.OrderStatus == SD.StatusShipped )
+                                                @if(Model.OrderHeader.OrderStatus == SD.StatusShipped && User.IsInRole(SD.Role_Customer))
                                                 {
                                                     var Return = Model.ProductReturnList.FirstOrDefault(u => u.OrderDetailId == detail.Id);
 
@@ -395,6 +395,7 @@
                     <input type="text" class="form-control" id="OrderHeader-Id" name="orderHeaderId" value="@Model.OrderHeader.Id" hidden>
 
                     <div class="form-group">
+                        <input type="hidden" name="userId" value="@Model.OrderHeader.ApplicationUserId" />
                         <label for="recipient-name" class="col-form-label">Ordered Product Id:</label>
                         <input type="text" class="form-control" id="OrderDetail-Id" name="orderDetailId" readonly>
                     </div>

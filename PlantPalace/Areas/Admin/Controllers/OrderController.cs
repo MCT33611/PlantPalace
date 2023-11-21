@@ -193,30 +193,37 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
 
         [HttpGet]
         [Authorize]
-        public IActionResult ChangeReturnStatus(string status,int ProductRetunId)
+        public IActionResult ChangeReturnStatus(string status,int ProductRetunId, string userId)
         {
-            if(status != null)
+            var returnModel = _unitOfWork.ProductReturn.Get(u => u.Id == ProductRetunId,incluedProperties: "OrderDetail");
+            if(returnModel != null)
             {
-                if (status == SD.ReturnRejected)
+                if (status != null)
                 {
-                    _unitOfWork.ProductReturn.UpdateStatus(ProductRetunId, SD.ReturnRejected);
-                }
-                else
-                {
-                    if (status == SD.ReturnPending)
+                    if (status == SD.ReturnRejected)
                     {
-                        _unitOfWork.ProductReturn.UpdateStatus(ProductRetunId, SD.ReturnPending);
-
+                        _unitOfWork.ProductReturn.UpdateStatus(ProductRetunId, SD.ReturnRejected);
                     }
                     else
                     {
-                        _unitOfWork.ProductReturn.UpdateStatus(ProductRetunId, SD.ReturnApproved);
+                        if (status == SD.ReturnPending)
+                        {
+                            _unitOfWork.ProductReturn.UpdateStatus(ProductRetunId, SD.ReturnPending);
 
+                        }
+                        else
+                        {
+                            _unitOfWork.ProductReturn.UpdateStatus(ProductRetunId, SD.ReturnApproved);
+                            _unitOfWork.ApplicationUser.UpdateWallet(userId, +returnModel.OrderDetail.Price);
+
+
+                        }
                     }
+                    _unitOfWork.Save();
+                    return Json(new { message = $"request status update as {status} " });
                 }
-                _unitOfWork.Save();
-                return Json(new { message = $"request status update as {status} " });
             }
+            
             return Json(new { message = "error" });
 
         }
