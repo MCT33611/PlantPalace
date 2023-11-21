@@ -99,6 +99,22 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
             return View(homeModel);
         }
 
+        [HttpGet]
+        public IActionResult CouponList()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            CouponVM couponsVM = new()
+            {
+                Coupons = _unitOfWork.Coupon.GetALL().ToList(),
+                CouponsData= _unitOfWork.CouponsData.GetALL(incluedProperties:"Coupon").ToList(),
+                user = _unitOfWork.ApplicationUser.Get(u=> u.Id == claim.Value),
+            };
+            
+
+            return View(couponsVM);
+        }
+
         /*public IActionResult ProductList(int[]? Rate, int[]? Categories, int? priceRange, string? search)*/
         public IActionResult ProductList(ProductFilterVM model,string?offer)
         {
@@ -114,7 +130,7 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 
             if (!string.IsNullOrEmpty(offer))
             {
-                list.products=list.products.Where(u => u.OfferName.Normalize() == offer.Normalize()).ToList();
+                list.products=list.products.Where(u => u.OfferName == offer).ToList();
             }
 
 

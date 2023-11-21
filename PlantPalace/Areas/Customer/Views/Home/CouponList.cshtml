@@ -1,0 +1,113 @@
+﻿@model CouponVM
+@{
+	Layout = "/Views/Shared/_Layout.cshtml";
+
+
+}
+<link href="~/css/couponlist.css" rel="stylesheet" />
+<div class="bossWrapp">
+	<div class="cardTitle">COUPONS</div>
+
+	@foreach(var coupon in Model.Coupons.Where(u=> !u.IsExpired))
+	{
+		<div class="single card">
+
+			<div class="icon"><img src="~/Images/pngegg.png" width="100" alt=""></div>
+			<div class="text">
+
+				<div class="header">
+					<h3>@(coupon.Percent != null && coupon.Percent != 0 ? coupon.Percent+"%" : "₹"+coupon.FixPrice)  @coupon.Name</h3>
+					<div class="desc">
+					</div>
+
+				</div>
+
+				<div class="functions">
+					<span class="soon">@coupon.ExpiryDate</span><span>
+					</span>
+				</div>
+				<div class="copy-button d-flex">
+					<input id="copyvalue" type="text" readonly value="@coupon.Code" />
+					<button onclick="copyIt()" class="copybtn">COPY</button>
+				</div>
+			</div>
+		</div>
+	}
+	
+
+
+	@if (Model.Coupons.Where(u => u.IsExpired).Count() != 0)
+	{
+		<div class="devider">Expired</div>
+		@foreach (var coupon in Model.Coupons.Where(u=> u.IsExpired))
+		{
+			<div class="single">
+
+				<div class="icon"><img src="~/Images/pngegg.png" alt=""></div>
+				<div class="text">
+
+					<div class="header">
+						<h3>@(coupon.Percent != null && coupon.Percent != 0 ? coupon.Percent + "%" : "₹" + coupon.FixPrice) &nbsp;&nbsp;&nbsp; @coupon.Name</h3>
+						<div class="desc">
+						</div>
+
+					</div>
+
+					<div class="functions">
+						<span class="soon">@coupon.ExpiryDate</span><span>
+						</span>
+					</div>
+				</div>
+			</div>
+		}
+
+
+		
+	}
+
+	
+	@if(Model.CouponsData.Where(u=> u.UserId == Model.user.Id).Count() != 0)
+	{
+		<div class="devider">claimed</div>
+
+		@foreach (var couponData in Model.CouponsData.Where(u => u.UserId == Model.user.Id))
+		{
+
+			<div class="single claimed">
+
+				<div class="icon"><img src="~/Images/pngegg.png" alt=""></div>
+				<div class="text">
+
+					<div class="header">
+						<h3>@(couponData.Coupon.Percent != null && couponData.Coupon.Percent != 0 ? couponData.Coupon.Percent + "%" : "₹" + couponData.Coupon.FixPrice) &nbsp;&nbsp;&nbsp; @couponData.Coupon.Name</h3>
+						<div class="desc">
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		}
+
+	}
+
+
+</div>
+
+@section Scripts{
+	<script>
+
+		let copybtn = document.querySelector(".copybtn");
+
+
+		function copyIt() {
+			let copyInput = document.querySelector('#copyvalue');
+
+			copyInput.select();
+
+			document.execCommand("copy");
+
+			copybtn.textContent = "COPIED";
+		}
+	</script>
+}

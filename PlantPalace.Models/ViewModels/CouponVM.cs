@@ -11,5 +11,6 @@ namespace PlantPalace.Models.ViewModels
 
         public List<Coupon> Coupons { get; set; }
         public List<CouponData> CouponsData { get; set; }
+        public ApplicationUser user { get; set; }
     }
 }
