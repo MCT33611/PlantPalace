@@ -149,8 +149,9 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 
 				}
 
-				var domain = "https://localhost:7253/";
-				var options = new SessionCreateOptions
+				var domain = "https://plantpalace.azurewebsites.net/";
+				//var domain = "https://localhost:7253/";
+                var options = new SessionCreateOptions
 				{
 					PaymentMethodTypes = new List<string>
 				{
@@ -171,7 +172,7 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 						PriceData = new SessionLineItemPriceDataOptions
 						{
 							UnitAmount = (long)(item.Price * 100),
-							Currency = "usd",
+							Currency = "inr",
 							ProductData = new SessionLineItemPriceDataProductDataOptions
 							{
 								Name = item.Product.Name,
