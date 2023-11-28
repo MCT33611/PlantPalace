@@ -51,7 +51,7 @@ namespace PlantPalace.Models
         [Display(Name = "Price for 100+")]
         public double Price100 { get; set; }
 
-
+        [ValidateNever]
         [AllowNull]
         [Range(1, double.MaxValue, ErrorMessage = "Price must be a positive number")]
         [Display(Name = "Discount Price")]

@@ -99,7 +99,8 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult SummaryPost(string PaymentMethod)
 		{
-			if (PaymentMethod == "OnlinePayment")
+            
+            if (PaymentMethod == "OnlinePayment")
 			{
 				var claimsIdentity = (ClaimsIdentity)User.Identity;
 				var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -131,7 +132,7 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 					ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Quantity);
 				}
 
-				_unitOfWork.OrderHeader.Add(ShoppingCartVM.OrderHeader);
+                _unitOfWork.OrderHeader.Add(ShoppingCartVM.OrderHeader);
 				_unitOfWork.Save();
 
 				foreach (var cart in ShoppingCartVM.ListCart)
@@ -192,8 +193,8 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 			}
 			else if (PaymentMethod == "WalletPayment")
 			{
-
-				var claimsIdentity = (ClaimsIdentity)User.Identity;
+				
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
 				var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
 				//ShoppingCartVM.ListCart = _unitOfWork.ShoppingCart.GetALL(u => u.userId == claim.Value, incluedProperties: "Product");
@@ -213,8 +214,16 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 					cart.Price = GetPriceBasedOnQuantity(cart.Quantity, cart.Product.Price, cart.Product.Price50, cart.Product.Price100, cart.Product.DiscountPrice);
 					ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Quantity);
 				}
+                if (_unitOfWork.ApplicationUser.Get(u => u.Id == claim.Value).WalletBalance < ShoppingCartVM.OrderHeader.OrderTotal)
+                {
+                    TempData["error"] = "Wallet Balance is not Enough for Payment Choose Other Method";
+                    ModelState.AddModelError("summarySubmit", "Choose Other Method");
+                    //return View();
+                    return View(ShoppingCartVM);
 
-				_unitOfWork.OrderHeader.Add(ShoppingCartVM.OrderHeader);
+                }
+
+                _unitOfWork.OrderHeader.Add(ShoppingCartVM.OrderHeader);
 				_unitOfWork.Save();
 
 				foreach (var cart in ShoppingCartVM.ListCart)
@@ -231,13 +240,8 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 
 				}
 
-				if (_unitOfWork.ApplicationUser.Get(u => u.Id == claim.Value).WalletBalance < ShoppingCartVM.OrderHeader.OrderTotal)
-				{
-					TempData["error"] = "Wallet Balance is not Enough for Payment Choose Other Method";
-					ModelState.AddModelError("summarySubmit", "Choose Other Method");
-					return View();
-				}
-				_unitOfWork.ApplicationUser.UpdateWallet(claim.Value, -ShoppingCartVM.OrderHeader.OrderTotal);
+				
+                _unitOfWork.ApplicationUser.UpdateWallet(claim.Value, -ShoppingCartVM.OrderHeader.OrderTotal);
 				_unitOfWork.OrderHeader.Update(ShoppingCartVM.OrderHeader);
 				_unitOfWork.Save();
 
