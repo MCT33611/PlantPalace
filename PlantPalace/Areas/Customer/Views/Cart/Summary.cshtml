@@ -108,13 +108,13 @@
 											<h6 class="my-0">@details.Product.Name</h6>
 											<small class="text-muted">Quantity: @details.Quantity </small>
 										</div>
-										<span class="text-muted">@((details.Price * details.Quantity).ToString("c")) </span>
+										<span class="text-muted">@("₹" + (details.Price * details.Quantity)) </span>
 									</li>
 								}
 
 								<li class="list-group-item d-flex justify-content-between bg-light">
 									<small class="text-info">Total (MRP)</small>
-									<strong class="text-info" id="TotalLoder">@Model.OrderHeader.OrderTotal.ToString("c")</strong>
+									<strong class="text-info" id="TotalLoder">₹@Model.OrderHeader.OrderTotal</strong>
 								</li>
 							</ul>
 						</div>

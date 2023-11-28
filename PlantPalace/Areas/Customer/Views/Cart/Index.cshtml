@@ -72,7 +72,7 @@
                             <div class="col-12  col-lg-5 text-center row">
                                 <div class="col-3 text-md-right pt-2 pt-md-4">
                                     <h6 class="fw-semibold text-nowrap">
-                                        @(item.Product.DiscountPrice == 0 ? item.Price.ToString("c") : item.Product.DiscountPrice)<span class="text-muted">&nbsp;x&nbsp;</span>@item.Quantity
+                                        @(item.Product.DiscountPrice == 0 ? "₹"+item.Price: item.Product.DiscountPrice)<span class="text-muted">&nbsp;x&nbsp;</span>@item.Quantity
                                         
                                     </h6>
                                 </div>
@@ -106,7 +106,7 @@
                         <ul class="list-group mb-4">
                             <li class="d-flex justify-content-between align-items-center">
                                 <h5 class="text-dark fw-semibold text-uppercase"> Total (MRP)</h5>
-                                <h4 class="text-dark fw-bolder">@Model.OrderHeader.OrderTotal.ToString("c")</h4>
+                                <h4 class="text-dark fw-bolder">₹@Model.OrderHeader.OrderTotal</h4>
                             </li>
                         </ul>
                     </div>
