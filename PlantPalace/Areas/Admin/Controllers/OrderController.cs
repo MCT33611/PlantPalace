@@ -6,12 +6,11 @@ using PlantPalace.Models;
 using PlantPalace.Models.ViewModels;
 using PlantPalace.Utility;
 using Stripe;
-using System.Diagnostics;
 using System.Security.Claims;
 
 namespace PlantPalaceWeb.Areas.Admin.Controllers
 {
-	[Area("Admin")]
+    [Area("Admin")]
     [Authorize]
 	public class OrderController : Controller
 	{	
@@ -19,6 +18,8 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
 		private readonly IRazorViewRenderer _viewRenderService;
         [BindProperty]
         public OrderVM OrderVM { get; set; }
+
+
         public OrderController(IUnitOfWork unitOfWork, IRazorViewRenderer viewRenderService)
         {
 			_unitOfWork = unitOfWork;
@@ -58,16 +59,15 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
 
         [HttpPost]
         [Authorize(Roles = SD.Role_Admin)]
-        [AutoValidateAntiforgeryToken]
-        public IActionResult SetASPaid()
+        public IActionResult SetASPaid(int id)
         {
-            var orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == OrderVM.OrderHeader.Id);
+            var orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == id);
             orderHeader.PaymentStatus = SD.PaymentStatusApproved;
 
             _unitOfWork.OrderHeader.Update(orderHeader);
             _unitOfWork.Save();
             TempData["Success"] = "Payment completed Successfully.";
-            return RedirectToAction(nameof(Details), new { orderId = OrderVM.OrderHeader.Id });
+            return RedirectToAction(nameof(Details), new { orderId = id });
         }
 
         public IActionResult COD_PaymentConfirmation(int id)
@@ -106,21 +106,26 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
 
         [HttpPost]
         [Authorize]
-        [AutoValidateAntiforgeryToken]
         public IActionResult CancelProduct(int orderDetailId)
         {
-            var orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == OrderVM.OrderHeader.Id, incluedProperties: "ApplicationUser");
+            var orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == orderDetailId, incluedProperties: "ApplicationUser");
 
             var orderDetail = _unitOfWork.OrderDetail.Get(u => u.Id == orderDetailId,incluedProperties:"Product");
             if(orderDetail == null)
             {
                 TempData["success"] = "Product Not Found";
-                return RedirectToAction(nameof(Details), new { orderId = OrderVM.OrderHeader.Id });
+                return RedirectToAction(nameof(Details), new { orderId = orderDetailId });
             }
             orderHeader.OrderTotal -= orderDetail.Price;
 
             _unitOfWork.OrderHeader.Update(orderHeader);
             _unitOfWork.OrderDetail.Remove(orderDetail);
+            if(!_unitOfWork.OrderDetail.GetALL(u=> u.OrderHeaderId == orderHeader.Id).Any())
+            {
+                _unitOfWork.OrderHeader.Remove(orderHeader);
+                return RedirectToAction(nameof(Index));
+
+            }
             var product = _unitOfWork.Product.Get(u => u.Id == orderDetail.ProductId);
             product.Stock += orderDetail.Count;
             _unitOfWork.Product.Update(product);
@@ -128,17 +133,16 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
             _unitOfWork.ApplicationUser.UpdateWallet(orderHeader.ApplicationUser.Id, +orderDetail.Price);
             TempData["success"] = $"{orderDetail.Product.Name} Cancelled Successfully.";
             _unitOfWork.Save();
-            return RedirectToAction(nameof(Details), new { orderId = OrderVM.OrderHeader.Id });
+            return RedirectToAction(nameof(Details), new { orderId = orderDetailId });
         }
 
         [HttpPost]
         [Authorize]
-        [AutoValidateAntiforgeryToken]
-        public IActionResult CancelOrder()
+        public IActionResult CancelOrder(int id)
         {
 
 
-            var orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == OrderVM.OrderHeader.Id,incluedProperties: "ApplicationUser") ;
+            var orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == id,incluedProperties: "ApplicationUser") ;
             var orderDetails = _unitOfWork.OrderDetail.GetALL(u => u.OrderHeaderId == orderHeader.Id);
             if (orderHeader.PaymentStatus == SD.PaymentStatusApproved)
             {
@@ -168,7 +172,7 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
             _unitOfWork.ApplicationUser.UpdateWallet(orderHeader.ApplicationUser.Id, +orderHeader.OrderTotal);
             _unitOfWork.Save();
             TempData["success"] = "Order Cancelled Successfully.";
-            return RedirectToAction(nameof(Details), new { orderId = OrderVM.OrderHeader.Id });
+            return RedirectToAction(nameof(Details), new { orderId = orderHeader.Id });
         }
 
         [HttpPost]
@@ -242,9 +246,9 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
         }
 
 
-        [Authorize]
         [HttpGet]
-        public async Task<IActionResult> Invoice(int id)
+        [Authorize]
+        public Task<IActionResult> Invoice(int id)
         {
             var OrderVM = new OrderVM()
             {
@@ -263,7 +267,7 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
             Response.Headers.Add("Content-Disposition", "inline");
 
             // Output PDF document
-            return File(pdf.BinaryData, "application/pdf", $"Invoice_{'#' + id + '_' + DateTime.Now.ToShortDateString()}.pdf");
+            return Task.FromResult<IActionResult>(File(pdf.BinaryData, "application/pdf", $"Invoice_{'#' + id + '_' + DateTime.Now.ToShortDateString()}.pdf"));
 
         }
 

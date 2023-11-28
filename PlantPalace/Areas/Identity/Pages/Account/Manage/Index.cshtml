@@ -41,16 +41,14 @@
                     </div>
                     <div id="cropper" hidden></div>
                     <button type="button" id="CropBtn" style="margin-top:10px" hidden class="btn btn-success">Crop</button>
-
-                    @* <div class="d-flex justify-content-center mb-2">
-                    <button type="submit" id="btnSubmit" class="btn btn-primary my-2" hidden>Upload New Image</button>
-                    </div> *@
                 </div>
             </div>
 
         </div>
         @if (User.IsInRole(SD.Role_Customer))
         {
+            <a id="Coupons" class="btn btn-primary w-100 mb-1" asp-action="CouponList" asp-controller="Home" asp-area="Customer" title="Coupons">Coupons</a>
+
             <div class="card mb-4">
                 <div class="card-header d-flex text-start">
                     <h3>Wallet Balance : <span>₹@Model.Input.WalletBalance &nbsp;&nbsp;</span></h3>
@@ -85,15 +83,6 @@
                     </div>
                 </div>
             </div>
-            <div class="card mb-4">
-                <div class="col-md-6">
-                    <div class="nav-item my-2">
-                        <a id="Coupons" class="nav-link " asp-action="CouponList" asp-controller="Home" asp-area="Customer" title="Coupons">Coupons</a>
-                    </div>
-                </div>
-            </div>
-
-
         }
 
 

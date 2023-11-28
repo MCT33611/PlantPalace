@@ -85,7 +85,11 @@ namespace PlantPalace.Areas.Admin.Controllers
                 }
 
             }
-
+            if (!orders.Any())
+            {
+                TempData["error"] = $"There is no sales in {filter}";
+                return RedirectToAction(nameof(SalesList));
+            }
             if (_httpContextAccessor.HttpContext.Request.Method == HttpMethod.Post.Method)
             {
                 ChromePdfRenderer renderer = new ChromePdfRenderer();
@@ -99,7 +103,8 @@ namespace PlantPalace.Areas.Admin.Controllers
                 // Output PDF document
                 return File(pdf.BinaryData, "application/pdf", $"SalesReport_this_{filter.ToUpper()+'_'+DateTime.Now.ToShortDateString()}.pdf");
             }
-            return View(orders);
+            return RedirectToAction(nameof(SalesList));
+
         }
 
         public IActionResult SalesList()

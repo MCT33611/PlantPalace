@@ -8,7 +8,7 @@
 
         <div class="pagetitle col-12 ">
             <h1>Category List</h1>
-            
+
             <div class="row d-flex">
                 <nav class="col-md-10">
                     <ol class="breadcrumb">
@@ -59,9 +59,12 @@
                                 <a asp-action="Edit" asp-controller="Category" asp-route-id="@category.Id" class="btn btn-primary rounded me-1 text-nowrap">
                                     <i class="bi bi-pencil-square"></i> Edit
                                 </a>
-                                <a asp-action="Delete" asp-controller="Category" asp-route-id="@category.Id" class="btn btn-danger rounded ms-1 text-nowrap">
+                                @* <a asp-action="Delete" asp-controller="Category" asp-route-id="@category.Id" class="btn btn-danger rounded ms-1 text-nowrap">
+                            <i class="bi bi-trash3-fill"></i> Delete
+                            </a> *@
+                                <button type="button" onclick="Delete('@category.Id')" class="btn btn-danger rounded ms-1 text-nowrap">
                                     <i class="bi bi-trash3-fill"></i> Delete
-                                </a>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -70,6 +73,45 @@
         </table>
     </div>
 
-    
+
 
 </div>
+
+@section Scripts{
+    <script>
+        // Add this script in your page or include it in a separate JavaScript file
+        function Delete(categoryId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Make an Ajax request
+                    $.ajax({
+                        url: "/Admin/Category/Delete/" + categoryId,
+                        type: "POST", // or "GET" depending on your server-side configuration
+                        success: function (data) {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your file has been deleted.",
+                                icon: "success"
+                            }).then(() => {
+                                location.reload();
+                            });
+                        },
+                        error: function (error) {
+                            // Handle the error response
+                            console.error("Error deleting category", error);
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+
+}

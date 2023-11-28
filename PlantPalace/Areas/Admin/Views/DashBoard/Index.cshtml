@@ -40,8 +40,8 @@
                     <div class="col-xxl-4 col-md-6">
                         <div class="card info-card sales-card">
 
-                            <div class="card-body">
-                                <h5 class="card-title">Sales <span>| This Month</span></h5>
+                            <div class="card-body text-nowrap">
+                                <h5 class="card-title">Sales @* <span>| This Month</span> *@</h5>
 
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -49,11 +49,12 @@
                                     </div>
                                     <div class="ps-3">
 
-                                        <h6>@Model.orders.Count(order => order.OrderDate.Month == DateTime.Today.Month)</h6>
-                                        <span class="text-success small pt-1 fw-bold">
-                                                @Model.orders.Count(order => order.OrderDate.Date == DateTime.Today.Date) +
-                                        </span>
-                                        <span class="text-muted small pt-2 ps-1">today</span>
+                                        <h6>@Model.orders.Count()</h6>
+                                        @* <h6>@Model.orders.Count(order => order.OrderDate.Month == DateTime.Today.Month)</h6> *@
+                                        @* <span class="text-success small pt-1 fw-bold">
+                                            @Model.orders.Count(order => order.OrderDate.Date == DateTime.Today.Date) +
+                                        </span> *@
+                                        @* <span class="text-muted small pt-2 ps-1">today</span> *@
 
                                     </div>
                                 </div>
@@ -65,28 +66,28 @@
                     <div class="col-xxl-4 col-md-6">
                         <div class="card info-card revenue-card">
 
-                            
 
-                            <div class="card-body">
-                                <h5 class="card-title">Revenue <span>| This Month</span></h5>
+
+                            <div class="card-body text-nowrap">
+                                <h5 class="card-title">Revenue @* <span>| This Month</span> *@</h5>
 
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                         <i class="bi bi-currency-dollar"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>
+                                        @* <h6>
                                             ₹@(Model.orders.Where(order => order.OrderDate.Month == DateTime.Now.Month).Sum(order => order.OrderTotal))
+                                        </h6> *@
+
+                                        <h6>
+                                            ₹@(Model.orders.Sum(order => order.OrderTotal))
                                         </h6>
 
-                                        <span class="text-success small pt-1 fw-bold">
+                                        @* <span class="text-success small pt-1 fw-bold">
                                             @((int)Math.Floor(((Model.orders.Where(order => order.OrderDate.Month == DateTime.Now.Month).Sum(order => order.OrderTotal)) /
                                                 (Model.orders.Sum(order => order.OrderTotal))) * 100))%
-                                        </span> <span class="text-muted small pt-2 ps-1">increase</span>
-
-
-
-
+                                        </span> <span class="text-muted small pt-2 ps-1">increase</span> *@
                                     </div>
                                 </div>
                             </div>
@@ -98,10 +99,10 @@
 
                         <div class="card info-card customers-card">
 
-                            
 
-                            <div class="card-body">
-                                <h5 class="card-title">Customers <span>| This Year</span></h5>
+
+                            <div class="card-body text-nowrap">
+                                <h5 class="card-title">Customers @* <span>| This Year</span> *@</h5>
 
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -109,7 +110,7 @@
                                     </div>
                                     <div class="ps-3">
                                         <h6>@Model.users.Count()</h6>
-                                        <span class="text-success small pt-1 fw-bold">@Model.users.Count(u => u.joinDate.Date == DateTime.Today.Date)+</span> <span class="text-muted small pt-2 ps-1">today</span>
+                                        @* <span class="text-success small pt-1 fw-bold">@Model.users.Count(u => u.joinDate.Date == DateTime.Today.Date)+</span> <span class="text-muted small pt-2 ps-1">today</span> *@
 
                                     </div>
                                 </div>
@@ -140,7 +141,7 @@
                                         var dailySales = totalSales
                                         .Where(u => u.OrderHeader.OrderDate.Date == DateTime.UtcNow.AddDays(-i).Date)
                                         .ToList();
-                                        
+
 
                                         //Sales.Add((dailySales.Count * dailySales.Sum(u => u.Count)).ToString());
                                         Sales.Add((dailySales.Count()).ToString());
@@ -159,23 +160,23 @@
                                             series: [{
                                                 name: 'Sales',
                                                 data: [
-                                                    @Sales[6],
-                                                    @Sales[5],
-                                                    @Sales[4],
-                                                    @Sales[3],
-                                                    @Sales[2],
-                                                    @Sales[1],
-                                                    @Sales[0]],
+                                    @Sales[6],
+                                    @Sales[5],
+                                    @Sales[4],
+                                    @Sales[3],
+                                    @Sales[2],
+                                    @Sales[1],
+                                    @Sales[0]],
                                             }, {
                                                 name: 'Revenue',
                                                 data: [
-                                                    @Revenue[6],
-                                                    @Revenue[5],
-                                                    @Revenue[4],
-                                                    @Revenue[3],
-                                                    @Revenue[2],
-                                                    @Revenue[1],
-                                                    @Revenue[0]]
+                                    @Revenue[6],
+                                    @Revenue[5],
+                                    @Revenue[4],
+                                    @Revenue[3],
+                                    @Revenue[2],
+                                    @Revenue[1],
+                                    @Revenue[0]]
                                             }, {
                                                 name: 'Customers',
                                                 data: [
@@ -238,7 +239,7 @@
                         <div class="card recent-sales overflow-auto">
 
                             <div class="card-body">
-                                <h5 class="card-title">Recent Sales <span>| Today</span></h5>
+                                <h5 class="card-title">Recent Sales @* <span>| Today</span> *@</h5>
 
                                 <table class="table table-borderless datatable">
                                     <thead>
@@ -294,91 +295,102 @@
                         .ToList();
 
                     }
-                    <div class="col-12">
-                        <div class="card top-selling overflow-auto">
+                    @if(sortedProducts.Any())
+                    {
+                        <div class="col-12">
+                            <div class="card top-selling overflow-auto">
 
-                            <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                    <li class="dropdown-header text-start">
-                                        <h6>Filter</h6>
-                                    </li>
+                                <div class="filter">
+                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                        <li class="dropdown-header text-start">
+                                            <h6>Filter</h6>
+                                        </li>
 
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
-                                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                                </ul>
-                            </div>
+                                        <li><a class="dropdown-item" href="#">Today</a></li>
+                                        <li><a class="dropdown-item" href="#">This Month</a></li>
+                                        <li><a class="dropdown-item" href="#">This Year</a></li>
+                                    </ul>
+                                </div>
 
-                            <div class="card-body pb-0">
-                                <h5 class="card-title">Top Selling <span>| All Time</span></h5>
+                                <div class="card-body pb-0">
+                                    <h5 class="card-title">Top Selling <span>| All Time</span></h5>
 
-                                <table class="table table-borderless datatable">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Preview</th>
-                                            <th scope="col">Product</th>
-                                            <th scope="col">Price</th>
-                                            <th scope="col">Sold</th>
-                                            <th scope="col">Revenue</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var product in sortedProducts)
-                                        {
+                                    <table class="table table-borderless datatable">
+                                        <thead>
                                             <tr>
-                                                <th scope="row"><a href="#"><img src="@product.ImageUrl" alt=""></a></th>
-                                                <td><a href="#" class="text-primary fw-bold">@product.Name</a></td>
-                                                <td>₹@product.Price</td>
-                                                <td class="fw-bold">@Model.ordersDetail.Count(od => od.ProductId == product.Id)</td>
-                                                <td>₹@(product.Price * Model.ordersDetail.Count(od => od.ProductId == product.Id))</td>
+                                                <th scope="col">Preview</th>
+                                                <th scope="col">Product</th>
+                                                <th scope="col">Price</th>
+                                                <th scope="col">Sold</th>
+                                                <th scope="col">Revenue</th>
                                             </tr>
-                                        }
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var product in sortedProducts)
+                                            {
+                                                <tr>
+                                                    <th scope="row"><a href="#"><img src="@product.ImageUrl" alt=""></a></th>
+                                                    <td><a href="#" class="text-primary fw-bold">@product.Name</a></td>
+                                                    <td>₹@product.Price</td>
+                                                    <td class="fw-bold">@Model.ordersDetail.Count(od => od.ProductId == product.Id)</td>
+                                                    <td>₹@(product.Price * Model.ordersDetail.Count(od => od.ProductId == product.Id))</td>
+                                                </tr>
+                                            }
 
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+
+                                </div>
 
                             </div>
-
                         </div>
-                    </div><!-- End Top Selling -->
+
+                        <!-- End Top Selling -->
+                    }
+                    
 
                 </div>
             </div><!-- End Left side columns -->
             <!-- Right side columns -->
             <div class="col-lg-4">
                 <div class="card">
-                    <a class="card-body text-center" asp-area="Admin" asp-controller="DashBoard" asp-action="SalesList">
+                    <a class="btn btn-primary rounded" asp-area="Admin" asp-controller="DashBoard" asp-action="SalesList">
                         <h5 class="card-title">SaleReport</h5>
                     </a>
 
                 </div>
-                
-                
-                <!-- News & Updates Traffic -->
-                <div class="card">
-                    
 
-                    <div class="card-body pb-0">
-                        <h5 class="card-title">Recent Reviews</h5>
+                @if (Model.productReviews.Any())
+                {
+                    <!-- News & Updates Traffic -->
+                    <div class="card">
 
-                        <div class="news">
-                            @foreach(var review in Model.productReviews.TakeLast(10))
-                            {
-                                <div class="post-item clearfix">
-                                    <img src="@review.Product.ImageUrl" alt="">
-                                    <h4><a href="#">@review.Product.Name</a></h4>
-                                    <p>@Html.Raw(review.Description)</p>
-                                </div>
-                            }
 
-                           <!-- End sidebar recent posts-->
+                        <div class="card-body pb-0">
+                            <h5 class="card-title">Recent Reviews</h5>
+
+                            <div class="news">
+                                @foreach (var review in Model.productReviews.TakeLast(10))
+                                {
+                                    <div class="post-item clearfix">
+                                        <img src="@review.Product.ImageUrl" alt="">
+                                        <h4><a href="#">@review.Product.Name</a></h4>
+                                        <p>@Html.Raw(review.Description)</p>
+                                    </div>
+                                }
+
+                                <!-- End sidebar recent posts-->
+
+                            </div>
+                        </div><!-- End News & Updates -->
 
                     </div>
-                </div><!-- End News & Updates -->
 
-            </div><!-- End Right side columns -->
-
+                    <!-- End Right side columns -->
+                }
+                
+            </div>
         </div>
     </section>
 

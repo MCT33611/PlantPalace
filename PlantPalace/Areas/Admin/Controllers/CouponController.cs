@@ -40,7 +40,13 @@ namespace PlantPalace.Areas.Admin.Controllers
 
 			if (ModelState.IsValid)
 			{
-				model.PublishDate = DateTime.UtcNow;
+				if(DateTime.UtcNow >= model.ExpiryDate)
+				{
+					ModelState.AddModelError("ExpiryDate", "Expiry Data Must Be Grater Than the Current Date");
+                    return View(model);
+
+                }
+                model.PublishDate = DateTime.UtcNow;
 				_unitOfWork.Coupon.Add(model);
 				_unitOfWork.Save();
 				TempData["success"] = "Coupon Created Successfully";
@@ -49,7 +55,7 @@ namespace PlantPalace.Areas.Admin.Controllers
 			ModelState.AddModelError("Name", "name is required");
 			TempData["error"] = "Something went wrong ";
 
-			return View();
+			return View(model);
 		}
 
 
@@ -102,7 +108,7 @@ namespace PlantPalace.Areas.Admin.Controllers
 		[HttpDelete, ActionName("Delete")]
 		public IActionResult DeletePost(int? id)
 		{
-			if (id == null || id == 0)
+			if (id == 0)
 			{
 				return NotFound();
 			}

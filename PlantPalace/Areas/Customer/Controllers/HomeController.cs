@@ -111,6 +111,7 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
                 user = _unitOfWork.ApplicationUser.Get(u=> u.Id == claim.Value),
             };
             
+            
 
             return View(couponsVM);
         }
@@ -203,7 +204,7 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
             DetailsVM detailsVM = new()
             {
                 cart = cart,
-                reviewList = _unitOfWork.ProductReview.GetALL(incluedProperties: "User").ToList(),
+                reviewList = _unitOfWork.ProductReview.GetALL(u=> u.ProductId== productId,incluedProperties: "User").ToList(),
                 eligible = false
             };
             if(User.IsInRole(SD.Role_Customer))

@@ -26,76 +26,132 @@
             </div>
         </div><!-- End Page Title -->
     </div>
-
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped  table-sm">
-            <thead>
-                <tr>
-                    <th>
-                        Coupon Name
-                    </th>
-                    <th>
-                        Minimum Price
-                    </th>
-                    <th>
-                        Discount
-                    </th>
-                    <th>
-                        PercentAge
-                    </th>
-                    <th>
-                        Public/ Privet 
-                    </th>
-                    <th>
-                        Total Users
-                    </th>
-                    <th>
-
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var coupon in Model.Coupons)
-                {
+    @if (Model.Coupons.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped  table-sm">
+                <thead>
                     <tr>
-                        <td>
-                            @coupon.Name
-                        </td>
+                        <th>
+                            Coupon Name
+                        </th>
+                        <th>
+                            Minimum Price
+                        </th>
+                        <th>
+                            Discount
+                        </th>
+                        <th>
+                            PercentAge
+                        </th>
+                        <th>
+                            Public/ Privet
+                        </th>
+                        <th>
+                            Total Users
+                        </th>
+                        <th>
 
-                        <td>
-                            ₹@coupon.MinPrice
-                        </td>
-                        <td>
-                            @(coupon.FixPrice != null ? "₹" : "0") @coupon.FixPrice
-                        </td>
-                        <td>
-                            @coupon.Percent @(coupon.Percent != null ? "%":"0" )
-                        </td>
-                        <td>
-                            @(coupon.IsPublic ? "Public":"Privet" )
-                        </td>
-                        <td>
-                            @{
-                                var userCound = Model.CouponsData.Count(u => u.CouponId == coupon.Id);
-                            }
-                            @userCound
-                        </td>
-                        <td>
-                            <div class=" d-flex justify-content-center flex-column flex-lg-row align-item-center" role="group">
-                                <a asp-action="Edit" asp-controller="Coupon" asp-route-id="@coupon.Id" class="btn btn-primary rounded me-1 text-nowrap">
-                                    <i class="bi bi-pencil-square"></i> Edit
-                                </a>
-                                <a asp-action="Delete" asp-controller="Coupon" asp-route-id="@coupon.Id" class="btn btn-danger rounded ms-1 text-nowrap">
-                                    <i class="bi bi-trash3-fill"></i> Delete
-                                </a>
-                            </div>
-                        </td>
+                        </th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    @foreach (var coupon in Model.Coupons)
+                    {
+                        <tr>
+                            <td>
+                                @coupon.Name
+                            </td>
+
+                            <td>
+                                ₹@coupon.MinPrice
+                            </td>
+                            <td>
+                                @(coupon.FixPrice != null ? "₹" : "0") @coupon.FixPrice
+                            </td>
+                            <td>
+                                @coupon.Percent @(coupon.Percent != null ? "%" : "0")
+                            </td>
+                            <td>
+                                @(coupon.IsPublic ? "Public" : "Privet")
+                            </td>
+                            <td>
+                                @{
+                                    var userCound = Model.CouponsData.Count(u => u.CouponId == coupon.Id);
+                                }
+                                @userCound
+                            </td>
+                            <td>
+                                <div class=" d-flex justify-content-center flex-column flex-lg-row align-item-center" role="group">
+                                    <a asp-action="Edit" asp-controller="Coupon" asp-route-id="@coupon.Id" class="btn btn-primary rounded me-1 text-nowrap">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </a>
+                                    @* <a asp-action="Delete" asp-controller="Coupon" asp-route-id="@coupon.Id" class="btn btn-danger rounded ms-1 text-nowrap">
+                            <i class="bi bi-trash3-fill"></i> Delete
+                            </a> *@
+                                    <button type="button" onclick="Delete('@coupon.Id')" class="btn btn-danger rounded ms-1 text-nowrap">
+                                        <i class="bi bi-trash3-fill"></i> Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="col-12 d-flex justify-content-center align-items-center flex-column">
+            <img src="~/Images/notAndDeadIcon.png">
+            <h1>Coupon Not Available</h1>
+            <p>Create new</p>
+            <a asp-controller="Coupon" asp-action="Create" id="refresh" class="btn btn-primary">Create</a>
+
+        </div>
+    }
+
 
 
 
 </div>
+
+
+@section Scripts{
+    <script>
+        // Add this script in your page or include it in a separate JavaScript file
+        function Delete(couponId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Make an Ajax request
+                    $.ajax({
+                        url: "/Admin/Coupon/Delete/" + couponId,
+                        type: "DELETE", // or "GET" depending on your server-side configuration
+                        success: function (data) {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your file has been deleted.",
+                                icon: "success"
+                            }).then(() => {
+                                location.reload();
+                            });
+                        },
+                        error: function (error) {
+                            // Handle the error response
+                            console.error("Error deleting category", error);
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+
+}

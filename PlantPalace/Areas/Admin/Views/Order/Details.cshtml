@@ -270,9 +270,10 @@
                                                 <p class="text-success">@((detail.Count * detail.Price).ToString("c"))</p>
                                                 @if (Model.OrderHeader.OrderStatus != SD.StatusRefunded &&
                                                Model.OrderHeader.OrderStatus != SD.StatusCancelled &&
-                                               Model.OrderHeader.OrderStatus != SD.StatusShipped)
+                                               Model.OrderHeader.OrderStatus != SD.StatusShipped && User.IsInRole(SD.Role_Customer))
                                                 {
-                                                    <button asp-action="CancelProduct" asp-route-orderDetailId="@detail.Id" type="submit" class="btn btn-danger ">Cancel</button>
+                                                    <button type="button" onclick="ProductCancel(@detail.Id)" class="btn btn-danger">Cancel</button>
+
                                                 }
 
                                                 @if(Model.OrderHeader.OrderStatus == SD.StatusShipped && User.IsInRole(SD.Role_Customer))
@@ -334,10 +335,10 @@
                             @if (Model.OrderHeader.PaymentStatus == SD.PaymentStatusDelayedPayment &&
                             Model.OrderHeader.OrderStatus == SD.StatusShipped)
                             {
-                                <button type="submit" asp-action="SetASPaid"
-                                        class="btn btn-success form-control my-1">
+                                <button type="button" onclick="confirmSetAsPaid(@Model.OrderHeader.Id)" class="btn btn-success form-control my-1">
                                     Set As Paid
                                 </button>
+
                             }
                             @if (User.IsInRole(SD.Role_Admin))
                             {
@@ -357,8 +358,7 @@
                                 }
                                 @if (Model.OrderHeader.PaymentStatus == SD.PaymentStatusPending && Model.OrderHeader.OrderStatus == SD.StatusShipped)
                                 {
-                                    <button type="submit" asp-action="SetASPaid"
-                                            class="btn btn-success form-control my-1">
+                                    <button type="button" onclick="confirmSetAsPaid(@Model.OrderHeader.Id)" class="btn btn-success form-control my-1">
                                         Set As Paid
                                     </button>
                                 }
@@ -368,7 +368,8 @@
                             Model.OrderHeader.OrderStatus != SD.StatusCancelled &&
                             Model.OrderHeader.OrderStatus != SD.StatusShipped)
                             {
-                                <button asp-action="CancelOrder" type="submit" class="btn btn-danger form-control my-1">Cancel Order</button>
+                                @* <button asp-action="CancelOrder" type="submit" class="btn btn-danger form-control my-1">Cancel Order</button> *@
+                                <button type="button" onclick="confirmCancelOrder(@Model.OrderHeader.Id)" class="btn btn-danger form-control my-1">Cancel Order</button>
                             }
                             @if(Model.OrderHeader.OrderStatus == SD.StatusShipped)
                             {
@@ -422,6 +423,7 @@
         {
             $('#OrderDetail-Id').val(OrderDetailID);
         }
+        
     </script>
 
     <script>
@@ -445,5 +447,127 @@
             return true;
         }
     </script>
+    <script>
+        function confirmSetAsPaid(orderHeaderId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "This action cannot be undone!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#28a745",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, set as paid!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Make an Ajax request
+                    $.ajax({
+                        url: "/Admin/Order/SetAsPaid/" + orderHeaderId, // Update with the correct controller and action
+                        type: "POST",
+                        data: { /* You can pass data here if needed */ },
+                        success: function (data) {
+                            // Handle success response
+                            Swal.fire({
+                                title: "Set as paid!",
+                                text: "The action was successful.",
+                                icon: "success"
+                            }).then(()=>{
+                                location.reload();
+                            });
+                            // Optionally, you can update the UI or perform other actions
+                        },
+                        error: function (error) {
+                            // Handle error response
+                            Swal.fire({
+                                title: "Error",
+                                text: "There was an error setting as paid.",
+                                icon: "error"
+                            });
+                            console.error("Error setting as paid", error);
+                        }
+                    });
+                }
+            });
+        }
 
+        function ProductCancel(orderDetailId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "This action cannot be undone!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#28a745",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, cancel the product!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Make an Ajax request
+                    $.ajax({
+                        url: "/Admin/Order/CancelProduct/",
+                        type: "POST",
+                        data: {
+                            orderDetailId: orderDetailId
+                            // You can add more data here if needed
+                        },
+                        success: function (data) {
+                            // Handle success response
+                            Swal.fire({
+                                title: "Product Canceled!",
+                                text: "The action was successful.",
+                                icon: "success"
+                            }).then(() => {
+                                location.reload();
+                            });
+                        },
+                        error: function (error) {
+                            // Handle error response
+                            Swal.fire({
+                                title: "Error",
+                                text: "There was an error on canceling.",
+                                icon: "error"
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        function confirmCancelOrder(orderHeaderId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "This action cannot be undone!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, cancel the order!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Make an Ajax request or submit the form with orderHeaderId
+                    $.ajax({
+                        url: "/Admin/order/CancelOrder/"+orderHeaderId,
+                        type: "POST",
+
+                        success: function (data) {
+                            // Handle success response
+                            Swal.fire({
+                                title: "Order Canceled!",
+                                text: "The action was successful.",
+                                icon: "success"
+                            }).then(() => {
+                                location.reload();
+                            });
+                        },
+                        error: function (error) {
+                            // Handle error response
+                            Swal.fire({
+                                title: "Error",
+                                text: "There was an error on canceling the order.",
+                                icon: "error"
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    </script>
 }

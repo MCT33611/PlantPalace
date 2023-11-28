@@ -1,113 +1,58 @@
 ﻿@model CouponVM
 @{
-	Layout = "/Views/Shared/_Layout.cshtml";
+    Layout = "/Views/Shared/_Layout.cshtml";
 
 
 }
+
 <link href="~/css/couponlist.css" rel="stylesheet" />
-<div class="bossWrapp">
-	<div class="cardTitle">COUPONS</div>
+<div class="d-flex justify-content-start">
+    @foreach(var coupon in Model.Coupons)
+    {
+        <div class="card m-2">
+            <h2 class="card-title">@coupon.Name.ToUpper()</h2>
+            <p class="card-description">Minimum:@coupon.MinPrice</p>
+            @if (DateTime.UtcNow >= coupon.ExpiryDate)
+            {
+                <span class="text-danger">@coupon.ExpiryDate</span>
+                <button type="button" disabled class="copy-button" >Copy to Clipboard</button>
 
-	@foreach(var coupon in Model.Coupons.Where(u=> !u.IsExpired))
-	{
-		<div class="single card">
+            }
+            else
+            {
+                <span class="text-success">@coupon.ExpiryDate</span>
+                <button type="button" class="copy-button" onclick="copyToClipboard('@coupon.Code')">Copy to Clipboard</button>
 
-			<div class="icon"><img src="~/Images/pngegg.png" width="100" alt=""></div>
-			<div class="text">
+            }
 
-				<div class="header">
-					<h3>@(coupon.Percent != null && coupon.Percent != 0 ? coupon.Percent+"%" : "₹"+coupon.FixPrice)  @coupon.Name</h3>
-					<div class="desc">
-					</div>
-
-				</div>
-
-				<div class="functions">
-					<span class="soon">@coupon.ExpiryDate</span><span>
-					</span>
-				</div>
-				<div class="copy-button d-flex">
-					<input id="copyvalue" type="text" readonly value="@coupon.Code" />
-					<button onclick="copyIt()" class="copybtn">COPY</button>
-				</div>
-			</div>
-		</div>
-	}
-	
-
-
-	@if (Model.Coupons.Where(u => u.IsExpired).Count() != 0)
-	{
-		<div class="devider">Expired</div>
-		@foreach (var coupon in Model.Coupons.Where(u=> u.IsExpired))
-		{
-			<div class="single">
-
-				<div class="icon"><img src="~/Images/pngegg.png" alt=""></div>
-				<div class="text">
-
-					<div class="header">
-						<h3>@(coupon.Percent != null && coupon.Percent != 0 ? coupon.Percent + "%" : "₹" + coupon.FixPrice) &nbsp;&nbsp;&nbsp; @coupon.Name</h3>
-						<div class="desc">
-						</div>
-
-					</div>
-
-					<div class="functions">
-						<span class="soon">@coupon.ExpiryDate</span><span>
-						</span>
-					</div>
-				</div>
-			</div>
-		}
-
-
-		
-	}
-
-	
-	@if(Model.CouponsData.Where(u=> u.UserId == Model.user.Id).Count() != 0)
-	{
-		<div class="devider">claimed</div>
-
-		@foreach (var couponData in Model.CouponsData.Where(u => u.UserId == Model.user.Id))
-		{
-
-			<div class="single claimed">
-
-				<div class="icon"><img src="~/Images/pngegg.png" alt=""></div>
-				<div class="text">
-
-					<div class="header">
-						<h3>@(couponData.Coupon.Percent != null && couponData.Coupon.Percent != 0 ? couponData.Coupon.Percent + "%" : "₹" + couponData.Coupon.FixPrice) &nbsp;&nbsp;&nbsp; @couponData.Coupon.Name</h3>
-						<div class="desc">
-						</div>
-
-					</div>
-
-				</div>
-			</div>
-		}
-
-	}
-
-
+        </div>
+    }
 </div>
-
 @section Scripts{
-	<script>
+    <script>
+        function copyToClipboard(text) {
+            var tempInput = $("<input>");
 
-		let copybtn = document.querySelector(".copybtn");
+            $("body").append(tempInput);
 
+            tempInput.val(text);
 
-		function copyIt() {
-			let copyInput = document.querySelector('#copyvalue');
+            tempInput.select();
 
-			copyInput.select();
+            document.execCommand("copy");
 
-			document.execCommand("copy");
+            tempInput.remove();
 
-			copybtn.textContent = "COPIED";
-		}
-	</script>
+            Swal.fire({
+                position: "center-center",
+                icon: "success",
+                title: "Coupon code copied to clipboard: " + text,
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    </script>
 }
+
+
+

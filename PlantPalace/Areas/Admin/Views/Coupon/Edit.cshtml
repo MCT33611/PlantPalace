@@ -1,7 +1,8 @@
 ﻿@model Coupon
 @{
 }
-<form asp-action="Create" asp-controller="Coupon">
+<form asp-action="Edit" asp-controller="Coupon">
+    <input type="hidden" asp-for="Id" />
     <div class="border p-3 mt-4">
         <div class="row pb-2">
             <h2 class="text-primary">
@@ -57,7 +58,7 @@
         </div>
         <div class="row ">
             <div class="col-6 col-md-3">
-                <button type="submit" class="btn btn-primary form-control">Create</button>
+                <button type="submit" class="btn btn-primary form-control">Update</button>
             </div>
             <div class="col-6 col-md-3">
                 <a asp-action="Index" asp-controller="Coupon" class="btn btn-secondary border form-control">Back TO List</a>
