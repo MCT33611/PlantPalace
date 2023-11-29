@@ -149,8 +149,8 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 
 				}
 
-				var domain = "https://plantpalace.azurewebsites.net/";
-				//var domain = "https://localhost:7253/";
+				//var domain = "https://plantpalace.azurewebsites.net/";
+				var domain = "https://localhost:7253/";
                 var options = new SessionCreateOptions
 				{
 					PaymentMethodTypes = new List<string>
@@ -257,8 +257,9 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
 				var ShoppingCartVModel = HttpContext.Session.GetObject<ShoppingCartVM>("ShoppingCartVM");
 
 				ShoppingCartVM.ListCart = ShoppingCartVModel.ListCart;
+				ShoppingCartVM.OrderHeader.OrderTotal = ShoppingCartVModel.OrderHeader.OrderTotal;
 
-				ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
+                ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
 				ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusPending;
 				ShoppingCartVM.OrderHeader.PaymentMethod = SD.PaymentMethodCOD;
 				ShoppingCartVM.OrderHeader.OrderDate = DateTime.Now;

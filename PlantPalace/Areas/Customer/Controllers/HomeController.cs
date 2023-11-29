@@ -416,7 +416,12 @@ namespace PlantPalaceWeb.Areas.Customer.Controllers
                 };
 
                 var product = _unitOfWork.Product.Get(u=>u.Id == productId);
-                product.Rate = _unitOfWork.ProductReview.GetALL(u=> u.ProductId == productId).Sum(u => u.Rate) / _unitOfWork.ProductReview.GetALL(u => u.ProductId == productId).Count();
+                var reviewCount = _unitOfWork.ProductReview.GetALL(u => u.ProductId == productId).Count();
+                if(reviewCount > 0)
+                {
+                    product.Rate = _unitOfWork.ProductReview.GetALL(u => u.ProductId == productId).Sum(u => u.Rate) / reviewCount;
+
+                }
                 if (reviewModel != null)
                 {
                     _unitOfWork.ProductReview.Add(reviewModel);

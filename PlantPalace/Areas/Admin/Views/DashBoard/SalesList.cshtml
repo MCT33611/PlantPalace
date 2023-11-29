@@ -1,38 +1,5 @@
 ﻿@model IEnumerable<OrderHeader>
 
-<style>
-    .a4-size {
-        width: 210mm;
-        height: 297mm;
-    }
-
-    body,
-    .intro {
-        height: 100%;
-    }
-
-    table td,
-    table th {
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-        font-size: small;
-    }
-
-    thead th,
-    tbody th {
-        color: #fff;
-    }
-
-    tbody td {
-        font-weight: 500;
-        color: rgba(255,255,255,.65);
-    }
-
-    .card {
-        border-radius: .5rem;
-    }
-</style>
 
 
 <section class="intro a4-size ">
@@ -44,7 +11,6 @@
                 </div>
                 <div class="card">
                     <form class="card-body text-center" asp-area="Admin" asp-controller="DashBoard" asp-action="SalesReport" method="post">
-                        <h5 class="card-title">SaleReport</h5>
                         <div class="form-group m-2 w-100">
                             <select id="filter" name="filter" class="form-control">
                                 <option value="all">All</option>

@@ -36,12 +36,12 @@ else
                     <div class="product_price">
                         @if (product.DiscountPrice == 0)
                         {
-                            <a href="#">@* <span class="price_old">@product.ListPrice.ToString("c")</span> *@ <span class="price_new">@product.Price.ToString("c")</span></a>
+                            <a href="#">@* <span class="price_old">@product.ListPrice.ToString("c")</span> *@ <span class="price_new">₹@product.Price</span></a>
 
                         }
                         else
                         {
-                            <a href="#"><span class="price_old">₹@product.Price</span> <span class="price_new">@product.DiscountPrice.ToString("c")</span></a>
+                            <a href="#"><span class="price_old">₹@product.Price</span> <span class="price_new">₹@product.DiscountPrice</span></a>
 
                         }
                     </div>

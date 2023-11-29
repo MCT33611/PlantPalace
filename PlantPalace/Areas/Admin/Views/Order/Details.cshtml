@@ -554,7 +554,8 @@
                                 text: "The action was successful.",
                                 icon: "success"
                             }).then(() => {
-                                location.reload();
+                                    
+                                location.href = data;
                             });
                         },
                         error: function (error) {

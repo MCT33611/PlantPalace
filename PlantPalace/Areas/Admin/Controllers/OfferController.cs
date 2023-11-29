@@ -86,7 +86,9 @@ namespace PlantPalace.Areas.Admin.Controllers
                         var product = _unitOfWork.Product.Get(u => u.Id == productid);
 						if(product != null && 100 > model.Offer.OfferPercent)
 						{
-                            product.DiscountPrice = (product.Price/100)*(100- model.Offer.OfferPercent);
+                            //product.DiscountPrice = (product.Price/100)*(100- model.Offer.OfferPercent);
+                            product.DiscountPrice = (double)((decimal)(product.Price / 100) * (100 - (decimal)model.Offer.OfferPercent));
+
                             product.OfferName = model.Offer.OfferName;
                             _unitOfWork.Product.Update(product);
                         }

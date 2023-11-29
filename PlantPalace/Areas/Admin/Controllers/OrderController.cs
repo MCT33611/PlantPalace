@@ -32,12 +32,15 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
 
         public IActionResult Details(int OrderId)
         {
+            
             OrderVM = new()
             {
                 OrderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == OrderId, incluedProperties: "ApplicationUser"),
                 OrderDetail = _unitOfWork.OrderDetail.GetALL(u => u.OrderHeaderId == OrderId, incluedProperties: "Product"),
                 ProductReturnList = _unitOfWork.ProductReturn.GetALL(incluedProperties: "OrderDetail"),
             };
+            if (OrderVM.OrderHeader == null)
+                return RedirectToAction(nameof(Index));
             return View(OrderVM);
         }
 
@@ -108,9 +111,10 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
         [Authorize]
         public IActionResult CancelProduct(int orderDetailId)
         {
-            var orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == orderDetailId, incluedProperties: "ApplicationUser");
+            var orderDetail = _unitOfWork.OrderDetail.Get(u => u.Id == orderDetailId, incluedProperties: "Product");
 
-            var orderDetail = _unitOfWork.OrderDetail.Get(u => u.Id == orderDetailId,incluedProperties:"Product");
+            var orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == orderDetail.OrderHeaderId, incluedProperties: "ApplicationUser");
+
             if(orderDetail == null)
             {
                 TempData["success"] = "Product Not Found";
@@ -120,10 +124,14 @@ namespace PlantPalaceWeb.Areas.Admin.Controllers
 
             _unitOfWork.OrderHeader.Update(orderHeader);
             _unitOfWork.OrderDetail.Remove(orderDetail);
-            if(!_unitOfWork.OrderDetail.GetALL(u=> u.OrderHeaderId == orderHeader.Id).Any())
+            if(orderHeader.OrderTotal <= 0)
             {
                 _unitOfWork.OrderHeader.Remove(orderHeader);
+                _unitOfWork.Save();
+                TempData["success"] = "Order completly deleted";
                 return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Details), new { orderId = orderHeader.Id });
+
 
             }
             var product = _unitOfWork.Product.Get(u => u.Id == orderDetail.ProductId);

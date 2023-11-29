@@ -63,7 +63,7 @@ namespace PlantPalace.Areas.Admin.Controllers
 
         public async Task<IActionResult> SalesReport(string? filter)
         {
-            var orders = _unitOfWork.OrderHeader.GetALL(incluedProperties: "ApplicationUser");
+            var orders = _unitOfWork.OrderHeader.GetALL(u => u.OrderStatus == SD.StatusShipped, incluedProperties: "ApplicationUser");
             if(filter != null)
             {
                 if(filter == "today")
@@ -80,7 +80,7 @@ namespace PlantPalace.Areas.Admin.Controllers
                 }
                 else
                 {
-                    orders = _unitOfWork.OrderHeader.GetALL( incluedProperties: "ApplicationUser");
+                    orders = _unitOfWork.OrderHeader.GetALL(u => u.OrderStatus == SD.StatusShipped, incluedProperties: "ApplicationUser");
 
                 }
 
